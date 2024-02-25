@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: reserve-app
+    build: 
+      context: docker-compose/php
+      dockerfile: ./Dockerfile
+    environment:
+      PHP_IDE_CONFIG: 'serverName=reserve-server'
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - .:/var/www
+
+  db:
+    image: mysql:8.0
+    platform: linux/amd64
+    container_name: reserve-db
+    environment:
+      MYSQL_DATABASE: database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - '3306:3306'
+    volumes:
+      - reserve-db:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+    container_name: reserve-redis
+    ports:
+      - "6379:6379"
+
+  nginx:
+    image: nginx:latest
+    container_name: reserve-nginx
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+
+volumes:
+  reserve-db:
