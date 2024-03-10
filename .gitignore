@@ -1,2 +1,5 @@
 .npm
 .config
+.cache
+.composer
+.bash_history

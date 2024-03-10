@@ -15,9 +15,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     supervisor \
     sudo \
-    nodejs \
-    npm \
-    && npm install -g npm@latest \
+    curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -26,6 +24,9 @@ RUN docker-php-ext-install \
     zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
 
 RUN mkdir -p /var/log/supervisor \
     && touch /var/log/supervisor/supervisord.log \

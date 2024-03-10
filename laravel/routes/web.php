@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/index', function () {
+Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/{any}', fn () =>\File::get(public_path(), 'build/index.html'))->where('any', '.*');
