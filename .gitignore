@@ -3,3 +3,4 @@
 .cache
 .composer
 .bash_history
+laravel/public/react-build

@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     supervisor \
     sudo \
     curl \
+    rsync \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
