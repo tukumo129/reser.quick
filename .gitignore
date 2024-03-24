@@ -3,4 +3,5 @@
 .cache
 .composer
 .bash_history
+.php-cs-fixer.cache
 laravel/public/react-build

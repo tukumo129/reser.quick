@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/home', function () {
-    return view('welcome');
-});
-
-Route::get('/{any}', fn ()  => File::get(public_path() . '/react-build/index.html'))->where('any', '.*');
+Route::get('/{any}', fn () => File::get(public_path() . '/react-build/index.html'))->where('any', '.*');
