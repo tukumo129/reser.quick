@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreReserveRequest extends FormRequest
+class GetReservesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StoreReserveRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class StoreReserveRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'sorts' => ['array', 'nullable'],
+            'sorts.*' => ['string', 'nullable'],
+            'page' => ['integer', 'nullable'],
+            'limit' => ['integer', 'nullable'],
         ];
     }
 }

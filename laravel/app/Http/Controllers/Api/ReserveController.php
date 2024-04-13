@@ -3,85 +3,89 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreReserveRequest;
+use App\Http\Requests\CreateReserveRequest;
+use App\Http\Requests\GetReservesRequest;
 use App\Http\Requests\UpdateReserveRequest;
-use App\Models\Reserve;
+use App\Http\Resources\ReserveResource;
+use App\Services\ReserveService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class ReserveController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    protected ReserveService $reserveService;
+
+    public function __construct(
+        ReserveService $reserveService
+    ) {
+        $this->reserveService = $reserveService;
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param int $reserveId
+     * @return Response
      */
-    public function create()
+    public function getReserve(int $reserveId): JsonResponse
     {
-        //
+        $user = auth()->user();
+        $reserve = $this->reserveService->getReserve($reserveId);
+
+        return response()->json([
+            'reserve' => new ReserveResource($reserve),
+        ], Response::HTTP_OK);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreReserveRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param GetReservesRequest $request
+     * @return Response
      */
-    public function store(StoreReserveRequest $request)
+    public function getReserves(GetReservesRequest $request): JsonResponse
     {
-        //
+        $user = auth()->user();
+        $sorts = $request->input('sorts', []);
+        $page = $request->input('page');
+        $limit = $request->input('limit');
+        $reserves = $this->reserveService->getReserves($user->contract_id, $sorts, $page, $limit);
+        return response()->json([
+            'reserves' => ReserveResource::collection($reserves['reserves']),
+            'pagination' => $reserves['pagination'] ?? null,
+        ], Response::HTTP_OK);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Reserve  $reserve
-     * @return \Illuminate\Http\Response
+     * @param CreateReserveRequest $request
+     * @return Response
      */
-    public function show(Reserve $reserve)
+    public function createReserve(CreateReserveRequest $request)
     {
-        //
+        $reserveData = $request->input('reserve');
+        $reserve = $this->reserveService->createReserve($reserveData);
+        return response()->json([
+            'reserve' => new ReserveResource($reserve),
+        ], Response::HTTP_OK);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Reserve  $reserve
-     * @return \Illuminate\Http\Response
+     * @param int $reserveId
+     * @param UpdateReserveRequest $request
+     * @return Response
      */
-    public function edit(Reserve $reserve)
+    public function updateReserve(int $reserveId, UpdateReserveRequest $request)
     {
-        //
+        $reserveData = $request->input('reserve');
+        $reserve = $this->reserveService->updateReserve($reserveId, $reserveData);
+        return response()->json([
+            'reserve' => new ReserveResource($reserve),
+        ], Response::HTTP_OK);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateReserveRequest  $request
-     * @param  \App\Models\Reserve  $reserve
-     * @return \Illuminate\Http\Response
+     * @param int $reserveId
+     * @return Response
      */
-    public function update(UpdateReserveRequest $request, Reserve $reserve)
+    public function deleteReserve(int $reserveId)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Reserve  $reserve
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Reserve $reserve)
-    {
-        //
+        $this->reserveService->deleteReserve($reserveId);
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }
