@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Admin;
+namespace Tests\Feature\Reserves;
 
 use App\Models\Reserve;
 use App\Models\User;
@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
- * php artisan test tests/Feature/Admin/GetReservesTest.php
+ * php artisan test tests/Feature/Reserves/GetReservesTest.php
  */
 class GetReservesTest extends TestCase
 {
@@ -20,6 +20,7 @@ class GetReservesTest extends TestCase
      */
     public function testSuccess(): void
     {
+        // パラメーターなし、全件取得
         Reserve::query()->forceDelete();
         $contractId = 1; // TODO contractをfactoryで作成するように変える
         /** @var User $user */
@@ -28,7 +29,7 @@ class GetReservesTest extends TestCase
 
         $reserves = Reserve::factory()->count(2)->create(['contract_id' => $contractId]);
 
-        $response = $this->json('GET', '/api/admin/reserves/');
+        $response = $this->json('GET', '/api/reserves/', []);
         $response->assertjson([
             'reserves' => [
                 0 => [
@@ -47,6 +48,7 @@ class GetReservesTest extends TestCase
             'pagination' => null,
         ])->assertStatus(Response::HTTP_OK);
 
+        // パラメーターあり、ページネーションあり
         $param = [
             'sorts' => [
                 'id' => 'desc',
@@ -54,7 +56,7 @@ class GetReservesTest extends TestCase
             'page' => 1,
             'limit' => 1,
         ];
-        $response = $this->json('GET', '/api/admin/reserves/', $param);
+        $response = $this->json('GET', '/api/reserves/', $param);
         $response->assertjson([
             'reserves' => [
                 0 => [
@@ -73,5 +75,9 @@ class GetReservesTest extends TestCase
                 'current_page' => 1,
             ],
         ])->assertStatus(Response::HTTP_OK);
+
+        // ゼロ件取得
+        Reserve::query()->forceDelete();
+        $response = $this->json('GET', '/api/reserves/', []);
     }
 }

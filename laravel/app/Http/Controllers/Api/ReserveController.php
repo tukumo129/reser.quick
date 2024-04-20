@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateReserveRequest;
-use App\Http\Requests\GetReservesRequest;
-use App\Http\Requests\UpdateReserveRequest;
+use App\Http\Requests\Reserves\CreateReserveRequest;
+use App\Http\Requests\Reserves\GetReservesRequest;
+use App\Http\Requests\Reserves\UpdateReserveRequest;
 use App\Http\Resources\ReserveResource;
 use App\Services\ReserveService;
 use Illuminate\Http\JsonResponse;

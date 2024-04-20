@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Admin;
+namespace Tests\Feature\Reserves;
 
 use App\Models\Reserve;
 use App\Models\User;
@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
- * php artisan test tests/Feature/Admin/DeleteReserveTest.php
+ * php artisan test tests/Feature/Reserves/DeleteReserveTest.php
  */
 class DeleteReserveTest extends TestCase
 {
@@ -27,7 +27,7 @@ class DeleteReserveTest extends TestCase
 
         $reserve = Reserve::factory()->create(['contract_id' => $contractId]);
 
-        $response = $this->json('delete', "/api/admin/reserve/{$reserve->id}", []);
+        $response = $this->json('delete', "/api/reserve/{$reserve->id}", []);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
         $this->assertSoftDeleted('reserves', ['id' => $reserve->id]);
     }

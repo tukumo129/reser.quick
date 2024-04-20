@@ -5,13 +5,13 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Http\Response;
 
-class ReserveNotFoundException extends Exception
+class UserNotFoundException extends Exception
 {
     protected $code;
 
-    public function __construct(int $reserveId)
+    public function __construct(int $userId)
     {
-        $massage = "Reserve with id {$reserveId} not found.";
+        $massage = "User with id {$userId} not found.";
         parent::__construct($massage, Response::HTTP_NOT_FOUND);
     }
 

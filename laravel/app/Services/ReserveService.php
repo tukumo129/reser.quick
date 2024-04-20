@@ -68,7 +68,6 @@ class ReserveService
 
     /**
      * @param int $reserveId
-     * @param array<string, mixed> $reserveData
      * @return void
      */
     public function deleteReserve(int $reserveId): void

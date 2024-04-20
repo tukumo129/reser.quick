@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Admin;
+namespace Tests\Feature\Reserves;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -8,7 +8,7 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
- * php artisan test tests/Feature/Admin/CreateReserveTest.php
+ * php artisan test tests/Feature/Reserves/CreateReserveTest.php
  */
 class CreateReserveTest extends TestCase
 {
@@ -35,7 +35,7 @@ class CreateReserveTest extends TestCase
             ],
         ];
 
-        $response = $this->json('POST', '/api/admin/reserve/', $params);
+        $response = $this->json('POST', '/api/reserve/', $params);
         $response->assertjson([
             'reserve' => [
                 'id' => true,

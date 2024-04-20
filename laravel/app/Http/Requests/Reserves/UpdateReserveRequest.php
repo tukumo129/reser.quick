@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Reserves;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,7 +24,13 @@ class UpdateReserveRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'reserve' => ['array', 'required'],
+            'reserve.contract_id' => ['integer', 'required'],
+            'reserve.name' => ['string', 'required'],
+            'reserve.guest_number' => ['integer', 'required'],
+            'reserve.start_date_time' => ['string', 'required'],
+            'reserve.end_date_time' => ['string', 'required'],
+            'reserve.uuid' => ['string', 'required'],
         ];
     }
 }
