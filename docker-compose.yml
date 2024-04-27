@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     container_name: reserve-app
@@ -13,6 +11,7 @@ services:
       - redis
     volumes:
       - .:/var/www
+      - ./docker-compose/supervisor/:/etc/supervisor/conf.d/
 
   db:
     image: mysql:8.0
@@ -41,6 +40,7 @@ services:
       - app
     ports:
       - "80:80"
+      - "3000:3000"
     volumes:
       - .:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
