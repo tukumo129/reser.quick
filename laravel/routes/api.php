@@ -18,7 +18,7 @@ Route::post('/user/register', [AuthController::class, 'userRegister']);
 Route::post('/user/login', [AuthController::class, 'userLogin']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('user/logout', [AuthController::class, 'userLogout']);
+    Route::post('/user/logout', [AuthController::class, 'userLogout']);
 
     // reserve
     Route::get('/reserve/{reserve_id}', [ReserveController::class, 'getReserve'])->where('reserve_id', '[0-9]+');
