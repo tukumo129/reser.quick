@@ -1,10 +1,9 @@
-import { QueryClient, QueryClientProvider } from 'react-query';
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { LoginView } from './pages/LoginView';
-import './output.css';
-import { TopView } from './pages/TopView';
-import { routePath } from './enums/routePath';
+import { QueryClient, QueryClientProvider } from "react-query";
+import "./output.css";
+import { Route, Routes } from "react-router-dom";
+import { routePath } from "./enums/routePath";
+import { LoginView } from "./pages/LoginView";
+import { TopView } from "./pages/TopView";
 
 const queryClient = new QueryClient();
 

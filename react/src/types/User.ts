@@ -1,5 +1,5 @@
 export type User = {
-    id: number
-    contract_id: number
-    email: string
-}
+  id: number;
+  contract_id: number;
+  email: string;
+};

@@ -1,4 +1,4 @@
 export const routePath = {
-    Login: '/login',
-    Top: '/top',
-}
+  Login: "/login",
+  Top: "/top",
+};

@@ -1,8 +1,5 @@
-import React from 'react';
-import { LoginForm } from '../components/LoginForm/component';
+import { LoginForm } from "../components/LoginForm/component";
 
-export const LoginView = () => {
-  return (
-    <LoginForm/>
-  );
-};
+export function LoginView() {
+  return <LoginForm />;
+}

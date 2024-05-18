@@ -5,13 +5,10 @@ import { Reserve } from "../../types/Reserve";
 import { Pagination } from "../../types/Pagination";
 
 export type GetReservesData = {
-    reserves: Reserve[],
-    pagination: Pagination,
-}
+  reserves: Reserve[];
+  pagination: Pagination;
+};
 
 export const useGetReserves = () => {
-    return useMutation<GetReservesData, Error>(
-        () => callGet(ApiPath.RESERVES)
-    );
-}
-
+  return useMutation<GetReservesData, Error>(() => callGet(ApiPath.RESERVES));
+};

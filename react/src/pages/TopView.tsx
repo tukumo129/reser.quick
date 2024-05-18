@@ -1,7 +1,3 @@
-import React from 'react';
-
-export const TopView = () => {
-  return (
-    <p>TOP</p>
-  );
-};
+export function TopView() {
+  return <p>TOP</p>;
+}

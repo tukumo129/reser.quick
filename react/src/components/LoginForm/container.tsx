@@ -1,23 +1,30 @@
-import { useForm } from 'react-hook-form';
-import { useUserLoginMutation, useUserLoginParams } from '../../services/UserService/UseLogin';
-import { useNavigate } from 'react-router-dom';
-import { routePath } from '../../enums/routePath';
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import {
+  useUserLoginMutation,
+  useUserLoginParams,
+} from "../../services/UserService/UseLogin";
+import { routePath } from "../../enums/routePath";
 
 export const useLoginForm = () => {
-  const { register: loginData, handleSubmit, formState: { errors } } = useForm<useUserLoginParams>();
+  const {
+    register: loginData,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<useUserLoginParams>();
   const { mutate } = useUserLoginMutation();
   const navigate = useNavigate();
 
   const onSubmit = (data: useUserLoginParams) => {
     mutate(data, {
-      onSuccess: (data) => {
+      onSuccess: () => {
         navigate(routePath.Top);
-        console.log(data);
+        // TODO ログイン成功時の処理
       },
-      onError: (error) => {
-        console.error('Error:', error);
-      }
+      onError: () => {
+        // TODO ログイン失敗時の処理
+      },
     });
   };
-  return {loginData, handleSubmit, onSubmit, errors}
-}
+  return { loginData, handleSubmit, onSubmit, errors };
+};
