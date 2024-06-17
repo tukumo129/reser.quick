@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useQuery } from "react-query";
 import { callGet } from "../ApiCallBase";
 import { ApiPath } from "../ApiPath";
 import { Reserve } from "../../types/Reserve";
@@ -9,6 +9,18 @@ export type GetReservesData = {
   pagination: Pagination;
 };
 
+const defaultPagination: Pagination = {
+  total: 1000,
+  last_page: 20,
+  current_page: 10,
+};
+
 export const useGetReserves = () => {
-  return useMutation<GetReservesData, Error>(() => callGet(ApiPath.RESERVES));
+  const { data, isLoading, error } = useQuery<GetReservesData, Error>('reserves', () => callGet(ApiPath.RESERVES));
+  return {
+    reserves: data?.reserves || [],
+    pagination: data?.pagination || defaultPagination,
+    isLoading,
+    error,
+  };
 };

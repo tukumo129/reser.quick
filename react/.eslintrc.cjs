@@ -23,6 +23,7 @@ module.exports = {
     "no-unused-vars": "warn",
     "no-console": "off",
     "react/react-in-jsx-scope": "off",
+    "indent": ["error", 2],
   },
   settings: {
     react: {

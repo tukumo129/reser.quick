@@ -9,5 +9,6 @@
       "typescript",
       "typescriptreact"
     ],
-    "prettier.requireConfig": true
+    "prettier.requireConfig": true,
+    "typescript.preferences.importModuleSpecifier": "relative"
 }
