@@ -20,7 +20,7 @@ module.exports = {
     "@typescript-eslint",
   ],
   rules: {
-    "no-unused-vars": "warn",
+    "no-unused-vars": ["warn", { "args": "none" }],
     "no-console": "off",
     "react/react-in-jsx-scope": "off",
     "indent": ["error", 2],

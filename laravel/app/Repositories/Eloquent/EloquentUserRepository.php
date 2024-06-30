@@ -61,7 +61,7 @@ class EloquentUserRepository implements UserRepositoryInterface
             'pagination' => [
                 'total' => $paginator->total(),
                 'last_page' => $paginator->lastPage(),
-                'current_page' => $paginator->currentPage(),
+                'page' => $paginator->currentPage(),
             ],
         ];
     }

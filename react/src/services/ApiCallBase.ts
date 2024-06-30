@@ -15,15 +15,13 @@ const axiosClient: AxiosInstance = axios.create({
 
 export const callGet = async <
   TParam extends Record<string, string>,
-  TBody extends Record<string, unknown>,
 >(
   path: string,
   pathParam: TParam = {} as TParam,
-  body: TBody = {} as TBody,
 ) => {
   const queryString = new URLSearchParams(pathParam).toString();
   const url = queryString ? `${path}?${queryString}` : path;
-  const response = await axiosClient.get(url, { params: body });
+  const response = await axiosClient.get(url);
   return response.data;
 };
 

@@ -10,13 +10,20 @@ export type GetReservesData = {
 };
 
 const defaultPagination: Pagination = {
-  total: 1000,
+  total: 10,
   last_page: 20,
-  current_page: 10,
+  page: 10,
 };
 
-export const useGetReserves = () => {
-  const { data, isLoading, error } = useQuery<GetReservesData, Error>('reserves', () => callGet(ApiPath.RESERVES));
+type useGetReservesProps = {
+  sorts?: string;
+  page?: string;
+  limit?: string;  
+}
+
+export const useGetReserves = (params?: useGetReservesProps) => {
+  const { data, isLoading, error } = useQuery<GetReservesData, Error>(
+    [ApiPath.RESERVES, params], () => callGet(ApiPath.RESERVES, params));
   return {
     reserves: data?.reserves || [],
     pagination: data?.pagination || defaultPagination,

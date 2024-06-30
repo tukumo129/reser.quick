@@ -61,7 +61,7 @@ class EloquentReserveRepository implements ReserveRepositoryInterface
             'pagination' => [
                 'total' => $paginator->total(),
                 'last_page' => $paginator->lastPage(),
-                'current_page' => $paginator->currentPage(),
+                'page' => $paginator->currentPage(),
             ],
         ];
     }

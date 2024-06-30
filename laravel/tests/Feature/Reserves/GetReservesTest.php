@@ -72,7 +72,7 @@ class GetReservesTest extends TestCase
             'pagination' => [
                 'total' => 2,
                 'last_page' => 2,
-                'current_page' => 1,
+                'page' => 1,
             ],
         ])->assertStatus(Response::HTTP_OK);
 
