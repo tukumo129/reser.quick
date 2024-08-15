@@ -1,5 +1,5 @@
-import { AdminLayout } from "../components/AdminLayout/component";
-import { ReservesContents } from "../components/ReservesContents/component";
+import { AdminLayout } from "../components/AdminLayoutComponent";
+import { ReservesContents } from "../components/ReservesComponent";
 
 export function ReserveView() {
   return (

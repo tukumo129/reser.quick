@@ -1,10 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import {
-  useUserLoginMutation,
-  useUserLoginParams,
-} from "../../services/UserService/UseLogin";
-import { routePath } from "../../enums/routePath";
+import { routePath } from "../enums/routePath";
+import { useUserLoginMutation, useUserLoginParams } from "../services/UserService/UseLogin";
 
 export const useLoginForm = () => {
   const {

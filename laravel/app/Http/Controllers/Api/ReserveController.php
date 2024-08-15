@@ -10,6 +10,7 @@ use App\Http\Resources\ReserveResource;
 use App\Services\ReserveService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 class ReserveController extends Controller
 {
@@ -58,7 +59,10 @@ class ReserveController extends Controller
      */
     public function createReserve(CreateReserveRequest $request)
     {
+        $user = auth()->user();
         $reserveData = $request->input('reserve');
+        $reserveData['contract_id'] = $user->contract_id;
+        $reserveData['uuid'] = Str::uuid()->toString();
         $reserve = $this->reserveService->createReserve($reserveData);
         return response()->json([
             'reserve' => new ReserveResource($reserve),

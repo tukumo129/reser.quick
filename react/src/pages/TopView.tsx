@@ -1,5 +1,5 @@
-import { AdminLayout } from "../components/AdminLayout/component";
-import { TopContents } from "../components/TopContents/component";
+import { AdminLayout } from "../components/AdminLayoutComponent";
+import { TopContents } from "../components/TopComponent";
 
 export function TopView() {
   return (

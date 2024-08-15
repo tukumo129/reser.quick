@@ -11,8 +11,8 @@ export type GetReservesData = {
 
 const defaultPagination: Pagination = {
   total: 10,
-  last_page: 20,
-  page: 10,
+  last_page: 1,
+  page: 1,
 };
 
 type useGetReservesProps = {
