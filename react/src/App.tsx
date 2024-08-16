@@ -3,9 +3,9 @@ import { Route, Routes } from "react-router-dom";
 import { routePath } from "./enums/routePath";
 import { LoginView } from "./pages/LoginView";
 import { TopView } from "./pages/TopView";
-import { ReserveView } from "./pages/ReservesView";
-import { ReserveCreateView } from "./pages/ReserveCreateView";
-import { ReserveDetailView } from "./pages/ReserveDetailView";
+import { ReserveView } from "./pages/Reserves/ReservesView";
+import { ReserveCreateView } from "./pages/Reserves/ReserveCreateView";
+import { ReserveDetailView } from "./pages/Reserves/ReserveDetailView";
 
 const queryClient = new QueryClient();
 

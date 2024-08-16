@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Box } from "@chakra-ui/react";
-import { useGetReserves } from "../services/ReserveService/UseGetReserves";
-import { LoadingSpinner } from "./LoadingSpinnerComponent";
-import { routePath } from "../enums/routePath";
-import { PaginationContainer, ReserveList } from "../container/ReservesContainer";
+import { useGetReserves } from "../../services/ReserveService/UseGetReserves";
+import { LoadingSpinner } from "../LoadingSpinnerComponent";
+import { routePath } from "../../enums/routePath";
+import { PaginationContainer, ReserveList } from "../../container/Reserves/ReservesContainer";
 
 // TODO #24 検索機能実装
 export const ReservesContents = (  ) => {

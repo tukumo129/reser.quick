@@ -22,6 +22,6 @@ export const useCreateReserveMutation = (): UseMutationResult<
   useCreateReserveParams
 > => {
   return useMutation<CreateReserveData, Error, useCreateReserveParams>(
-    (params: useCreateReserveParams) => callPost(ApiPath.CREATE_RESERVES, params),
+    (params: useCreateReserveParams) => callPost(ApiPath.RESERVES, params),
   );
 };

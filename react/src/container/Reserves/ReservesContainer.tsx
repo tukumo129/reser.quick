@@ -1,9 +1,9 @@
 import { format } from "date-fns";
 import { Box, Flex, Text, useBreakpointValue,  Button, useStyleConfig, Select, Stack } from '@chakra-ui/react';
 import { useNavigate } from "react-router-dom";
-import { Reserve } from "../types/Reserve";
-import { routePath } from "../enums/routePath";
-import { Pagination } from "../types/Pagination";
+import { Reserve } from "../../types/Reserve";
+import { routePath } from "../../enums/routePath";
+import { Pagination } from "../../types/Pagination";
 
 type ReserveListProps = {
   reserves: Reserve[];

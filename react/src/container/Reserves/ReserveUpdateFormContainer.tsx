@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from "react-router-dom";
-import { useCreateReserveMutation, useCreateReserveParams } from "../services/ReserveService/UseCreateReserve";
-import { routePath } from "../enums/routePath";
 import { z } from "zod";
+import { useUpdateReserveMutation, useUpdateReserveParams } from "../../services/ReserveService/UseUpdateReserve";
+import { routePath } from "../../enums/routePath";
 
 const schema = z.object({
   name: z.string().min(1, {message: '名前を入力してください'}),
@@ -33,17 +33,17 @@ const schema = z.object({
   }
 }) 
 
-type useCreateReserveSchema = z.infer<typeof schema>
+type useUpdateReserveSchema = z.infer<typeof schema>
 
-export const useReserveCreateForm = () => {
-  const { register: ReserveCreateData, handleSubmit, formState: { errors } } = useForm<useCreateReserveSchema>({
+export const useReserveUpdateForm = (reserveId: number) => {
+  const { register: ReserveUpdateData, handleSubmit, formState: { errors } } = useForm<useUpdateReserveSchema>({
     resolver: zodResolver(schema),
   });
-  const { mutate } = useCreateReserveMutation();
+  const { mutate } = useUpdateReserveMutation(reserveId);
   const navigate = useNavigate();
 
-  const onSubmit = (data: useCreateReserveSchema) => {
-    const params: useCreateReserveParams = {
+  const onSubmit = (data: useUpdateReserveSchema) => {
+    const params: useUpdateReserveParams = {
       reserve: {
         name: data.name,
         start_date_time: `${data.startDate} ${data.startTime}`,
@@ -62,5 +62,5 @@ export const useReserveCreateForm = () => {
       },
     });
   };
-  return { ReserveCreateData, handleSubmit, onSubmit, errors };
+  return { ReserveUpdateData, handleSubmit, onSubmit, errors };
 };

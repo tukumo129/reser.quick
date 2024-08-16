@@ -34,16 +34,12 @@ export const callPost = async <TBody extends Record<string, unknown>>(
 };
 
 export const callPut = async <
-  TParam extends Record<string, string>,
   TBody extends Record<string, unknown>,
 >(
   path: string,
-  pathParam: TParam = {} as TParam,
   body: TBody = {} as TBody,
 ) => {
-  const queryString = new URLSearchParams(pathParam).toString();
-  const url = queryString ? `${path}?${queryString}` : path;
-  const response = await axiosClient.put(url, body);
+  const response = await axiosClient.put(path, body);
   return response.data;
 };
 

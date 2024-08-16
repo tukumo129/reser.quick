@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => ({
   },
   base: mode === "production" ? "/react-build/" : "/",  build: {
     outDir: "../laravel/public/react-build",
+    sourcemap: true,
   },
   css: {
     postcss: {

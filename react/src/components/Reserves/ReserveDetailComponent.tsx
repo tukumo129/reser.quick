@@ -1,7 +1,7 @@
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Select, Stack, Text } from "@chakra-ui/react";
-import { useReserveCreateForm } from "../container/ReserveCreateFormContainer";
 import { useNavigate } from "react-router-dom";
-import { routePath } from "../enums/routePath";
+import { useReserveUpdateForm } from "../../container/Reserves/ReserveUpdateFormContainer";
+import { routePath } from "../../enums/routePath";
 
 const getTimes = (activeTimes:{start: string, end: string}[], interval: number) => {
   const Times:Array<string> = [];
@@ -19,12 +19,23 @@ const getTimes = (activeTimes:{start: string, end: string}[], interval: number) 
   })
   return Times;
 };
+export type ReserveFormProps = {
+  reserve: {
+    id: number
+    name: string,
+    startDate: string,
+    startTime: string,
+    endDate: string,
+    endTime: string,
+    guestNumber: number,
+  }
+}
 
-export function CreateReserveForm() {
+export function UpdateReserveForm({reserve}: ReserveFormProps) {
   const navigate = useNavigate()
-  const { ReserveCreateData, handleSubmit, onSubmit , errors} = useReserveCreateForm();
+  const { ReserveUpdateData, handleSubmit, onSubmit , errors} = useReserveUpdateForm(reserve.id);
 
-  // 各種設定は設定画面から取得する
+  // TODO 各種設定は設定画面から取得する
   const TimeInterval = 15;
   const activeTimes = [
     { start: '00:00', end: '01:00'},
@@ -42,7 +53,8 @@ export function CreateReserveForm() {
               名前<Text as="span" color="red">*</Text>
             </FormLabel>
             <Input
-              {...ReserveCreateData('name')}
+              defaultValue={reserve.name}
+              {...ReserveUpdateData('name')}
               placeholder="名前を入力してください"
               w="full"
               maxW={{ base: "100%", md: "20rem" }}
@@ -57,7 +69,7 @@ export function CreateReserveForm() {
               <FormLabel>
                 開始日時<Text as="span" color="red">*</Text>
               </FormLabel>
-              <Input type="date" {...ReserveCreateData('startDate')} />
+              <Input type="date" {...ReserveUpdateData('startDate')} defaultValue={reserve.startDate}/>
               <FormErrorMessage>{errors.startDate?.message}</FormErrorMessage>
             </FormControl>
 
@@ -65,7 +77,7 @@ export function CreateReserveForm() {
               <FormLabel visibility={{ base: "hidden", md: "visible" }}>
                 開始時刻<Text as="span" color="red">*</Text>
               </FormLabel>
-              <Select {...ReserveCreateData('startTime')}>
+              <Select {...ReserveUpdateData('startTime')} defaultValue={reserve.startTime}>
                 {timeOptions.map((time) => (
                   <option key={time} value={time}>
                     {time}
@@ -83,7 +95,7 @@ export function CreateReserveForm() {
               <FormLabel>
                 終了日時<Text as="span" color="red">*</Text>
               </FormLabel>
-              <Input type="date" {...ReserveCreateData('endDate')} />
+              <Input type="date" {...ReserveUpdateData('endDate')} defaultValue={reserve.endDate}/>
               <FormErrorMessage>{errors.endDate?.message}</FormErrorMessage>
             </FormControl>
 
@@ -91,7 +103,7 @@ export function CreateReserveForm() {
               <FormLabel visibility={{ base: "hidden", md: "visible" }}>
                 終了時刻<Text as="span" color="red">*</Text>
               </FormLabel>
-              <Select {...ReserveCreateData('endTime')} >
+              <Select {...ReserveUpdateData('endTime')} defaultValue={reserve.endTime} >
                 {timeOptions.map((time) => (
                   <option key={time} value={time}>
                     {time}
@@ -111,8 +123,8 @@ export function CreateReserveForm() {
             <Input
               w="full"
               type="number"
-              defaultValue={0}
-              {...ReserveCreateData('guestNumber')}
+              defaultValue={reserve.guestNumber}
+              {...ReserveUpdateData('guestNumber')}
               maxW={{ base: "100%", md: "5rem" }}
             />
             <FormErrorMessage>{errors.guestNumber?.message}</FormErrorMessage>

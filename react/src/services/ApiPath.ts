@@ -1,6 +1,6 @@
 export const ApiPath = {
   BASE_PATH: "http://reser.quick/api",
-  RESERVES: "/reserves",
-  CREATE_RESERVES: "/reserve",
   LOGIN: "/user/login",
+  RESERVE: "/reserve/:reserveId",
+  RESERVES: "/reserves",
 } as const;
