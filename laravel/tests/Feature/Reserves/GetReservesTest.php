@@ -22,15 +22,14 @@ class GetReservesTest extends TestCase
     {
         // パラメーターなし、全件取得
         Reserve::query()->forceDelete();
-        $contractId = 1; // TODO contractをfactoryで作成するように変える
         /** @var User $user */
-        $user = User::factory()->create(['contract_id' => $contractId]);
+        $user = User::factory()->create();
         $this->actingAs($user, 'web');
 
-        $reserves = Reserve::factory()->count(2)->create(['contract_id' => $contractId]);
+        $reserves = Reserve::factory()->count(2)->create(['contract_id' => $user->contract_id]);
 
         $response = $this->json('GET', '/api/reserves/', []);
-        $response->assertjson([
+        $response->assertJson([
             'reserves' => [
                 0 => [
                     'id' => $reserves[0]->id,
@@ -57,7 +56,7 @@ class GetReservesTest extends TestCase
             'limit' => 1,
         ];
         $response = $this->json('GET', '/api/reserves/', $param);
-        $response->assertjson([
+        $response->assertJson([
             'reserves' => [
                 0 => [
                     'id' => $reserves[1]->id,

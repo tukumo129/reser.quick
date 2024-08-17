@@ -1,58 +1,63 @@
 import { useLoginForm } from "../container/LoginFormContainer";
+import {Alert, Box,Button,Center,FormControl,FormLabel,Input,Stack,Text} from "@chakra-ui/react";
 
 export function LoginForm() {
-  const { loginData, handleSubmit, onSubmit } = useLoginForm();
+  const { loginData, handleSubmit, onSubmit, errorMessage } = useLoginForm();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-backColor py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl text-fontBase">
-            ログイン
-          </h2>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email" className="sr-only">
-                メールアドレス
-              </label>
-              <input
-                {...loginData("email")}
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-borderColor placeholder-push text-fontBase rounded-t-md focus:outline-none focus:ring-subMain focus:border-subMain focus:z-10 sm:text-sm"
-                placeholder="メールアドレス"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                パスワード
-              </label>
-              <input
-                {...loginData("password")}
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-borderColor placeholder-push text-fontBase rounded-b-md focus:outline-none focus:ring-subMain focus:border-subMain focus:z-10 sm:text-sm"
-                placeholder="パスワード"
-              />
-            </div>
-          </div>
+    <Box h="100vh" bg="gray.200" py={12} px={4}>
+      <Center>
+        <Box maxW="md" w="full">
+          <Box textAlign="center" mb={8}>
+            <Text fontSize="3xl">
+              予約管理
+            </Text>
+          </Box>
+          {errorMessage && (
+            <Alert status="error" mb={4}>
+              {errorMessage}
+            </Alert>
+          )}
+          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing={2}>
+              <FormControl id="email">
+                <FormLabel srOnly>メールアドレス</FormLabel>
+                <Input
+                  {...loginData("email")}
+                  type="email"
+                  autoComplete="email"
+                  placeholder="メールアドレス"
+                  bg="white"
+                  borderColor="gray.500"
+                  roundedTop="md"
+                />
+              </FormControl>
+              <FormControl id="password">
+                <FormLabel srOnly>パスワード</FormLabel>
+                <Input
+                  {...loginData("password")}
+                  type="password"
+                  autoComplete="current-password"
+                  placeholder="パスワード"
+                  bg="white"
+                  borderColor="gray.500"
+                  roundedBottom="md"
+                />
+              </FormControl>
+            </Stack>
 
-          <div>
-            <button
+            <Button
               type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-borderColor rounded-md shadow-sm text-sm font-medium text-fontBase bg-base focus:outline-none focus:ring-2 focus:ring-offset-2"
+              mt={6}
+              w="full"
+              colorScheme='yellow'
+              rounded="md"
             >
               ログイン
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+            </Button>
+          </Box>
+        </Box>
+      </Center>
+    </Box>
   );
 }

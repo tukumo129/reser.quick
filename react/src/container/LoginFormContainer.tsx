@@ -2,8 +2,11 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { routePath } from "../enums/routePath";
 import { useUserLoginMutation, useUserLoginParams } from "../services/UserService/UseLogin";
+import { useState } from "react";
 
 export const useLoginForm = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+
   const {
     register: loginData,
     handleSubmit,
@@ -15,13 +18,13 @@ export const useLoginForm = () => {
   const onSubmit = (data: useUserLoginParams) => {
     mutate(data, {
       onSuccess: () => {
+        setErrorMessage('')
         navigate(routePath.Top);
-        // TODO ログイン成功時の処理
       },
       onError: () => {
-        // TODO ログイン失敗時の処理
+        setErrorMessage('メールアドレスまたはパスワードが正しくありません。')
       },
     });
   };
-  return { loginData, handleSubmit, onSubmit, errors };
+  return { loginData, handleSubmit, onSubmit, errors, errorMessage };
 };

@@ -23,7 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // reserve
     Route::get('/reserve/{reserve_id}', [ReserveController::class, 'getReserve'])->where('reserve_id', '[0-9]+');
     Route::get('/reserves', [ReserveController::class, 'getReserves']);
-    Route::post('/reserve', [ReserveController::class, 'createReserve']);
+    Route::post('/reserves', [ReserveController::class, 'createReserve']);
     Route::put('/reserve/{reserve_id}', [ReserveController::class, 'updateReserve'])->where('reserve_id', '[0-9]+');
     Route::delete('/reserve/{reserve_id}', [ReserveController::class, 'deleteReserve'])->where('reserve_id', '[0-9]+');
 });

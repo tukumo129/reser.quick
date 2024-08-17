@@ -32,7 +32,7 @@ class CreateReserveTest extends TestCase
             ],
         ];
 
-        $response = $this->json('POST', '/api/reserve/', $params);
+        $response = $this->json('POST', '/api/reserves/', $params);
         $response->assertJson([
             'reserve' => [
                 'id' => true,

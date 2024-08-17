@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useUpdateReserveMutation, useUpdateReserveParams } from "../../services/ReserveService/UseUpdateReserve";
 import { routePath } from "../../enums/routePath";
+import { useToast } from "@chakra-ui/react";
 
 const schema = z.object({
-  name: z.string().min(1, {message: '名前を入力してください'}),
+  name: z.string().min(1, {message: '名前を入力してください'}).max(50, '50文字以内で入力してください'),
   startDate: z.string().min(1, {message: '開始日を入力してください'}),
   startTime: z.string().min(1, {message: '開始時刻を入力してください'}),
   endDate: z.string().min(1, {message: '終了日を入力してください'}),
@@ -31,6 +32,13 @@ const schema = z.object({
       message: '0以上の値を設定してください',
     })
   }
+  if(data.guestNumber > 1000) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['guestNumber'],
+      message: '1000以下の値を設定してください',
+    })
+  }
 }) 
 
 type useUpdateReserveSchema = z.infer<typeof schema>
@@ -41,6 +49,7 @@ export const useReserveUpdateForm = (reserveId: number) => {
   });
   const { mutate } = useUpdateReserveMutation(reserveId);
   const navigate = useNavigate();
+  const toast = useToast()
 
   const onSubmit = (data: useUpdateReserveSchema) => {
     const params: useUpdateReserveParams = {
@@ -56,9 +65,16 @@ export const useReserveUpdateForm = (reserveId: number) => {
       onSuccess: () => {
         navigate(routePath.Reserves);
       },
-      onError: (error) => {
-        console.log(error.message)
-        // TODO 失敗時の処理
+      onError: () => {
+        navigate(routePath.Reserves)
+        toast({
+          title: "更新んに失敗しました",
+          description: "予期しないエラーが発生しました",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
       },
     });
   };

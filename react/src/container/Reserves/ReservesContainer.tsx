@@ -15,19 +15,18 @@ export const ReserveList = ({ reserves }: ReserveListProps) => {
 
   return (
     reserves.length === 0 ? (
-      <div className="bg-hover border-l-4 border-borderColor text-textBase p-4" role="alert">
-        <p>予約がありません</p>
-      </div>
+      <Box bg="yellow.200" p={4}role="alert">
+        <Text>予約がありません</Text>
+      </Box>
     ) : (
-      <Box pt={4}>
-        <Flex direction={isMobile ? 'column' : 'row'} wrap="wrap">
+      <Box>
+        <Flex direction={isMobile ? 'column' : 'row'} wrap="wrap" gap={4}>
           {reserves.map((reserve, index) => (
             <Box
               borderWidth="1px"
               borderRadius="lg"
               overflow="hidden"
               p={4}
-              m={2}
               key={index}
               cursor="pointer"
               bg="white"

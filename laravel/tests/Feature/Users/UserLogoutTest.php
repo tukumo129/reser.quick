@@ -34,7 +34,7 @@ class UserLogoutTest extends TestCase
         $token = $user->createToken('test-token')->plainTextToken;
         $params = [
             'user' => [
-                'contract_id' => $contractId, // TODO factoryでcontractを作成するように修正
+                'contract_id' => $user->contract_id,
                 'email' => $email,
                 'password' => '1234',
             ],

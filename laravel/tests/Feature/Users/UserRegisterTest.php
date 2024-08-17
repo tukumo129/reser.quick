@@ -25,14 +25,14 @@ class UserRegisterTest extends TestCase
 
         $params = [
             'user' => [
-                'contract_id' => $contractId, // TODO factoryでcontractを作成するように修正
+                'contract_id' => $contractId,
                 'email' => $email,
                 'password' => '1234',
             ],
         ];
 
         $response = $this->json('POST', '/api/user/register', $params);
-        $response->assertjson([
+        $response->assertJson([
             'user' => [
                 'id' => true,
                 'contract_id' => $contractId,

@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { ApiPath } from "./ApiPath";
+import { routePath } from "../enums/routePath";
 
 const baseURL = ApiPath.BASE_PATH;
 
@@ -12,6 +13,16 @@ const axiosClient: AxiosInstance = axios.create({
       : undefined,
   },
 });
+
+axiosClient.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response.status === 401 && error.config.url !== ApiPath.LOGIN) {
+      window.location.replace(routePath.Login)
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const callGet = async <
   TParam extends Record<string, string>,
@@ -63,5 +74,6 @@ export const callLogin = async <TBody extends Record<string, unknown>>(
   const response = await axiosClient.post(ApiPath.LOGIN, body);
   const token = response.data?.token;
   localStorage.setItem("token", token);
+  axiosClient.defaults.headers.Authorization = `Bearer ${token}`
   return response.data;
 };
