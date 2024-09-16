@@ -10,7 +10,7 @@ const menuItems = [
   { label: "予約", path: routePath.Reserves, icon: <FaCalendarAlt className="w-7 h-7" /> },
 ];
 const settingsItems = [
-  { label: "店舗設定", path: routePath.Top, icon: <FaCog className="w-7 h-7" /> },
+  { label: "店舗設定", path: routePath.StoreSetting, icon: <FaCog className="w-7 h-7" /> },
   { label: "予約設定", path: routePath.Top, icon: <FaCog className="w-7 h-7" /> },
 ];
 

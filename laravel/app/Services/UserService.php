@@ -3,18 +3,17 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Repositories\Eloquent\EloquentUserRepository;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    protected UserRepositoryInterface $userRepository;
+    protected UserRepository $userRepository;
 
     public function __construct(
-        EloquentUserRepository $eloquentUserRepository
+        UserRepository $userRepository
     ) {
-        $this->userRepository = $eloquentUserRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**

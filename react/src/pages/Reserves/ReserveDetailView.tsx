@@ -11,11 +11,11 @@ export function ReserveDetailView() {
   const reserveDetail = {
     id: reserve.id,
     name: reserve.name,
-    startDate: reserve.start_date_time.split(' ')[0],
-    startTime: reserve.start_date_time.split(' ')[1],
-    endDate: reserve.end_date_time.split(' ')[0],
-    endTime: reserve.end_date_time.split(' ')[1],
-    guestNumber: reserve.guest_number,
+    startDate: reserve.startDateTime.split(' ')[0],
+    startTime: reserve.startDateTime.split(' ')[1],
+    endDate: reserve.endDateTime.split(' ')[0],
+    endTime: reserve.endDateTime.split(' ')[1],
+    guestNumber: reserve.guestNumber,
   }
 
   if (isLoading) return <LoadingSpinner/>

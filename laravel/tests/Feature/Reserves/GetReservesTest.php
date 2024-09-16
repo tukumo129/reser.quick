@@ -33,11 +33,11 @@ class GetReservesTest extends TestCase
             'reserves' => [
                 0 => [
                     'id' => $reserves[0]->id,
-                    'contract_id' => $reserves[0]->contract_id,
+                    'contractId' => $reserves[0]->contract_id,
                     'name' => $reserves[0]->name,
-                    'guest_number' => $reserves[0]->guest_number,
-                    'start_date_time' => $reserves[0]->start_date_time,
-                    'end_date_time' => $reserves[0]->end_date_time,
+                    'guestNumber' => $reserves[0]->guest_number,
+                    'startDateTime' => $reserves[0]->start_date_time,
+                    'endDateTime' => $reserves[0]->end_date_time,
                     'uuid' => $reserves[0]->uuid,
                 ],
                 1 => [
@@ -60,11 +60,11 @@ class GetReservesTest extends TestCase
             'reserves' => [
                 0 => [
                     'id' => $reserves[1]->id,
-                    'contract_id' => $reserves[1]->contract_id,
+                    'contractId' => $reserves[1]->contract_id,
                     'name' => $reserves[1]->name,
-                    'guest_number' => $reserves[1]->guest_number,
-                    'start_date_time' => $reserves[1]->start_date_time,
-                    'end_date_time' => $reserves[1]->end_date_time,
+                    'guestNumber' => $reserves[1]->guest_number,
+                    'startDateTime' => $reserves[1]->start_date_time,
+                    'endDateTime' => $reserves[1]->end_date_time,
                     'uuid' => $reserves[1]->uuid,
                 ],
             ],

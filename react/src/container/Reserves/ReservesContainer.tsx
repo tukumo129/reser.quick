@@ -36,9 +36,9 @@ export const ReserveList = ({ reserves }: ReserveListProps) => {
               <Stack spacing={2}>
                 <Text fontWeight="bold">予約番号: {reserve.id}</Text>
                 <Text>名前: {reserve.name}</Text>
-                <Text>人数: {reserve.guest_number}</Text>
+                <Text>人数: {reserve.guestNumber}</Text>
                 <Text>
-                    予約時間: {`${format(new Date(reserve.start_date_time), 'yyyy/MM/dd HH:mm')} ～ ${format(new Date(reserve.end_date_time), 'yyyy/MM/dd HH:mm')}`}
+                    予約時間: {`${format(new Date(reserve.startDateTime), 'yyyy/MM/dd HH:mm')} ～ ${format(new Date(reserve.endDateTime), 'yyyy/MM/dd HH:mm')}`}
                 </Text>
               </Stack>
             </Box>

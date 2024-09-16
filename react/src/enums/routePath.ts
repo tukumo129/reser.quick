@@ -4,4 +4,5 @@ export const routePath = {
   Reserves: "/reserves",
   ReserveCreate: "/reserve/create",
   ReserveDetail: "/reserve/:reserveId",
+  StoreSetting: "/store_setting"
 };

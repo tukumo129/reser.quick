@@ -20,12 +20,11 @@ class DeleteReserveTest extends TestCase
      */
     public function testSuccess(): void
     {
-        $contractId = 1;
         /** @var User $user */
-        $user = User::factory()->create(['contract_id' => $contractId]);
+        $user = User::factory()->create();
         $this->actingAs($user, 'web');
 
-        $reserve = Reserve::factory()->create(['contract_id' => $contractId]);
+        $reserve = Reserve::factory()->create(['contract_id' => $user->contract_id]);
 
         $response = $this->json('delete', "/api/reserve/{$reserve->id}", []);
         $response->assertStatus(Response::HTTP_NO_CONTENT);

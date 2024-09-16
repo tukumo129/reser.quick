@@ -1,34 +1,34 @@
 <?php
 
-namespace App\Repositories\Eloquent;
+namespace App\Repositories;
 
-use App\Exceptions\UserNotFoundException;
+use App\Exceptions\ReserveNotFoundException;
 use Illuminate\Support\Collection;
-use App\Models\User;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Models\Reserve;
 
-class EloquentUserRepository implements UserRepositoryInterface
+class ReserveRepository
 {
     /**
+     * @param int $contractId
      * @param int $id
-     * @return User
+     * @return Reserve
      */
-    public function find(int $id): User
+    public function find(int $contractId, int $id): Reserve
     {
-        $user = User::find($id);
-        if (!$user) {
-            throw new UserNotFoundException("User with id {$id} not found.");
+        $reserve = Reserve::where('contract_id', $contractId)->where('id', $id)->first();
+        if (!$reserve) {
+            throw new ReserveNotFoundException($id);
         }
-        return $user;
+        return $reserve;
     }
 
     /**
      * @param array<string, mixed> $criteria
-     * @return Collection<User>|null
+     * @return Collection<Reserve>|null
      */
     public function findBy(array $criteria): ?Collection
     {
-        $query = User::query();
+        $query = Reserve::query();
         foreach ($criteria as $key => $value) {
             $query->where($key, $value);
         }
@@ -45,7 +45,7 @@ class EloquentUserRepository implements UserRepositoryInterface
      */
     public function findWithPagination(array $criteria, array $sorts = [], ?int $page = 1, ?int $limit = 10): array
     {
-        $query = User::query();
+        $query = Reserve::query();
         foreach ($criteria as $key => $value) {
             $query->where($key, $value);
         }
@@ -57,7 +57,7 @@ class EloquentUserRepository implements UserRepositoryInterface
         $paginator = $query->paginate($limit, ['*'], 'page', $page);
 
         return [
-            'user' => $paginator->items(),
+            'reserves' => $paginator->items(),
             'pagination' => [
                 'total' => $paginator->total(),
                 'last_page' => $paginator->lastPage(),
@@ -68,33 +68,40 @@ class EloquentUserRepository implements UserRepositoryInterface
 
     /**
      * @param array<string, mixed> $data
-     * @return User
+     * @return Reserve
      */
-    public function create(array $data): User
+    public function create(array $data): Reserve
     {
-        $user = new User();
-        $user->fill($data)->save();
-        return $user;
+        $reserve = new Reserve();
+        $reserve->fill($data)->save();
+        return $reserve;
     }
 
     /**
+     * @param int $contractId
      * @param int $id
      * @param array<string, mixed> $data
-     * @return User
+     * @return Reserve
      */
-    public function update(int $id, array $data): User
+    public function update(int $contractId, int $id, array $data): Reserve
     {
-        $user = User::find($id);
-        if (!$user) {
-            throw new UserNotFoundException("User with id {$id} not found.");
+        $reserve = $this->find($contractId, $id);
+        if (!$reserve) {
+            throw new ReserveNotFoundException($id);
         }
-        $user->fill($data)->save();
-        return $user;
+        $reserve->fill($data)->save();
+        return $reserve;
+
     }
 
-    public function delete(int $id): void
+    /**
+     * @param int $contractId
+     * @param int $id
+     * @return void
+     */
+    public function delete(int $contractId, int $id): void
     {
-        $user = User::find($id);
-        $user->delete();
+        $reserve = $this->find($contractId, $id);
+        $reserve->delete();
     }
 }

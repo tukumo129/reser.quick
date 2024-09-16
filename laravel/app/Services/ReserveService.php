@@ -3,26 +3,26 @@
 namespace App\Services;
 
 use App\Models\Reserve;
-use App\Repositories\Eloquent\EloquentReserveRepository;
-use App\Repositories\Interfaces\ReserveRepositoryInterface;
+use App\Repositories\ReserveRepository;
 
 class ReserveService
 {
-    protected ReserveRepositoryInterface $reserveRepository;
+    protected ReserveRepository $reserveRepository;
 
     public function __construct(
-        EloquentReserveRepository $eloquentReserveRepository
+        ReserveRepository $reserveRepository
     ) {
-        $this->reserveRepository = $eloquentReserveRepository;
+        $this->reserveRepository = $reserveRepository;
     }
 
     /**
+     * @param int $contractId
      * @param int $reserveId
      * @return Reserve
      */
-    public function getReserve(int $reserveId): Reserve
+    public function getReserve(int $contractId, int $reserveId): Reserve
     {
-        return $this->reserveRepository->find($reserveId);
+        return $this->reserveRepository->find($contractId, $reserveId);
     }
 
     /**
@@ -57,21 +57,23 @@ class ReserveService
     }
 
     /**
+     * @param int $contractId
      * @param int $reserveId
      * @param array<string, mixed> $reserveData
      * @return Reserve
      */
-    public function updateReserve(int $reserveId, array $reserveData): Reserve
+    public function updateReserve(int $contractId, int $reserveId, array $reserveData): Reserve
     {
-        return $this->reserveRepository->update($reserveId, $reserveData);
+        return $this->reserveRepository->update($contractId, $reserveId, $reserveData);
     }
 
     /**
+     * @param int $contractId
      * @param int $reserveId
      * @return void
      */
-    public function deleteReserve(int $reserveId): void
+    public function deleteReserve(int $contractId, int $reserveId): void
     {
-        $this->reserveRepository->delete($reserveId);
+        $this->reserveRepository->delete($contractId, $reserveId);
     }
 }

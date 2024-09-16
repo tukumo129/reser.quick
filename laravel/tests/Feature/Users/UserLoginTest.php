@@ -36,10 +36,10 @@ class UserLoginTest extends TestCase
         ];
 
         $response = $this->json('POST', '/api/user/login', $params);
-        $response->assertjson([
+        $response->assertJson([
             'user' => [
                 'id' => $user->id,
-                'contract_id' => $user->contract_id,
+                'contractId' => $user->contract_id,
                 'email' => $email,
             ],
             'token' => true,

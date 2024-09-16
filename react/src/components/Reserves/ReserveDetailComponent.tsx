@@ -1,24 +1,8 @@
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Select, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useReserveUpdateForm } from "../../container/Reserves/ReserveUpdateFormContainer";
 import { routePath } from "../../enums/routePath";
 
-const getTimes = (activeTimes:{start: string, end: string}[], interval: number) => {
-  const Times:Array<string> = [];
-  activeTimes.map((activeTime) => {
-    const startTime = new Date(`1970-01-01T${activeTime.start}:00Z`);
-    const endTime = new Date(`1970-01-01T${activeTime.end}:00Z`);
-    const currentTime = new Date(startTime);
-  
-    while (currentTime <= endTime) {
-      const hours = String(currentTime.getUTCHours()).padStart(2, '0');
-      const minutes = String(currentTime.getUTCMinutes()).padStart(2, '0');
-      Times.push(`${hours}:${minutes}`);
-      currentTime.setUTCMinutes(currentTime.getUTCMinutes() + interval);
-    }
-  })
-  return Times;
-};
 export type ReserveFormProps = {
   reserve: {
     id: number
@@ -34,15 +18,6 @@ export type ReserveFormProps = {
 export function UpdateReserveForm({reserve}: ReserveFormProps) {
   const navigate = useNavigate()
   const { ReserveUpdateData, handleSubmit, onSubmit , errors} = useReserveUpdateForm(reserve.id);
-
-  // TODO 各種設定は設定画面から取得する
-  const TimeInterval = 15;
-  const activeTimes = [
-    { start: '00:00', end: '01:00'},
-    { start: '10:00', end: '13:45'},
-    { start: '23:00', end: '24:00'},
-  ]
-  const timeOptions = getTimes(activeTimes, TimeInterval);
 
   return (
     <Box p={{base: 4, md: 8}} mx="right" bg="white">
@@ -77,13 +52,7 @@ export function UpdateReserveForm({reserve}: ReserveFormProps) {
               <FormLabel visibility={{ base: "hidden", md: "visible" }}>
                 開始時刻<Text as="span" color="red">*</Text>
               </FormLabel>
-              <Select {...ReserveUpdateData('startTime')} defaultValue={reserve.startTime}>
-                {timeOptions.map((time) => (
-                  <option key={time} value={time}>
-                    {time}
-                  </option>
-                ))}
-              </Select>
+              <Input {...ReserveUpdateData('startTime')} defaultValue={reserve.startTime} placeholder="00:00"/>
               <FormErrorMessage>{errors.startTime?.message}</FormErrorMessage>
             </FormControl>
           </HStack>
@@ -103,13 +72,7 @@ export function UpdateReserveForm({reserve}: ReserveFormProps) {
               <FormLabel visibility={{ base: "hidden", md: "visible" }}>
                 終了時刻<Text as="span" color="red">*</Text>
               </FormLabel>
-              <Select {...ReserveUpdateData('endTime')} defaultValue={reserve.endTime} >
-                {timeOptions.map((time) => (
-                  <option key={time} value={time}>
-                    {time}
-                  </option>
-                ))}
-              </Select>
+              <Input {...ReserveUpdateData('endTime')} defaultValue={reserve.endTime} placeholder="00:00" />
               <FormErrorMessage>{errors.endTime?.message}</FormErrorMessage>
             </FormControl>
           </HStack>

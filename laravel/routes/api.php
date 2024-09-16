@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ReserveController;
+use App\Http\Controllers\Api\SettingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,4 +27,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/reserves', [ReserveController::class, 'createReserve']);
     Route::put('/reserve/{reserve_id}', [ReserveController::class, 'updateReserve'])->where('reserve_id', '[0-9]+');
     Route::delete('/reserve/{reserve_id}', [ReserveController::class, 'deleteReserve'])->where('reserve_id', '[0-9]+');
+
+    Route::get('/store_setting', [SettingController::class, 'getStoreSetting']);
+    Route::put('/store_setting', [SettingController::class, 'updateStoreSetting']);
 });

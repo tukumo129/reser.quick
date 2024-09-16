@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @param int $contract_id
- * @param string $name
- * @param int $guest_number
- * @param string $start_date_time
- * @param string $end_date_time
- * @param string $uuid
+ * @property int $contract_id
+ * @property string $name
+ * @property int $guest_number
+ * @property string $start_date_time
+ * @property string $end_date_time
+ * @property string $uuid
  */
 class Reserve extends Model
 {

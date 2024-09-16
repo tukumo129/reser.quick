@@ -3,4 +3,5 @@ export const ApiPath = {
   LOGIN: "/user/login",
   RESERVE: "/reserve/:reserveId",
   RESERVES: "/reserves",
+  STORE_SETTING: "store_setting"
 } as const;

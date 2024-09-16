@@ -9,11 +9,11 @@ export type GetReserveData = {
 
 const defaultValues = {
   id: 0,
-  contract_id: 0,
+  contractId: 0,
   name: '',
-  guest_number: 0,
-  start_date_time: '',
-  end_date_time: '',
+  guestNumber: 0,
+  startDateTime: '',
+  endDateTime: '',
   uuid: '',
 }
 

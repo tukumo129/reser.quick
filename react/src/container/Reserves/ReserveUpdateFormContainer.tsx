@@ -16,6 +16,21 @@ const schema = z.object({
     .refine(val => !isNaN(parseFloat(val)), '数字を入力してください')
     .transform(val => parseInt(val))
 }).superRefine((data, ctx) => {
+  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+  if (!timeRegex.test(data.startTime)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['startTime'],
+      message: '時刻は "HH:MM" の形式で入力してください',
+    });
+  }
+  if (!timeRegex.test(data.endTime)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['endTime'],
+      message: '時刻は "HH:MM" の形式で入力してください',
+    });
+  }
   const startDateTime = new Date(`${data.startDate} ${data.startTime}`)
   const endDateTime = new Date(`${data.endDate} ${data.endTime}`)
   if(startDateTime >= endDateTime) {
@@ -68,7 +83,7 @@ export const useReserveUpdateForm = (reserveId: number) => {
       onError: () => {
         navigate(routePath.Reserves)
         toast({
-          title: "更新んに失敗しました",
+          title: "更新に失敗しました",
           description: "予期しないエラーが発生しました",
           status: "error",
           duration: 3000,

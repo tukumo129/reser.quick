@@ -1,34 +1,33 @@
 <?php
 
-namespace App\Repositories\Eloquent;
+namespace App\Repositories;
 
-use App\Exceptions\ReserveNotFoundException;
+use App\Exceptions\UserNotFoundException;
 use Illuminate\Support\Collection;
-use App\Models\Reserve;
-use App\Repositories\Interfaces\ReserveRepositoryInterface;
+use App\Models\User;
 
-class EloquentReserveRepository implements ReserveRepositoryInterface
+class UserRepository
 {
     /**
      * @param int $id
-     * @return Reserve
+     * @return User
      */
-    public function find(int $id): Reserve
+    public function find(int $id): User
     {
-        $reserve = Reserve::find($id);
-        if (!$reserve) {
-            throw new ReserveNotFoundException($id);
+        $user = User::find($id);
+        if (!$user) {
+            throw new UserNotFoundException("User with id {$id} not found.");
         }
-        return $reserve;
+        return $user;
     }
 
     /**
      * @param array<string, mixed> $criteria
-     * @return Collection<Reserve>|null
+     * @return Collection<User>|null
      */
     public function findBy(array $criteria): ?Collection
     {
-        $query = Reserve::query();
+        $query = User::query();
         foreach ($criteria as $key => $value) {
             $query->where($key, $value);
         }
@@ -45,7 +44,7 @@ class EloquentReserveRepository implements ReserveRepositoryInterface
      */
     public function findWithPagination(array $criteria, array $sorts = [], ?int $page = 1, ?int $limit = 10): array
     {
-        $query = Reserve::query();
+        $query = User::query();
         foreach ($criteria as $key => $value) {
             $query->where($key, $value);
         }
@@ -57,7 +56,7 @@ class EloquentReserveRepository implements ReserveRepositoryInterface
         $paginator = $query->paginate($limit, ['*'], 'page', $page);
 
         return [
-            'reserves' => $paginator->items(),
+            'user' => $paginator->items(),
             'pagination' => [
                 'total' => $paginator->total(),
                 'last_page' => $paginator->lastPage(),
@@ -68,34 +67,33 @@ class EloquentReserveRepository implements ReserveRepositoryInterface
 
     /**
      * @param array<string, mixed> $data
-     * @return Reserve
+     * @return User
      */
-    public function create(array $data): Reserve
+    public function create(array $data): User
     {
-        $reserve = new Reserve();
-        $reserve->fill($data)->save();
-        return $reserve;
+        $user = new User();
+        $user->fill($data)->save();
+        return $user;
     }
 
     /**
      * @param int $id
      * @param array<string, mixed> $data
-     * @return Reserve
+     * @return User
      */
-    public function update(int $id, array $data): Reserve
+    public function update(int $id, array $data): User
     {
-        $reserve = Reserve::find($id);
-        if (!$reserve) {
-            throw new ReserveNotFoundException($id);
+        $user = User::find($id);
+        if (!$user) {
+            throw new UserNotFoundException("User with id {$id} not found.");
         }
-        $reserve->fill($data)->save();
-        return $reserve;
-
+        $user->fill($data)->save();
+        return $user;
     }
 
     public function delete(int $id): void
     {
-        $reserve = Reserve::find($id);
-        $reserve->delete();
+        $user = User::find($id);
+        $user->delete();
     }
 }

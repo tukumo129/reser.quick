@@ -24,17 +24,17 @@ class GetReserveTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user, 'web');
 
-        $reserve = Reserve::factory()->create();
+        $reserve = Reserve::factory()->create(['contract_id' => $user->contract_id]);
 
         $response = $this->json('GET', "/api/reserve/{$reserve->id}");
-        $response->assertjson([
+        $response->assertJson([
             'reserve' => [
                 'id' => $reserve->id,
-                'contract_id' => $reserve->contract_id,
+                'contractId' => $reserve->contract_id,
                 'name' => $reserve->name,
-                'guest_number' => $reserve->guest_number,
-                'start_date_time' => $reserve->start_date_time,
-                'end_date_time' => $reserve->end_date_time,
+                'guestNumber' => $reserve->guest_number,
+                'startDateTime' => $reserve->start_date_time,
+                'endDateTime' => $reserve->end_date_time,
                 'uuid' => $reserve->uuid,
             ],
         ])->assertStatus(Response::HTTP_OK);

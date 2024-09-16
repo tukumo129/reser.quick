@@ -1,5 +1,5 @@
 export type User = {
   id: number;
-  contract_id: number;
+  contractId: number;
   email: string;
 };

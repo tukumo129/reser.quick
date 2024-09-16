@@ -7,6 +7,7 @@ use App\Http\Requests\Reserves\CreateReserveRequest;
 use App\Http\Requests\Reserves\GetReservesRequest;
 use App\Http\Requests\Reserves\UpdateReserveRequest;
 use App\Http\Resources\ReserveResource;
+use App\Models\User;
 use App\Services\ReserveService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -28,8 +29,9 @@ class ReserveController extends Controller
      */
     public function getReserve(int $reserveId): JsonResponse
     {
+        /** @var User $user */
         $user = auth()->user();
-        $reserve = $this->reserveService->getReserve($reserveId);
+        $reserve = $this->reserveService->getReserve($user->contract_id, $reserveId);
 
         return response()->json([
             'reserve' => new ReserveResource($reserve),
@@ -42,6 +44,7 @@ class ReserveController extends Controller
      */
     public function getReserves(GetReservesRequest $request): JsonResponse
     {
+        /** @var User $user */
         $user = auth()->user();
         $sorts = $request->input('sorts', []);
         $page = $request->input('page');
@@ -57,8 +60,9 @@ class ReserveController extends Controller
      * @param CreateReserveRequest $request
      * @return Response
      */
-    public function createReserve(CreateReserveRequest $request)
+    public function createReserve(CreateReserveRequest $request): JsonResponse
     {
+        /** @var User $user */
         $user = auth()->user();
         $reserveData = $request->input('reserve');
         $reserveData['contract_id'] = $user->contract_id;
@@ -74,10 +78,12 @@ class ReserveController extends Controller
      * @param UpdateReserveRequest $request
      * @return Response
      */
-    public function updateReserve(int $reserveId, UpdateReserveRequest $request)
+    public function updateReserve(int $reserveId, UpdateReserveRequest $request): JsonResponse
     {
+        /** @var User $user */
+        $user = auth()->user();
         $reserveData = $request->input('reserve');
-        $reserve = $this->reserveService->updateReserve($reserveId, $reserveData);
+        $reserve = $this->reserveService->updateReserve($user->contract_id, $reserveId, $reserveData);
         return response()->json([
             'reserve' => new ReserveResource($reserve),
         ], Response::HTTP_OK);
@@ -87,9 +93,11 @@ class ReserveController extends Controller
      * @param int $reserveId
      * @return Response
      */
-    public function deleteReserve(int $reserveId)
+    public function deleteReserve(int $reserveId): JsonResponse
     {
-        $this->reserveService->deleteReserve($reserveId);
+        /** @var User $user */
+        $user = auth()->user();
+        $this->reserveService->deleteReserve($user->contract_id, $reserveId);
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

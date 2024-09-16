@@ -35,7 +35,7 @@ class UserRegisterTest extends TestCase
         $response->assertJson([
             'user' => [
                 'id' => true,
-                'contract_id' => $contractId,
+                'contractId' => $contractId,
                 'email' => $email,
             ],
             'token' => true,

@@ -1,9 +1,9 @@
 export type Reserve = {
   id: number;
-  contract_id: number;
+  contractId: number;
   name: string;
-  guest_number: number;
-  start_date_time: string;
-  end_date_time: string;
+  guestNumber: number;
+  startDateTime: string;
+  endDateTime: string;
   uuid: string;
 };
