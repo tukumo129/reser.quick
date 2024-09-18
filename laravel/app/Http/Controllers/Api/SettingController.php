@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Settings\UpdateReserveSettingRequest;
 use App\Http\Requests\Settings\UpdateSettingRequest;
 use App\Http\Requests\Settings\UpdateStoreSettingRequest;
+use App\Http\Resources\ReserveSettingResource;
 use App\Http\Resources\StoreSettingResource;
 use App\Models\User;
 use App\Services\SettingService;
@@ -22,8 +24,7 @@ class SettingController extends Controller
     }
 
     /**
-     * @param UpdateSettingRequest $request
-     * @return Response
+     * @return JsonResponse
      */
     public function getStoreSetting(): JsonResponse
     {
@@ -38,8 +39,8 @@ class SettingController extends Controller
     }
 
     /**
-     * @param UpdateSettingRequest $request
-     * @return Response
+     * @param UpdateStoreSettingRequest $request
+     * @return JsonResponse
      */
     public function updateStoreSetting(UpdateStoreSettingRequest $request): JsonResponse
     {
@@ -49,6 +50,36 @@ class SettingController extends Controller
         $storeSetting = $this->settingService->updateOrCreateStoreSettings($user->contract_id, $settingData);
         return response()->json([
             'storeSetting' => new StoreSettingResource($storeSetting),
+        ], Response::HTTP_OK);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getReserveSetting(): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        $contract = $user->contract;
+        $reserveSetting = $contract->reserveSetting;
+
+        return response()->json([
+            'reserveSetting' => new ReserveSettingResource($reserveSetting),
+        ], Response::HTTP_OK);
+    }
+
+    /**
+     * @param UpdateSettingRequest $request
+     * @return JsonResponse
+     */
+    public function updateReserveSetting(UpdateReserveSettingRequest $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        $settingData = $request->input('setting');
+        $reserveSetting = $this->settingService->updateOrCreateReserveSettings($user->contract_id, $settingData);
+        return response()->json([
+            'reserveSetting' => new ReserveSettingResource($reserveSetting),
         ], Response::HTTP_OK);
     }
 }

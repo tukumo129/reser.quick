@@ -30,4 +30,12 @@ class Contract extends Model
     {
         return $this->hasOne(StoreSetting::class);
     }
+
+    /**
+     * @return HasOne
+     */
+    public function reserveSetting(): HasOne
+    {
+        return $this->hasOne(ReserveSetting::class);
+    }
 }

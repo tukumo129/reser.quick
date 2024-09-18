@@ -30,4 +30,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/store_setting', [SettingController::class, 'getStoreSetting']);
     Route::put('/store_setting', [SettingController::class, 'updateStoreSetting']);
+
+    Route::get('/reserve_setting', [SettingController::class, 'getReserveSetting']);
+    Route::put('/reserve_setting', [SettingController::class, 'updateReserveSetting']);
 });
