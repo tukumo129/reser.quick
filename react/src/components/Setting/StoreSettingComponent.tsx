@@ -10,17 +10,18 @@ import { DayOpenTimesContainer } from "../../container/Settings/DayOpenTimesCont
 export const StoreSettingComponent = (storeSetting: GetStoreSettingData) => {
   const navigate = useNavigate()
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const { StoreSettingUpdateData, setValue, handleSubmit, onSubmit , errors} = useStoreSettingUpdateForm()
+  const { StoreSettingUpdateData, setValue, handleSubmit, onSubmit , errors, reset} = useStoreSettingUpdateForm()
   const [weekOpenTimes, setWeekOpenTimes] = useState<WeekOpenTime[]>([]);
   const [dayOpenTimes, setDayOpenTimes] = useState<DayOpenTime[]>([]);
   const handleWeekOpenTimesChange = (updateTimes: WeekOpenTime[]) => {
     setWeekOpenTimes(updateTimes);
-  };
+  }
   const handleDayOpenTimesChange = (updateTimes: DayOpenTime[]) => {
     setDayOpenTimes(updateTimes);
-  };
+  }
   useEffect(() => {
     if (storeSetting) {
+      reset(storeSetting)
       setWeekOpenTimes(storeSetting.weekOpenTimes)
       setDayOpenTimes(storeSetting.dayOpenTimes)
     }

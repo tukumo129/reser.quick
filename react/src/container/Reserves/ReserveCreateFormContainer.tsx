@@ -12,9 +12,7 @@ const schema = z.object({
   startTime: z.string().min(1, {message: '開始時刻を入力してください'}),
   endDate: z.string().min(1, {message: '終了日を入力してください'}),
   endTime: z.string().min(1, {message: '終了時刻を入力してください'}),
-  guestNumber: z.string()
-    .refine(val => !isNaN(parseFloat(val)), '数字を入力してください')
-    .transform(val => parseInt(val))
+  guestNumber: z.number(),
 }).superRefine((data, ctx) => {
   const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
   if (!timeRegex.test(data.startTime)) {

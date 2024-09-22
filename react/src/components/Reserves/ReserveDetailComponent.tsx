@@ -2,6 +2,7 @@ import { Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, S
 import { useNavigate } from "react-router-dom";
 import { useReserveUpdateForm } from "../../container/Reserves/ReserveUpdateFormContainer";
 import { routePath } from "../../enums/routePath";
+import { useEffect } from "react";
 
 export type ReserveFormProps = {
   reserve: {
@@ -17,7 +18,13 @@ export type ReserveFormProps = {
 
 export function UpdateReserveForm({reserve}: ReserveFormProps) {
   const navigate = useNavigate()
-  const { ReserveUpdateData, handleSubmit, onSubmit , errors} = useReserveUpdateForm(reserve.id);
+  const { ReserveUpdateData, handleSubmit, onSubmit , errors, reset} = useReserveUpdateForm(reserve.id);
+
+  useEffect(() => {
+    if (reserve) {
+      reset(reserve)
+    }
+  }, [reserve])
 
   return (
     <Box p={{base: 4, md: 8}} mx="right" bg="white">
@@ -87,7 +94,7 @@ export function UpdateReserveForm({reserve}: ReserveFormProps) {
               w="full"
               type="number"
               defaultValue={reserve.guestNumber}
-              {...ReserveUpdateData('guestNumber')}
+              {...ReserveUpdateData('guestNumber', { valueAsNumber: true })}
               maxW={{ base: "100%", md: "5rem" }}
             />
             <FormErrorMessage>{errors.guestNumber?.message}</FormErrorMessage>

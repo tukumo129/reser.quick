@@ -35,11 +35,11 @@ class GetReserveSettingTest extends TestCase
         $response->assertJson([
             'reserveSetting' => [
                 'id' => $reserveSetting->id,
-                'max_concurrent_reserve' => $reserveSetting->max_concurrent_reserve,
-                'reserve_slot_time' => $reserveSetting->reserve_slot_time,
-                'default_stay_time' => $reserveSetting->default_stay_time,
-                'max_reserve_number' => $reserveSetting->max_reserve_number,
-                'reserve_months_limit' => $reserveSetting->reserve_months_limit,
+                'maxConcurrentReserve' => $reserveSetting->max_concurrent_reserve,
+                'reserveSlotTime' => $reserveSetting->reserve_slot_time,
+                'defaultStayTime' => $reserveSetting->default_stay_time,
+                'maxReserveNumber' => $reserveSetting->max_reserve_number,
+                'reserveMonthsLimit' => $reserveSetting->reserve_months_limit,
             ],
         ]);
         $response->assertStatus(Response::HTTP_OK);

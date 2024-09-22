@@ -7,6 +7,7 @@ import { ReserveView } from "./pages/Reserves/ReservesView";
 import { ReserveCreateView } from "./pages/Reserves/ReserveCreateView";
 import { ReserveDetailView } from "./pages/Reserves/ReserveDetailView";
 import { StoreSettingUpdateView } from "./pages/Settings/StoreSettingUpdateView";
+import { ReserveSettingUpdateView } from "./pages/Settings/ReserveSettingUpdateView";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App: React.FC = () => {
           <Route path={routePath.ReserveCreate} element={<ReserveCreateView />} />
           <Route path={routePath.ReserveDetail} element={<ReserveDetailView />} />
           <Route path={routePath.StoreSetting} element={<StoreSettingUpdateView />} />
+          <Route path={routePath.ReserveSetting} element={<ReserveSettingUpdateView />} />
         </Routes>
       </QueryClientProvider>
     </div>

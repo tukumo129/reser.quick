@@ -90,7 +90,7 @@ export function CreateReserveForm() {
                 w="full"
                 type="number"
                 defaultValue={0}
-                {...ReserveCreateData('guestNumber')}
+                {...ReserveCreateData('guestNumber', { valueAsNumber: true })}
                 maxW={{ base: "100%", md: "5rem" }}
               />
               <FormErrorMessage>{errors.guestNumber?.message}</FormErrorMessage>

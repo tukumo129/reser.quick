@@ -12,9 +12,7 @@ const schema = z.object({
   startTime: z.string().min(1, {message: '開始時刻を入力してください'}),
   endDate: z.string().min(1, {message: '終了日を入力してください'}),
   endTime: z.string().min(1, {message: '終了時刻を入力してください'}),
-  guestNumber: z.string()
-    .refine(val => !isNaN(parseFloat(val)), '数字を入力してください')
-    .transform(val => parseInt(val))
+  guestNumber: z.number(),
 }).superRefine((data, ctx) => {
   const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
   if (!timeRegex.test(data.startTime)) {
@@ -59,7 +57,7 @@ const schema = z.object({
 type useUpdateReserveSchema = z.infer<typeof schema>
 
 export const useReserveUpdateForm = (reserveId: number) => {
-  const { register: ReserveUpdateData, handleSubmit, formState: { errors } } = useForm<useUpdateReserveSchema>({
+  const { register: ReserveUpdateData, handleSubmit, formState: { errors },reset } = useForm<useUpdateReserveSchema>({
     resolver: zodResolver(schema),
   });
   const { mutate } = useUpdateReserveMutation(reserveId);
@@ -93,5 +91,5 @@ export const useReserveUpdateForm = (reserveId: number) => {
       },
     });
   };
-  return { ReserveUpdateData, handleSubmit, onSubmit, errors };
+  return { ReserveUpdateData, handleSubmit, onSubmit, errors, reset };
 };

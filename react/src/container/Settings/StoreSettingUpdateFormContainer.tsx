@@ -26,7 +26,7 @@ const schema = z.object({
 export type useUpdateStoreSettingSchema = z.infer<typeof schema>
 
 export const useStoreSettingUpdateForm = () => {
-  const { register: StoreSettingUpdateData, setValue, handleSubmit, formState: { errors } } = useForm<useUpdateStoreSettingSchema>({
+  const { register: StoreSettingUpdateData, setValue, handleSubmit, formState: { errors } , reset} = useForm<useUpdateStoreSettingSchema>({
     resolver: zodResolver(schema),
   });
   const { mutate } = useUpdateStoreSettingMutation();
@@ -50,11 +50,9 @@ export const useStoreSettingUpdateForm = () => {
       }
     }
 
-    console.log(params)
-
     mutate(params, {
       onSuccess: () => {
-        navigate(-1);
+        navigate(routePath.Top);
       },
       onError: () => {
         navigate(routePath.Top)
@@ -69,5 +67,5 @@ export const useStoreSettingUpdateForm = () => {
       },
     });
   };
-  return { StoreSettingUpdateData, setValue, handleSubmit, onSubmit, errors };
+  return { StoreSettingUpdateData, setValue, handleSubmit, onSubmit, errors, reset};
 };
