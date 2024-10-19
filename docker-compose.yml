@@ -20,8 +20,8 @@ services:
     environment:
       MYSQL_DATABASE: database
       MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - '3306:3306'
     volumes:
@@ -40,7 +40,6 @@ services:
       - app
     ports:
       - "80:80"
-      - "3000:3000"
     volumes:
       - .:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/

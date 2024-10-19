@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Button, Flex, Input } from "@chakra-ui/react";
 import { useGetReserves } from "../../services/ReserveService/UseGetReserves";
 import { LoadingSpinner } from "../LoadingSpinnerComponent";
 import { routePath } from "../../enums/routePath";
 import { PaginationContainer, ReserveList } from "../../container/Reserves/ReservesContainer";
+import { AddIcon } from "@chakra-ui/icons";
 
 // TODO #24 検索機能実装
 export const ReservesContents = (  ) => {
@@ -18,20 +19,35 @@ export const ReservesContents = (  ) => {
 
   return (
     <>
-      <div className="flex">
-        <input
-          type="text"
+      <Flex>
+        <Input
           placeholder="検索"
-          className="border border-borderColor p-2 w-full"
+          borderWidth="1px"
+          bg="white"
+          p={2}
+          flex={1}
         />
-        <button className="bg-subMain text-fontBase border border-borderColor ml-2 w-16"> 
+        <Button
+          colorScheme="blue"
+          borderWidth="1px"
+          ml={2}
+          w="64px"
+        >
           検索
-        </button>
-      </div>
-      <button onClick={() => navigate(routePath.ReserveCreate)} className="flex items-center border bg-subMain border-borderColor p-2 my-4">
-        <span className="mr-2">＋</span>
-            新規登録
-      </button>
+        </Button>
+      </Flex>
+      <Button
+        onClick={() => navigate(routePath.ReserveCreate)}
+        leftIcon={<AddIcon />}
+        colorScheme="blue"
+        p={2}
+        mt={4}
+        mb={4}
+        display="flex"
+        alignItems="center"
+      >
+        新規登録
+      </Button>
       <Box>
         <ReserveList reserves={reserves}/>
         <div className="mt-4">

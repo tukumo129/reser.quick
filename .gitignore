@@ -4,5 +4,6 @@
 .composer
 .bash_history
 .php-cs-fixer.cache
+.env
 laravel/public/react-build
 react/build
