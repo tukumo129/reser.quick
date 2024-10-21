@@ -14,4 +14,6 @@ use Illuminate\Support\Facades\File;
 |
 */
 
+Route::get('/error/404', fn () => abort(404));
+
 Route::get('/{any}', fn () => File::get(public_path() . '/react-build/index.html'))->where('any', '.*');
