@@ -32,18 +32,21 @@ export const WeekOpenTimesContainer = ({ weekOpenTimes, onChange }: WeekOpenTime
 
   const addWeekOpenTime = (week: number) => {
     const newWeekOpenTime: WeekOpenTime = { week, openTime: "09:00", closeTime: "18:00" };
-    onChange([...weekOpenTimes, newWeekOpenTime]);
+    const updatedWeekOpenTimes = [...weekOpenTimes, newWeekOpenTime];
+    onChange(updatedWeekOpenTimes);
   };
 
   const handleWeekOpenTime = (index: number, newTime: Partial<WeekOpenTime>) => {
-    const updatedWeekOpenTimes = weekOpenTimes.map((time, i) =>
+    const updatedWeekOpenTimes = weekOpenTimes.map((time, i) => 
       i === index ? { ...time, ...newTime } : time
     );
     onChange(updatedWeekOpenTimes);
   };
 
-  const removeWeekOpenTime = (index: number) => {
-    const updatedWeekOpenTimes = weekOpenTimes.filter((_, i) => i !== index);
+  const removeWeekOpenTime = (week: number, index: number) => {
+    const updatedWeekOpenTimes = weekOpenTimes.filter((time, i) => 
+      !(time.week === week && i === index)
+    );
     onChange(updatedWeekOpenTimes);
   };
 
@@ -90,7 +93,7 @@ export const WeekOpenTimesContainer = ({ weekOpenTimes, onChange }: WeekOpenTime
                       )}
                     </Flex>
 
-                    {openTimes.map((openTime, index) => (
+                    {openTimes.map((time, index) => (
                       <Flex
                         key={`${day}-${index}`}
                         alignItems="center"
@@ -106,22 +109,22 @@ export const WeekOpenTimesContainer = ({ weekOpenTimes, onChange }: WeekOpenTime
                         <Flex width="100%" justifyContent="space-between">
                           <Input
                             type="time"
-                            value={openTime.openTime}
-                            onChange={e => handleWeekOpenTime(index, { openTime: e.target.value })}
+                            value={time.openTime}
+                            onChange={(e) => handleWeekOpenTime(weekOpenTimes.indexOf(time), { openTime: e.target.value })}
                             width="45%"
                           />
                           <Text alignSelf="center" px={2}>to</Text>
                           <Input
                             type="time"
-                            value={openTime.closeTime}
-                            onChange={e => handleWeekOpenTime(index, { closeTime: e.target.value })}
+                            value={time.closeTime}
+                            onChange={(e) => handleWeekOpenTime(weekOpenTimes.indexOf(time), { closeTime: e.target.value })}
                             width="45%"
                           />
                         </Flex>
                         <Button
                           size="sm"
                           colorScheme="red"
-                          onClick={() => removeWeekOpenTime(index)}
+                          onClick={() => removeWeekOpenTime(time.week, weekOpenTimes.indexOf(time))}
                           m={2}
                           alignSelf={isMobile ? "flex-end" : "center"} 
                         >

@@ -13,12 +13,6 @@ export const StoreSettingComponent = (storeSetting: GetStoreSettingData) => {
   const { StoreSettingUpdateData, setValue, handleSubmit, onSubmit , errors, reset} = useStoreSettingUpdateForm()
   const [weekOpenTimes, setWeekOpenTimes] = useState<WeekOpenTime[]>([]);
   const [dayOpenTimes, setDayOpenTimes] = useState<DayOpenTime[]>([]);
-  const handleWeekOpenTimesChange = (updateTimes: WeekOpenTime[]) => {
-    setWeekOpenTimes(updateTimes);
-  }
-  const handleDayOpenTimesChange = (updateTimes: DayOpenTime[]) => {
-    setDayOpenTimes(updateTimes);
-  }
   useEffect(() => {
     if (storeSetting) {
       reset(storeSetting)
@@ -57,10 +51,10 @@ export const StoreSettingComponent = (storeSetting: GetStoreSettingData) => {
           </FormControl>
 
           <Box borderWidth="1px" borderColor="bray.300" />
-          <WeekOpenTimesContainer weekOpenTimes={weekOpenTimes} onChange={handleWeekOpenTimesChange}/>
+          <WeekOpenTimesContainer weekOpenTimes={weekOpenTimes} onChange={setWeekOpenTimes}/>
 
           <Box borderWidth="1px" borderColor="bray.300" />
-          <DayOpenTimesContainer dayOpenTimes={dayOpenTimes} onChange={handleDayOpenTimesChange}/>
+          <DayOpenTimesContainer dayOpenTimes={dayOpenTimes} onChange={setDayOpenTimes}/>
           {errors.dayOpenTimes && Array.isArray(errors.dayOpenTimes) && (
             errors.dayOpenTimes.map((error) => (
               <>

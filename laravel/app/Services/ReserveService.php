@@ -2,8 +2,11 @@
 
 namespace App\Services;
 
+use App\Models\Contract;
 use App\Models\Reserve;
 use App\Repositories\ReserveRepository;
+use Carbon\CarbonPeriod;
+use Illuminate\Support\Carbon;
 
 class ReserveService
 {
@@ -75,5 +78,42 @@ class ReserveService
     public function deleteReserve(int $contractId, int $reserveId): void
     {
         $this->reserveRepository->delete($contractId, $reserveId);
+    }
+
+    /**
+     * @param Contract $contract
+     * @param string $date
+     * @return array<string>
+     */
+    public function getReserveAvailableDates(Contract $contract, string $date): array
+    {
+        // 対象の月のカレンダー取得
+        $storeSetting = $contract->storeSetting;
+        $targetDate = Carbon::parse($date);
+        $calender = CarbonPeriod::create($targetDate->copy()->startOfMonth(), $targetDate->copy()->endOfMonth())->toArray();
+
+        // 有効な曜日だけに絞り込み
+        $weekOpenTimes = $storeSetting->weekOpenTimes;
+        $weeks = $weekOpenTimes->pluck('week')->toArray();
+        $weekOpenDates = array_filter($calender, function($date) use ($weeks) {
+            return in_array($date->dayOfWeek, $weeks);
+        });
+        $availableDates = array_map(function($date) {
+            return $date->format('Y-m-d');
+        }, $weekOpenDates);
+
+        // 日付当たりの設定から対象日付を追加
+        $dayOpenTimes = $storeSetting->dayOpenTimes;
+        $unsetValues = [];
+        foreach($dayOpenTimes as $dayOpenTime) {
+            $openDate = Carbon::parse($dayOpenTime->date);
+            if($dayOpenTime->open_time === $dayOpenTime->close_time) {
+                // 開始と終了が同一時刻の場合営業なし
+                $unsetValues[] = $dayOpenTime->date;
+            } elseif($openDate->isSameMonth($targetDate)) {
+                $availableDates[] = $dayOpenTime->date;
+            }
+        }
+        return array_values(array_diff($availableDates, $unsetValues));
     }
 }

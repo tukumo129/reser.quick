@@ -1,5 +1,16 @@
-export const LoadingSpinner = () => (
-  <div className="flex justify-center items-center h-full">
-    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-push"></div>
-  </div>
-);
+import { Flex, Spinner } from "@chakra-ui/react"
+
+export const LoadingSpinner = () => {
+
+  return (
+    <Flex justify="center" align="center" height="100%">
+      <Spinner
+        thickness="4px"
+        speed="1s"
+        emptyColor="gray.200"
+        color="gray.500"
+        size="xl"
+      />
+    </Flex>  
+  )
+}
