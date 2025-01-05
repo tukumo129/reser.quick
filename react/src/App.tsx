@@ -13,7 +13,15 @@ import { AppAuth } from "./App/components/AppAuthComponent";
 import { RecoilRoot } from "recoil";
 import { ErrorView } from "./pages/ErrorView";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+      useErrorBoundary: false,
+    }
+  }
+});
 
 const App: React.FC = () => {
   return (

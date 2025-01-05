@@ -1,40 +1,55 @@
-# reser.quick
-予約管理アプリ
+# 予約管理アプリ
 
-dockerdesctopをインストール
-gitをインストール
+# 環境構築方法
+## dockerdesctopをインストール
+- https://www.docker.com/ja-jp/products/docker-desktop/
 
-ssh 接続
-ターミナル
-sshキー作成
-ssh-keygen -t ed25519 -C "test@gamail.com"　（途中でコマンドが止まった場合はエンター）
-公開鍵をコピー
+## gitをインストール
+``` sh
+sudo apt update
+sudo apt-get install git
+```
+
+## githubへsshで接続する
+### sshキーを作成し、公開鍵をコピー
+``` sh
+ssh-keygen -t ed25519 -C "test@gamail.com"  
+#（途中でコマンドが止まった場合はエンター）
 cat .ssh/id_ed25519.pub
+```
 
-github
-githubでsshキーを設定
-github -> settings -> SSH and GPG keys -> new SSH key
-title: 任意の名前(local-sshなど)
-key:ターミナルでコピーした公開鍵を入力
-ADD SSH key
+### githubでsshキーを設定
+- github -> settings -> SSH and GPG keys -> new SSH key
+- 設定値は下記の通り
+  - title: 任意の名前(local-sshなど)
+  - key:ターミナルでコピーした公開鍵を入力
+  - ADD SSH key
 
-ターミナル
-ssh -T git@github.com　途中で止まった場合はyesで続行
+### gitgubとの接続を確認
+``` sh
+ssh -T git@github.com
+# (途中で止まった場合はyesで続行)
+```  
 
-環境変数を設定
+## 環境変数を設定
+### .env.exampleを.envにコピー
+``` sh
 cd reser.quick/laravel
 cp .env.example .env
-laravelディレクトリ内にある.envを編集
+```
+### laravelディレクトリ内にある.envを編集
+```env
 APP_ENV=local
 DB_PASSWORD=123456
+```
 
-docker-compose.ymlと同一のディレクトリに.envを作成し下記を追加
-DB_PASSWORD=123456
-
-docker起動
+## docker起動
+```
 docker compose up -d --build
+```
 
-dockerコンテナでコマンド実行
+## dockerコンテナでコマンド実行
+``` sh
 docker compose exec app bash
 cd laravel
 composer i
@@ -43,3 +58,12 @@ php artisan migrate
 cd ../react
 npm i
 npm run build
+```
+
+## dnsを登録
+ターミナルを管理者として実行
+``` sh
+notepad C:\Windows\System32\drivers\etc\hosts
+# 最下段に下記を追加
+127.0.0.1 reser.quick
+```
