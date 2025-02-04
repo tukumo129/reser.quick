@@ -17,10 +17,11 @@ class CreateReservesTable extends Migration
             $table->id();
             $table->integer('contract_id');
             $table->string('name');
-            $table->integer('guest_number');
+            $table->integer('guest_number')->nullable();
             $table->string('start_date_time');
-            $table->string('end_date_time');
+            $table->string('end_date_time')->nullable();
             $table->string('uuid');
+            $table->string('status');
             $table->timestamps();
             $table->softDeletes();
         });

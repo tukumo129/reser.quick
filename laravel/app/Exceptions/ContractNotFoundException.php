@@ -9,7 +9,7 @@ class ContractNotFoundException extends Exception
 {
     protected $code;
 
-    public function __construct(string $massage= "Contract not found.")
+    public function __construct(string $massage = 'Contract not found.')
     {
         parent::__construct($massage, Response::HTTP_NOT_FOUND);
     }

@@ -3,8 +3,7 @@
 namespace Tests\Feature\App\Settings;
 
 use App\Models\Contract;
-use App\Models\ReserveSetting;
-use App\Models\StoreSetting;
+use App\Models\Setting;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -23,23 +22,18 @@ class GetAppSettingsTest extends TestCase
     {
         $contract = Contract::factory()->create();
 
-        /** @var ReserveSetting $reserveSetting */
-        $reserveSetting = ReserveSetting::factory()->create(['contract_id' => $contract->id]);
-
-        /** @var StoreSetting $storeSetting */
-        $storeSetting = StoreSetting::factory()->create(['contract_id' => $contract->id]);
+        /** @var Setting $setting */
+        $setting = Setting::factory()->create(['contract_id' => $contract->id]);
 
         $params = [];
 
         $response = $this->json('GET', "/api/app/{$contract->uuid}/auth", $params);
         $response->assertJson([
-            'settings' => [
-                'storeName' => $storeSetting->store_name,
-                'maxConcurrentReserve' => $reserveSetting->max_concurrent_reserve,
-                'reserveSlotTime' => $reserveSetting->reserve_slot_time,
-                'defaultStayTime' => $reserveSetting->default_stay_time,
-                'maxReserveNumber' => $reserveSetting->max_reserve_number,
-                'reserveMonthsLimit' => $reserveSetting->reserve_months_limit,
+            'setting' => [
+                'storeName' => $setting->store_name,
+                'reserveSlotTime' => $setting->reserve_slot_time,
+                'maxReserveNumber' => $setting->max_reserve_number,
+                'reserveMonthsLimit' => $setting->reserve_months_limit,
             ],
         ]);
         $response->assertStatus(Response::HTTP_OK);

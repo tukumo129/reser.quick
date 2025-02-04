@@ -50,7 +50,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * @return BelongsTo
+     * @return BelongsTo<Contract, User>
      */
     public function contract(): BelongsTo
     {

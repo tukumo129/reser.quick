@@ -27,11 +27,11 @@ class AppSettingController extends Controller
     public function getAppSettings(Request $request): JsonResponse
     {
         $contract = $request->attributes->get('contract');
-        if(!$contract->reserveSetting || !$contract->storeSetting) {
+        if(!$contract->setting) {
             throw new ContractNotFoundException($contract->id);
         }
         return response()->json([
-            'settings' => new AppSettingResource($contract),
+            'setting' => new AppSettingResource($contract->setting),
         ]);
     }
 }

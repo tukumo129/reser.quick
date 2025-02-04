@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ReserveStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reserves\CreateReserveRequest;
 use App\Http\Requests\Reserves\GetReservesRequest;
@@ -67,6 +68,10 @@ class ReserveController extends Controller
         $reserveData = $request->input('reserve');
         $reserveData['contract_id'] = $user->contract_id;
         $reserveData['uuid'] = Str::uuid()->toString();
+        if(!isset($reserveData['status'])) {
+            // 作成時にstatusが指定されていない場合はNO_COMPLETEを設定
+            $reserveData['status'] = ReserveStatus::NO_COMPLETE;
+        }
         $reserve = $this->reserveService->createReserve($reserveData);
         return response()->json([
             'reserve' => new ReserveResource($reserve),

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CrateStoreSettingsTable extends Migration
+class CrateSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CrateStoreSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('store_settings', function (Blueprint $table) {
+        Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->integer('contract_id');
             $table->string('store_name');
+            $table->string('reserve_slot_time');
+            $table->integer('max_reserve_number')->nullable();
+            $table->integer('reserve_months_limit')->nullable();
+            $table->integer('max_available_reserve')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +33,6 @@ class CrateStoreSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('store_settings');
+        Schema::dropIfExists('settings');
     }
 }

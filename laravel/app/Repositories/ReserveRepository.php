@@ -13,7 +13,7 @@ class ReserveRepository
      * @param int $id
      * @return Reserve
      */
-    public function find(int $contractId, int $id): Reserve
+    public function get(int $contractId, int $id): Reserve
     {
         $reserve = Reserve::where('contract_id', $contractId)->where('id', $id)->first();
         if (!$reserve) {
@@ -26,7 +26,7 @@ class ReserveRepository
      * @param array<string, mixed> $criteria
      * @return Collection<Reserve>|null
      */
-    public function findBy(array $criteria): ?Collection
+    public function getBy(array $criteria): ?Collection
     {
         $query = Reserve::query();
         foreach ($criteria as $key => $value) {
@@ -43,7 +43,7 @@ class ReserveRepository
      * @param int|null $limit
      * @return array<string, mixed>
      */
-    public function findWithPagination(array $criteria, array $sorts = [], ?int $page = 1, ?int $limit = 10): array
+    public function getWithPagination(array $criteria, array $sorts = [], ?int $page = 1, ?int $limit = 10): array
     {
         $query = Reserve::query();
         foreach ($criteria as $key => $value) {
@@ -67,6 +67,20 @@ class ReserveRepository
     }
 
     /**
+     * @param int $contractId
+     * @param string $date
+     * @param string $time
+     * @return Collection<Reserve>|null
+     */
+    public function getByStartDateTime(int $contractId, string $date, string $time): Collection
+    {
+        return Reserve::where('contract_id', $contractId)
+            ->whereDate('start_date_time', $date)
+            ->whereTime('start_date_time', $time)
+            ->get();
+    }
+
+    /**
      * @param array<string, mixed> $data
      * @return Reserve
      */
@@ -85,7 +99,7 @@ class ReserveRepository
      */
     public function update(int $contractId, int $id, array $data): Reserve
     {
-        $reserve = $this->find($contractId, $id);
+        $reserve = $this->get($contractId, $id);
         if (!$reserve) {
             throw new ReserveNotFoundException($id);
         }
@@ -101,7 +115,7 @@ class ReserveRepository
      */
     public function delete(int $contractId, int $id): void
     {
-        $reserve = $this->find($contractId, $id);
+        $reserve = $this->get($contractId, $id);
         $reserve->delete();
     }
 }

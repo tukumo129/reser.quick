@@ -31,10 +31,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/reserve/{reserve_id}', [ReserveController::class, 'deleteReserve'])->where('reserve_id', '[0-9]+');
 
     // setting
-    Route::get('/store_setting', [SettingController::class, 'getStoreSetting']);
-    Route::put('/store_setting', [SettingController::class, 'updateStoreSetting']);
-    Route::get('/reserve_setting', [SettingController::class, 'getReserveSetting']);
-    Route::put('/reserve_setting', [SettingController::class, 'updateReserveSetting']);
+    Route::get('/setting', [SettingController::class, 'getSetting']);
+    Route::put('/setting', [SettingController::class, 'updateSetting']);
 });
 
 

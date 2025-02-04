@@ -36,6 +36,7 @@ class GetReserveTest extends TestCase
                 'startDateTime' => $reserve->start_date_time,
                 'endDateTime' => $reserve->end_date_time,
                 'uuid' => $reserve->uuid,
+                'status' => $reserve->status,
             ],
         ])->assertStatus(Response::HTTP_OK);
     }

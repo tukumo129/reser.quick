@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property int $contract_id
  * @property string $name
- * @property int $guest_number
+ * @property int|null $guest_number
  * @property string $start_date_time
- * @property string $end_date_time
+ * @property string|null $end_date_time
  * @property string $uuid
+ * @property string $status
  */
 class Reserve extends Model
 {
@@ -28,5 +29,6 @@ class Reserve extends Model
         'start_date_time',
         'end_date_time',
         'uuid',
+        'status',
     ];
 }

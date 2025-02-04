@@ -22,7 +22,7 @@ class UserService
      */
     public function getUser(int $userId): User
     {
-        return $this->userRepository->find($userId);
+        return $this->userRepository->get($userId);
     }
 
     /**
@@ -37,10 +37,10 @@ class UserService
         $criteria = ['contract_id' => $contractId];
 
         if($page && $limit) {
-            return $this->userRepository->findWithPagination($criteria, $sorts, $page, $limit);
+            return $this->userRepository->getWithPagination($criteria, $sorts, $page, $limit);
         }
 
-        $users = $this->userRepository->findBy($criteria);
+        $users = $this->userRepository->getBy($criteria);
         return [
             'Users' => $users,
             'pagination' => null,
@@ -83,7 +83,7 @@ class UserService
     public function login(string $email, string $password): ?User
     {
         $criteria = ['email' => $email];
-        $user = $this->userRepository->findBy($criteria)->first();
+        $user = $this->userRepository->getBy($criteria)->first();
 
         if (!$user || !Hash::check($password, $user->password)) {
             return null;

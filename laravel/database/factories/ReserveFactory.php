@@ -22,6 +22,7 @@ class ReserveFactory extends Factory
             'start_date_time' => Carbon::now()->format('Y-m-d'),
             'end_date_time' => Carbon::now()->addHour(1)->format('Y-m-d'),
             'uuid' => Str::uuid()->toString(),
+            'status' => random_int(1, 5),
         ];
     }
 }

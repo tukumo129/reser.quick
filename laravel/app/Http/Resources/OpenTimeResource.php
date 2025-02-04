@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Models\OpenTime;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReserveResource extends JsonResource
+class OpenTimeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,15 +15,15 @@ class ReserveResource extends JsonResource
      */
     public function toArray($request)
     {
+        /** @var OpenTime|null $this */
         return [
             'id' => $this->id,
-            'contractId' => $this->contract_id,
-            'name' => $this->name,
-            'guestNumber' => $this->guest_number,
-            'startDateTime' => $this->start_date_time,
-            'endDateTime' => $this->end_date_time,
-            'uuid' => $this->uuid,
-            'status' => $this->status,
+            'type' => $this->type,
+            'date' => $this->date,
+            'week' => $this->week,
+            'startTime' => $this->start_time,
+            'endTime' => $this->end_time,
+            'maxAvailableReserve' => $this->max_available_reserve,
         ];
     }
 }

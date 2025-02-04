@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\App;
 
-use App\Models\Contract;
+use App\Models\Setting;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppSettingResource extends JsonResource
@@ -15,15 +15,12 @@ class AppSettingResource extends JsonResource
      */
     public function toArray($request)
     {
-        /** @var Contract $this */
-        $reserveSetting = $this->reserveSetting;
+        /** @var Setting $this */
         return [
-            'storeName' => $this->storeSetting->store_name,
-            'maxConcurrentReserve' => $reserveSetting->max_concurrent_reserve,
-            'reserveSlotTime' => $reserveSetting->reserve_slot_time,
-            'defaultStayTime' => $reserveSetting->default_stay_time,
-            'maxReserveNumber' => $reserveSetting->max_reserve_number,
-            'reserveMonthsLimit' => $reserveSetting->reserve_months_limit,
+            'storeName' => $this->store_name ?? null,
+            'reserveSlotTime' => $this->reserve_slot_time ?? null,
+            'maxReserveNumber' => $this->max_reserve_number ?? null,
+            'reserveMonthsLimit' => $this->reserve_months_limit ?? null,
         ];
     }
 }

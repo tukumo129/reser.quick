@@ -12,9 +12,9 @@ class UserRepository
      * @param int $id
      * @return User
      */
-    public function find(int $id): User
+    public function get(int $id): User
     {
-        $user = User::find($id);
+        $user = User::get($id);
         if (!$user) {
             throw new UserNotFoundException("User with id {$id} not found.");
         }
@@ -25,7 +25,7 @@ class UserRepository
      * @param array<string, mixed> $criteria
      * @return Collection<User>|null
      */
-    public function findBy(array $criteria): ?Collection
+    public function getBy(array $criteria): ?Collection
     {
         $query = User::query();
         foreach ($criteria as $key => $value) {
@@ -42,7 +42,7 @@ class UserRepository
      * @param int|null $limit
      * @return array<string, mixed>
      */
-    public function findWithPagination(array $criteria, array $sorts = [], ?int $page = 1, ?int $limit = 10): array
+    public function getWithPagination(array $criteria, array $sorts = [], ?int $page = 1, ?int $limit = 10): array
     {
         $query = User::query();
         foreach ($criteria as $key => $value) {
@@ -83,7 +83,7 @@ class UserRepository
      */
     public function update(int $id, array $data): User
     {
-        $user = User::find($id);
+        $user = User::get($id);
         if (!$user) {
             throw new UserNotFoundException("User with id {$id} not found.");
         }
@@ -93,7 +93,7 @@ class UserRepository
 
     public function delete(int $id): void
     {
-        $user = User::find($id);
+        $user = User::get($id);
         $user->delete();
     }
 }

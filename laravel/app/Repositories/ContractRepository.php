@@ -12,9 +12,9 @@ class ContractRepository
      * @param int $id
      * @return Contract
      */
-    public function find(int $id): Contract
+    public function get(int $id): Contract
     {
-        $contract = Contract::find($id);
+        $contract = Contract::get($id);
         if (!$contract) {
             throw new ContractNotFoundException("Contract with id {$id} not found.");
         }
@@ -25,7 +25,7 @@ class ContractRepository
      * @param array<string, mixed> $criteria
      * @return Collection<Contract>|null
      */
-    public function findBy(array $criteria): ?Collection
+    public function getBy(array $criteria): ?Collection
     {
         $query = Contract::query();
         foreach ($criteria as $key => $value) {
@@ -52,7 +52,7 @@ class ContractRepository
      */
     public function update(int $id, array $data): Contract
     {
-        $contract = Contract::find($id);
+        $contract = Contract::get($id);
         if (!$contract) {
             throw new ContractNotFoundException("Contract with id {$id} not found.");
         }
@@ -62,7 +62,7 @@ class ContractRepository
 
     public function delete(int $id): void
     {
-        $contract = Contract::find($id);
+        $contract = Contract::get($id);
         $contract->delete();
     }
 }

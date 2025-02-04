@@ -39,6 +39,7 @@ class GetReservesTest extends TestCase
                     'startDateTime' => $reserves[0]->start_date_time,
                     'endDateTime' => $reserves[0]->end_date_time,
                     'uuid' => $reserves[0]->uuid,
+                    'status' => $reserves[0]->status,
                 ],
                 1 => [
                     'id' => $reserves[1]->id,
@@ -66,6 +67,7 @@ class GetReservesTest extends TestCase
                     'startDateTime' => $reserves[1]->start_date_time,
                     'endDateTime' => $reserves[1]->end_date_time,
                     'uuid' => $reserves[1]->uuid,
+                    'status' => $reserves[1]->status,
                 ],
             ],
             'pagination' => [

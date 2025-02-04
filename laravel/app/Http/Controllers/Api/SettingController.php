@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Settings\UpdateReserveSettingRequest;
 use App\Http\Requests\Settings\UpdateSettingRequest;
-use App\Http\Requests\Settings\UpdateStoreSettingRequest;
-use App\Http\Resources\ReserveSettingResource;
-use App\Http\Resources\StoreSettingResource;
+use App\Http\Resources\SettingResource;
 use App\Models\User;
 use App\Services\SettingService;
 use Illuminate\Http\JsonResponse;
@@ -26,45 +23,16 @@ class SettingController extends Controller
     /**
      * @return JsonResponse
      */
-    public function getStoreSetting(): JsonResponse
+    public function getSetting(): JsonResponse
     {
         /** @var User $user */
         $user = auth()->user();
-        $contract = $user->contract;
-        $storeSetting = $contract->storeSetting;
 
+        if(!$user->contract) {
+            return response()->json([], Response::HTTP_NOT_FOUND);
+        }
         return response()->json([
-            'storeSetting' => new StoreSettingResource($storeSetting),
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * @param UpdateStoreSettingRequest $request
-     * @return JsonResponse
-     */
-    public function updateStoreSetting(UpdateStoreSettingRequest $request): JsonResponse
-    {
-        /** @var User $user */
-        $user = auth()->user();
-        $settingData = $request->input('setting');
-        $storeSetting = $this->settingService->updateOrCreateStoreSettings($user->contract_id, $settingData);
-        return response()->json([
-            'storeSetting' => new StoreSettingResource($storeSetting),
-        ], Response::HTTP_OK);
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function getReserveSetting(): JsonResponse
-    {
-        /** @var User $user */
-        $user = auth()->user();
-        $contract = $user->contract;
-        $reserveSetting = $contract->reserveSetting;
-
-        return response()->json([
-            'reserveSetting' => new ReserveSettingResource($reserveSetting),
+            'setting' => new SettingResource($user->contract->setting),
         ], Response::HTTP_OK);
     }
 
@@ -72,14 +40,14 @@ class SettingController extends Controller
      * @param UpdateSettingRequest $request
      * @return JsonResponse
      */
-    public function updateReserveSetting(UpdateReserveSettingRequest $request): JsonResponse
+    public function updateSetting(UpdateSettingRequest $request): JsonResponse
     {
         /** @var User $user */
         $user = auth()->user();
         $settingData = $request->input('setting');
-        $reserveSetting = $this->settingService->updateOrCreateReserveSettings($user->contract_id, $settingData);
+        $setting = $this->settingService->updateOrCreateSettings($user->contract_id, $settingData);
         return response()->json([
-            'reserveSetting' => new ReserveSettingResource($reserveSetting),
+            'setting' => new SettingResource($setting),
         ], Response::HTTP_OK);
     }
 }

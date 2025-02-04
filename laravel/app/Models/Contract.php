@@ -24,18 +24,10 @@ class Contract extends Model
     ];
 
     /**
-     * @return HasOne
+     * @return HasOne<Setting>
      */
-    public function storeSetting(): HasOne
+    public function setting(): HasOne
     {
-        return $this->hasOne(StoreSetting::class);
-    }
-
-    /**
-     * @return HasOne
-     */
-    public function reserveSetting(): HasOne
-    {
-        return $this->hasOne(ReserveSetting::class);
+        return $this->hasOne(Setting::class);
     }
 }

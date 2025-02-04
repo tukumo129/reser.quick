@@ -2,70 +2,41 @@
 
 namespace App\Services;
 
-use App\Models\ReserveSetting;
-use App\Models\StoreSetting;
-use App\Repositories\DayOpenTimeRepository;
-use App\Repositories\ReserveSettingRepository;
-use App\Repositories\StoreSettingRepository;
-use App\Repositories\WeekOpenTimeRepository;
+use App\Models\Setting;
+use App\Repositories\OpenTimeRepository;
+use App\Repositories\SettingRepository;
 
 class SettingService
 {
-    protected StoreSettingRepository $storeSettingRepository;
-    protected DayOpenTimeRepository $dayOpenTimeRepository;
-    protected WeekOpenTimeRepository $weekOpenTimeRepository;
-    protected ReserveSettingRepository $reserveSettingRepository;
+    protected SettingRepository $settingRepository;
+    protected OpenTimeRepository $openTimeRepository;
 
     public function __construct(
-        StoreSettingRepository $storeSettingRepository,
-        DayOpenTimeRepository $dayOpenTimeRepository,
-        WeekOpenTimeRepository $weekOpenTimeRepository,
-        ReserveSettingRepository $reserveSettingRepository
+        SettingRepository $settingRepository,
+        OpenTimeRepository $openTimeRepository
     ) {
-        $this->storeSettingRepository = $storeSettingRepository;
-        $this->dayOpenTimeRepository = $dayOpenTimeRepository;
-        $this->weekOpenTimeRepository = $weekOpenTimeRepository;
-        $this->reserveSettingRepository = $reserveSettingRepository;
+        $this->settingRepository = $settingRepository;
+        $this->openTimeRepository = $openTimeRepository;
     }
 
     /**
      * @param int $contractId
-     * @param array<string, mixed> $storeSettingData
-     * @return StoreSetting
+     * @param array<string, mixed> $settingData
+     * @return Setting
      */
-    public function updateOrCreateStoreSettings(int $contractId, array $storeSettingData): StoreSetting
+    public function updateOrCreateSettings(int $contractId, array $settingData): Setting
     {
-        $storeSettingData['store_name'] = $storeSettingData['store_name'] ?? null;
-        $storeSetting = $this->storeSettingRepository->updateOrCreate($contractId, $storeSettingData);
+        $setting = $this->settingRepository->updateOrCreate($contractId, $settingData);
 
-        $dayOpenTimesData = $storeSettingData['day_open_times'] ?? null;
-        $dayOpenTimeIds = collect($dayOpenTimesData)->pluck('id')->unique()->toArray();
-        $this->dayOpenTimeRepository->cleanupRemove($storeSetting->id, $dayOpenTimeIds);
-        if($dayOpenTimesData) {
-            foreach($dayOpenTimesData as $dayOpenTimeData) {
-                $this->dayOpenTimeRepository->updateOrCreate($storeSetting->id, $dayOpenTimeData);
+        $openTimesData = $settingData['open_times'] ?? [];
+        $openTimeIds = collect($openTimesData)->pluck('id')->unique()->toArray();
+        $this->openTimeRepository->cleanupDelete($setting->id, $openTimeIds);
+        if($openTimesData) {
+            foreach($openTimesData as $openTimeData) {
+                $this->openTimeRepository->updateOrCreate($setting->id, $openTimeData);
             }
         }
 
-        $weekOpenTimesData = $storeSettingData['week_open_times'] ?? null;
-        $weekOpenTimeIds = collect($weekOpenTimesData)->pluck('id')->unique()->toArray();
-        $this->weekOpenTimeRepository->cleanupRemove($storeSetting->id, $weekOpenTimeIds);
-        if($weekOpenTimesData) {
-            foreach($weekOpenTimesData as $weekOpenTimeData) {
-                $this->weekOpenTimeRepository->updateOrCreate($storeSetting->id, $weekOpenTimeData);
-            }
-        }
-
-        return $storeSetting;
-    }
-
-    /**
-     * @param int $contractId
-     * @param array<string, mixed> $reserveSettingData
-     * @return ReserveSetting
-     */
-    public function updateOrCreateReserveSettings(int $contractId, array $reserveSettingData): ReserveSetting
-    {
-        return $this->reserveSettingRepository->updateOrCreate($contractId, $reserveSettingData);
+        return $setting->refresh();
     }
 }

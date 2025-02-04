@@ -16,7 +16,7 @@ class AppAuth
     {
         $uuid = $request->route('uuid');
         $contractRepository = resolve(ContractRepository::class);
-        $contract = $contractRepository->findBy(['uuid' => $uuid])->first();
+        $contract = $contractRepository->getBy(['uuid' => $uuid])->first();
         if(!$contract) {
             throw new ContractNotFoundException("Contract not found uuid: {$uuid}.");
         }
