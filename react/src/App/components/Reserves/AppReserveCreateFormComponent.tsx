@@ -17,7 +17,7 @@ import { routePath } from "../../../enums/routePath"
 
 
 export function AppCreateReserveComponent() {
-  const {uuid} = useParams()
+  const { uuid } = useParams()
   const navigate = useNavigate()
 
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -25,10 +25,10 @@ export function AppCreateReserveComponent() {
 
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate()
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay()
-  const {availableDates, isLoading, error} = useGetReserveAvailableDates(String(uuid), {date: `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}`})
+  const { availableDates, isLoading, error } = useGetReserveAvailableDates(String(uuid), { date: `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}` })
 
-  if (isLoading) return <LoadingSpinner/>
-  if (error) navigate(routePath.appErrorPage)
+  if (isLoading) return <LoadingSpinner />
+  if (error) navigate(routePath.AppErrorPage)
 
 
   const getDateFormat = (currentDate: Date, day: number) => {

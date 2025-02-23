@@ -18,8 +18,8 @@ class SettingResource extends JsonResource
     {
         /** @var Setting|null $this */
         return [
-            'storeName' => $this->store_name ?? null,
-            'reserveSlotTime' => $this->reserve_slot_time ?? null,
+            'storeName' => $this->store_name ?? '',
+            'reserveSlotTime' => $this->reserve_slot_time ?? '5',
             'maxReserveNumber' => $this->max_reserve_number ?? null,
             'reserveMonthsLimit' => $this->reserve_months_limit ?? null,
             'maxAvailableReserve' => $this->max_available_reserve ?? null,

@@ -6,8 +6,7 @@ import { TopView } from "./pages/TopView";
 import { ReserveView } from "./pages/Reserves/ReservesView";
 import { ReserveCreateView } from "./pages/Reserves/ReserveCreateView";
 import { ReserveDetailView } from "./pages/Reserves/ReserveDetailView";
-import { StoreSettingUpdateView } from "./pages/Settings/StoreSettingUpdateView";
-import { ReserveSettingUpdateView } from "./pages/Settings/ReserveSettingUpdateView";
+import { SettingUpdateView } from "./pages/Settings/SettingUpdateView";
 import { AppReserveCreateView } from "./App/pages/Reserves/AppReserveCreateView";
 import { AppAuth } from "./App/components/AppAuthComponent";
 import { RecoilRoot } from "recoil";
@@ -35,14 +34,13 @@ const App: React.FC = () => {
             <Route path={routePath.Reserves} element={<ReserveView />} />
             <Route path={routePath.ReserveCreate} element={<ReserveCreateView />} />
             <Route path={routePath.ReserveDetail} element={<ReserveDetailView />} />
-            <Route path={routePath.StoreSetting} element={<StoreSettingUpdateView />} />
-            <Route path={routePath.ReserveSetting} element={<ReserveSettingUpdateView />} />
+            <Route path={routePath.Setting} element={<SettingUpdateView />} />
 
             {/* ユーザー画面 */}
             <Route path={routePath.AppTop} element={<AppAuth><AppReserveCreateView /></AppAuth>} />
             <Route path={routePath.AppReserveCreate} element={<AppAuth><AppReserveCreateView /></AppAuth>} />
             {/* エラー画面 */}
-            <Route path={routePath.appErrorPage} element={<ErrorView />} />
+            <Route path={routePath.AppErrorPage} element={<ErrorView />} />
             <Route path="*" element={<ErrorView />} />
           </Routes>
         </RecoilRoot>

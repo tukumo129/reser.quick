@@ -7,8 +7,8 @@ type AdminLayoutProps = {
   mainContents: ReactNode;
 }
 
-export const AdminLayout = ({ pageName ,mainContents }: AdminLayoutProps) => {
-  const { isOpen:isMenuOpen ,onToggle:onMenuToggle } = useDisclosure();
+export const AdminLayout = ({ pageName, mainContents }: AdminLayoutProps) => {
+  const { isOpen: isMenuOpen, onToggle: onMenuToggle } = useDisclosure();
   return (
     <Flex direction="column" height="100vh">
       <AdminHeaderContainer onMenuToggle={onMenuToggle} />

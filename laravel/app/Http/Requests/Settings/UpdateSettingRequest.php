@@ -28,18 +28,18 @@ class UpdateSettingRequest extends FormRequest
         return [
             'setting' => ['array', 'required'],
             'setting.store_name' => ['string', 'required'],
-            'setting.reserve_slot_time' => ['string', 'required'],
-            'setting.max_reserve_number' => ['string', 'required'],
-            'setting.reserve_months_limit' => ['string', 'required'],
-            'setting.max_available_reserve' => ['integer', 'required'],
+            'setting.reserve_slot_time' => ['integer', 'nullable'],
+            'setting.max_reserve_number' => ['integer', 'nullable'],
+            'setting.reserve_months_limit' => ['integer', 'nullable'],
+            'setting.max_available_reserve' => ['integer', 'nullable'],
             'setting.open_times' => ['array'],
-            'setting.open_times.*.id' => ['integer', 'required_with:setting.id', 'nullable'],
+            'setting.open_times.*.id' => ['integer', 'nullable'],
             'setting.open_times.*.type' => ['integer', 'required_with:setting.type'],
-            'setting.open_times.*.date' => ['string', 'required_with:setting.date', 'nullable'],
-            'setting.open_times.*.week' => [Rule::in(DayOfWeek::getValues()), 'required_with:setting.week', 'nullable'],
-            'setting.open_times.*.start_time' => ['string', 'required_with:setting.start_time', 'nullable'],
-            'setting.open_times.*.end_time' => ['string', 'required_with:setting.end_time', 'nullable'],
-            'setting.open_times.*.max_available_reserve' => ['integer', 'required_with:setting.max_available_reserve', 'nullable'],
+            'setting.open_times.*.date' => ['string', 'nullable'],
+            'setting.open_times.*.week' => [Rule::in(DayOfWeek::getValues()), 'nullable'],
+            'setting.open_times.*.start_time' => ['string', 'nullable'],
+            'setting.open_times.*.end_time' => ['string', 'nullable'],
+            'setting.open_times.*.max_available_reserve' => ['integer', 'nullable'],
         ];
     }
 }

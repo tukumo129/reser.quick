@@ -9,7 +9,7 @@ export type GetAppAuthData = {
     reserveSlotTime: string
     defaultStayTime: string
     maxReserveNumber: string
-    reserveMonthsLimit: string  
+    reserveMonthsLimit: string
   }
 };
 
@@ -22,7 +22,7 @@ const defaultValues = {
   reserveMonthsLimit: '',
 }
 
-export const useGetAppSettings = (uuid: string ) => {
+export const useGetAppSettings = (uuid: string) => {
   const path = ApiPath.APP_AUTH.replace(':uuid', uuid.toString())
 
   const { data, isLoading, error } = useQuery<GetAppAuthData, Error>(

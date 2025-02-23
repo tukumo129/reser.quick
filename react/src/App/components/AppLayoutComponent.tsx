@@ -8,7 +8,7 @@ type AppLayoutProps = {
   mainContents: ReactNode;
 }
 
-export const AppLayout = ({ pageName ,mainContents }: AppLayoutProps) => {
+export const AppLayout = ({ pageName, mainContents }: AppLayoutProps) => {
   const navigate = useNavigate();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
@@ -24,10 +24,10 @@ export const AppLayout = ({ pageName ,mainContents }: AppLayoutProps) => {
         alignItems="center"
         textAlign={isMobile ? "center" : "left"}
       >
-        <Heading 
+        <Heading
           flex="1"
           size="lg"
-          onClick={() => navigate(routePath.AppReserveCreate)} 
+          onClick={() => navigate(routePath.AppReserveCreate)}
         >
           店舗名
         </Heading>

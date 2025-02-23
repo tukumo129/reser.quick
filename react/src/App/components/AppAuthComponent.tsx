@@ -9,9 +9,9 @@ type AppAuthProps = {
   children: ReactNode
 }
 
-export const AppAuth = ({children}: AppAuthProps) => {
-  const {setAppSettings} = useAppSettingsRecoil()
-  const {uuid} = useParams()
+export const AppAuth = ({ children }: AppAuthProps) => {
+  const { setAppSettings } = useAppSettingsRecoil()
+  const { uuid } = useParams()
   const navigate = useNavigate()
   const { settings, isLoading, error } = useGetAppSettings(String(uuid))
 
@@ -20,9 +20,9 @@ export const AppAuth = ({children}: AppAuthProps) => {
       setAppSettings(settings)
     }
   }, [settings])
-  
-  if (isLoading) return <LoadingSpinner/>
-  if (error) navigate(routePath.appErrorPage)
+
+  if (isLoading) return <LoadingSpinner />
+  if (error) navigate(routePath.AppErrorPage)
 
   return (
     <>{children}</>
