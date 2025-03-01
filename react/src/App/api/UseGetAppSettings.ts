@@ -3,23 +3,21 @@ import { callGet } from "../../services/ApiCallBase";
 import { ApiPath } from "../../services/ApiPath";
 
 export type GetAppAuthData = {
-  settings: {
-    storeName: string
-    maxConcurrentReserve: string
-    reserveSlotTime: string
-    defaultStayTime: string
-    maxReserveNumber: string
-    reserveMonthsLimit: string
-  }
-};
+  setting: GetAppSettingData
+}
+
+export type GetAppSettingData = {
+  storeName: string | null
+  reserveSlotTime: string | null
+  maxReserveNumber: string | null
+  reserveMonthsLimit: string | null
+}
 
 const defaultValues = {
-  storeName: '',
-  maxConcurrentReserve: '',
-  reserveSlotTime: '',
-  defaultStayTime: '',
-  maxReserveNumber: '',
-  reserveMonthsLimit: '',
+  storeName: null,
+  reserveSlotTime: null,
+  maxReserveNumber: null,
+  reserveMonthsLimit: null,
 }
 
 export const useGetAppSettings = (uuid: string) => {
@@ -28,7 +26,7 @@ export const useGetAppSettings = (uuid: string) => {
   const { data, isLoading, error } = useQuery<GetAppAuthData, Error>(
     [ApiPath.APP_AUTH, uuid], () => callGet(path));
   return {
-    settings: data?.settings || defaultValues,
+    settings: data?.setting || defaultValues,
     isLoading,
     error,
   };

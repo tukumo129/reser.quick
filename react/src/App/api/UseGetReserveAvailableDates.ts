@@ -7,10 +7,13 @@ export type GetReserveAvailableDatesParams = {
 };
 
 export type GetReserveAvailableDatesData = {
-  availableDates: string[]
+  availableDates: {
+    date: string
+    available: boolean
+  }[]
 };
 
-export const useGetReserveAvailableDates = (uuid: string, params: GetReserveAvailableDatesParams ) => {
+export const useGetReserveAvailableDates = (uuid: string, params: GetReserveAvailableDatesParams) => {
   const path = ApiPath.APP_RESERVE_DATES.replace(':uuid', uuid.toString())
 
   const { data, isLoading, error } = useQuery<GetReserveAvailableDatesData, Error>(

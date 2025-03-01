@@ -1,7 +1,8 @@
 import { ReactNode } from "react";
 import { Box, Flex, Heading, useBreakpointValue } from "@chakra-ui/react";
-import { routePath } from "../../enums/routePath";
+import { getRoutePath, routePath } from "../../enums/routePath";
 import { useNavigate } from "react-router-dom";
+import { useAppUuidRecoil } from "../recoils/AppUuidRecoil";
 
 type AppLayoutProps = {
   pageName: string;
@@ -9,6 +10,7 @@ type AppLayoutProps = {
 }
 
 export const AppLayout = ({ pageName, mainContents }: AppLayoutProps) => {
+  const { appUuid } = useAppUuidRecoil()
   const navigate = useNavigate();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
@@ -27,7 +29,7 @@ export const AppLayout = ({ pageName, mainContents }: AppLayoutProps) => {
         <Heading
           flex="1"
           size="lg"
-          onClick={() => navigate(routePath.AppReserveCreate)}
+          onClick={() => navigate(getRoutePath(routePath.AppTop, appUuid))}
         >
           店舗名
         </Heading>

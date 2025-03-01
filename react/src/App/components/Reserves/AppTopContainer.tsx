@@ -3,13 +3,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { useToast } from "@chakra-ui/react";
-import { routePath } from "../../../enums/routePath";
+import { getRoutePath, routePath } from "../../../enums/routePath";
 import { useAppCreateReserveMutation, useAppCreateReserveParams } from "../../api/UseAppCreateReserve";
+import { useAppUuidRecoil } from "../../recoils/AppUuidRecoil";
 
 const schema = z.object({
-  name: z.string().min(1, {message: '名前を入力してください'}).max(50, '50文字以内で入力してください'),
-  startDate: z.string().min(1, {message: '開始日を入力してください'}),
-  startTime: z.string().min(1, {message: '開始時刻を入力してください'}),
+  name: z.string().min(1, { message: '名前を入力してください' }).max(50, '50文字以内で入力してください'),
+  startDate: z.string().min(1, { message: '開始日を入力してください' }),
+  startTime: z.string().min(1, { message: '開始時刻を入力してください' }),
   guestNumber: z.number(),
 }).superRefine((data, ctx) => {
   const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -20,19 +21,20 @@ const schema = z.object({
       message: '時刻は "HH:MM" の形式で入力してください',
     });
   }
-}) 
+})
 
-type useAppCreateReserveSchema = z.infer<typeof schema>
+type useAppTopSchema = z.infer<typeof schema>
 
 export const useAppReserveCreateForm = () => {
-  const { register: ReserveCreateData, handleSubmit, formState: { errors } } = useForm<useAppCreateReserveSchema>({
+  const { appUuid } = useAppUuidRecoil()
+  const { register: ReserveCreateData, handleSubmit, formState: { errors } } = useForm<useAppTopSchema>({
     resolver: zodResolver(schema),
   });
   const { mutate } = useAppCreateReserveMutation();
   const navigate = useNavigate();
   const toast = useToast()
 
-  const onSubmit = (data: useAppCreateReserveSchema) => {
+  const onSubmit = (data: useAppTopSchema) => {
     const params: useAppCreateReserveParams = {
       reserve: {
         name: data.name,
@@ -43,10 +45,10 @@ export const useAppReserveCreateForm = () => {
 
     mutate(params, {
       onSuccess: () => {
-        navigate(routePath.AppReserveCreate);
+        navigate(getRoutePath(routePath.AppTop, appUuid))
       },
       onError: () => {
-        navigate(routePath.AppReserveCreate)
+        navigate(getRoutePath(routePath.AppTop, appUuid))
         toast({
           title: "登録に失敗しました",
           description: "予期しないエラーが発生しました",

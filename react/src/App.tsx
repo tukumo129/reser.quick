@@ -7,10 +7,11 @@ import { ReserveView } from "./pages/Reserves/ReservesView";
 import { ReserveCreateView } from "./pages/Reserves/ReserveCreateView";
 import { ReserveDetailView } from "./pages/Reserves/ReserveDetailView";
 import { SettingUpdateView } from "./pages/Settings/SettingUpdateView";
-import { AppReserveCreateView } from "./App/pages/Reserves/AppReserveCreateView";
+import { AppTopView } from "./App/pages/Reserves/AppTopView";
 import { AppAuth } from "./App/components/AppAuthComponent";
 import { RecoilRoot } from "recoil";
 import { ErrorView } from "./pages/ErrorView";
+import { AppReserveCreateView } from "./App/pages/Reserves/AppReserveCreateView";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,7 +38,7 @@ const App: React.FC = () => {
             <Route path={routePath.Setting} element={<SettingUpdateView />} />
 
             {/* ユーザー画面 */}
-            <Route path={routePath.AppTop} element={<AppAuth><AppReserveCreateView /></AppAuth>} />
+            <Route path={routePath.AppTop} element={<AppAuth><AppTopView /></AppAuth>} />
             <Route path={routePath.AppReserveCreate} element={<AppAuth><AppReserveCreateView /></AppAuth>} />
             {/* エラー画面 */}
             <Route path={routePath.AppErrorPage} element={<ErrorView />} />

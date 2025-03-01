@@ -100,7 +100,7 @@ class ReserveService
                 'date' => $reserveDateTime['date'],
                 'start_time' => $reserveDateTime['start_time'],
                 'end_time' => $reserveDateTime['end_time'],
-                'available' => $availableDateTimeCount < $setting->max_available_reserve,
+                'available' => $setting->max_available_reserve ? $availableDateTimeCount < $setting->max_available_reserve : true,
             ];
         }
 

@@ -1,8 +1,14 @@
 import { atom, useRecoilState } from "recoil";
+import { GetAppSettingData } from "../api/UseGetAppSettings";
 
-const appSettingsState = atom({
+const appSettingsState = atom<GetAppSettingData>({
   key: 'appSettings',
-  default: {},
+  default: {
+    storeName: null,
+    reserveSlotTime: null,
+    maxReserveNumber: null,
+    reserveMonthsLimit: null,
+  },
 });
 
 export function useAppSettingsRecoil() {

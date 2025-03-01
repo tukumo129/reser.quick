@@ -2,8 +2,9 @@ import { useQuery } from "react-query";
 import { callGet } from "../ApiCallBase";
 import { ApiPath } from "../ApiPath";
 
-type GetSetting = {
+export type GetSetting = {
   setting: GetSettingData
+  reserveSiteUrl: string
 }
 
 export type OpenTime = {
@@ -39,6 +40,7 @@ export const useGetSetting = () => {
     [ApiPath.SETTING], () => callGet(ApiPath.SETTING));
   return {
     setting: data?.setting || defaultValues,
+    reserveSiteUrl: data?.reserveSiteUrl || '',
     isLoading,
     error,
   };

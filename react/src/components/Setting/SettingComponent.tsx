@@ -2,12 +2,12 @@ import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, In
 import { routePath } from "../../enums/routePath";
 import { useNavigate } from "react-router-dom";
 import { WeekOpenTimesContainer } from "../../container/Settings/WeekOpenTimesContainer";
-import { GetSettingData } from "../../services/SettingService/UseGetSetting";
+import { GetSetting } from "../../services/SettingService/UseGetSetting";
 import { useSettingUpdateForm } from "../../container/Settings/SettingUpdateFormContainer";
 import { DayOpenTimesContainer } from "../../container/Settings/DayOpenTimesContainer";
 import { useEffect } from "react";
 
-export const SettingComponent = (setting: GetSettingData) => {
+export const SettingComponent = ({ setting, reserveSiteUrl }: GetSetting) => {
   const navigate = useNavigate()
   const isMobile = useBreakpointValue({ base: true, md: false });
   const { SettingUpdateData, control, handleSubmit, onSubmit, errors, reset } = useSettingUpdateForm()
@@ -22,6 +22,18 @@ export const SettingComponent = (setting: GetSettingData) => {
     <Box p={{ base: 4, md: 8 }} mx="right" mb={20} bg="white">
       <form onSubmit={handleSubmit(onSubmit)} id="updateSettingForm">
         <Stack spacing={2}>
+          <FormControl isInvalid={!!errors.storeName} id="name">
+            <Flex direction={isMobile ? 'column' : 'row'}>
+              <FormLabel w={isMobile ? "auto" : 40} m={isMobile ? "auto 2" : "auto 0"}>
+                予約サイトURL
+              </FormLabel>
+              <a href={reserveSiteUrl} target="_blank" rel="noopener noreferrer" style={{ color: 'blue', textDecoration: 'underline' }}>
+                {reserveSiteUrl}
+              </a>
+            </Flex>
+            <FormErrorMessage>{errors.storeName?.message}</FormErrorMessage>
+          </FormControl>
+          <Box borderWidth="1px" borderColor="bray.300" />
           <FormControl isInvalid={!!errors.storeName} id="name">
             <Flex direction={isMobile ? 'column' : 'row'}>
               <FormLabel w={isMobile ? "auto" : 40} m={isMobile ? "auto 2" : "auto 0"}>

@@ -50,6 +50,7 @@ class GetSettingTest extends TestCase
                     ['id' => $openTimes[2]->id],
                 ],
             ],
+            'reserve_site_url' => env('APP_URL')."/app/{$user->contract->uuid}",
         ]);
         $response->assertStatus(Response::HTTP_OK);
     }
