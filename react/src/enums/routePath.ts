@@ -9,7 +9,7 @@ export const routePath = {
   AdminErrorPage: "/error/404",
 
   AppTop: "/app/:uuid",
-  AppReserveCreate: "/app/:uuid/reserve/create",
+  AppReserveCreate: "/app/:uuid/reserve/create/:date",
   AppErrorPage: "/app/:uuid/error/404",
 }
 

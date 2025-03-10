@@ -24,9 +24,7 @@ export type openTimesSchema = {
 }
 
 export const useSettingUpdateForm = () => {
-  const { register: SettingUpdateData, control, handleSubmit, formState: { errors }, reset } = useForm<useUpdateSettingSchema>(
-    // {resolver: zodResolver(schema),}
-  );
+  const { register: SettingUpdateData, control, handleSubmit, formState: { errors }, reset } = useForm<useUpdateSettingSchema>();
   const { mutate } = useUpdateSettingMutation();
   const navigate = useNavigate();
   const toast = useToast()

@@ -44,7 +44,7 @@ export function AppTopComponent() {
     const dateString = getDateFormat(currentDate, day)
     if (isDateAvailable(day)) {
       setSelectedDate(dateString)
-      navigate(getRoutePath(routePath.AppReserveCreate, appUuid))
+      navigate(getRoutePath(routePath.AppReserveCreate, appUuid).replace(":date", getDateFormat(currentDate, day)))
     }
   }
 

@@ -88,12 +88,13 @@ class ReserveService
      * @param string $date
      * @return array<string, string>
      */
-    public function getReserveAvailableDates(Contract $contract, string $date): array
+    public function getMonthReserveAvailableDates(Contract $contract, string $date): array
     {
         $setting = $contract->setting;
         $reserveDateTimes = [];
 
-        $reserveDateTimes = $this->getReserveDateTimes($setting, $date);
+        $targetDate = Carbon::parse($date);
+        $reserveDateTimes = $this->getReserveDateTimes($setting, $targetDate->copy()->startOfMonth(), $targetDate->copy()->endOfMonth());
         foreach($reserveDateTimes as $reserveDateTime) {
             $availableDateTimeCount = $this->reserveRepository->getByStartDateTime($contract->id, $reserveDateTime['date'], $reserveDateTime['start_time'])->count();
             $availableDates[] = [
@@ -113,17 +114,41 @@ class ReserveService
     }
 
     /**
-     * 設定から予約できる日時を取得
+     * 指定日付の予約可能な時間を取得
      * @param Contract $contract
      * @param string $date
      * @return array<string, string>
      */
-    public function getReserveDateTimes(Setting $setting, string $date): array
+    public function getReserveAvailableTimes(Contract $contract, string $date): array
+    {
+        $setting = $contract->setting;
+        $availableDates = [];
+
+        $targetDate = Carbon::parse($date);
+        $reserveDateTimes = $this->getReserveDateTimes($setting, $targetDate, $targetDate);
+        foreach($reserveDateTimes as $reserveDateTime) {
+            $availableDateTimeCount = $this->reserveRepository->getByStartDateTime($contract->id, $reserveDateTime['date'], $reserveDateTime['start_time'])->count();
+            $availableDates[] = [
+                'date' => $reserveDateTime['date'],
+                'startTime' => $reserveDateTime['start_time'],
+                'endTime' => $reserveDateTime['end_time'],
+                'available' => $setting->max_available_reserve ? $availableDateTimeCount < $setting->max_available_reserve : true,
+            ];
+        }
+        return $availableDates;
+    }
+
+    /**
+     * 指定した日付間の設定から予約できる日時を取得
+     * @param Contract $contract
+     * @param Carbon $startDate
+     * @param Carbon $endDate
+     * @return array<string, string>
+     */
+    public function getReserveDateTimes(Setting $setting, Carbon $startDate, Carbon $endDate): array
     {
         // 対象の月のカレンダー取得
-        $targetDate = Carbon::parse($date);
-        $calender = CarbonPeriod::create($targetDate->copy()->startOfMonth(), $targetDate->copy()->endOfMonth())->toArray();
-
+        $calender = CarbonPeriod::create($startDate, $endDate)->toArray();
         // 有効な曜日だけに絞り込み
         $reserveSlotTime = $setting->reserve_slot_time;
         $openTimes = $setting->openTimes;
@@ -133,8 +158,8 @@ class ReserveService
 
         foreach($calender as $date) {
             // 週当たりの設定から対象日付を追加
-            $weekOpenTime = $openTimes->where('type', OpenTimeType::WEEK)->where('week', $date->dayOfWeek)->first();
-            if($weekOpenTime) {
+            $weekOpenTimes = $openTimes->where('type', OpenTimeType::WEEK)->where('week', $date->dayOfWeek);
+            foreach($weekOpenTimes as $weekOpenTime) {
                 $weekEndTime = Carbon::parse($weekOpenTime->end_time)->subMinutes($reserveSlotTime)->format('H:i');
                 foreach(CarbonPeriod::create($weekOpenTime->start_time, "{$reserveSlotTime} minutes", $weekEndTime) as $day) {
                     $weekArray[] = [
@@ -150,8 +175,8 @@ class ReserveService
         $dayOpenTimes = $openTimes->where('type', OpenTimeType::DAY);
         foreach($dayOpenTimes as $dayOpenTime) {
             $openDate = Carbon::parse($dayOpenTime->date);
-            if(!$openDate->isSameMonth($targetDate)) {
-                // 指定した月以外はスキップ
+            if(!$openDate->between($startDate, $endDate)) {
+                // 指定した日付の区間外の場合スキップ
                 continue;
             }
             // 日付での指定がある場合はweekの設定を消す

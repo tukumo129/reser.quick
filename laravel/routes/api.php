@@ -44,5 +44,7 @@ Route::middleware(['app.auth'])->group(function () {
 
         // reserve
         Route::get('/reserves/dates', [AppReserveController::class, 'getReserveAvailableDates']);
+        Route::get('/reserves/times', [AppReserveController::class, 'getReserveAvailableTimes']);
+        Route::post('/reserves', [AppReserveController::class, 'createAppReserve']);
     });
 });

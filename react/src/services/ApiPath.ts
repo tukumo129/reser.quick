@@ -7,9 +7,10 @@ export const ApiPath = {
   RESERVES: "/reserves",
   SETTING: "/setting",
 
-  APP_RESERVES: "/app/:uuid/reserves/dates",
   APP_AUTH: "/app/:uuid/auth",
   APP_RESERVE_DATES: "/app/:uuid/reserves/dates",
+  APP_RESERVE_TIMES: "/app/:uuid/reserves/times",
+  APP_RESERVES: "/app/:uuid/reserves",
 } as const;
 
 export const getRoutePath = (path: string, uuid: string) => {

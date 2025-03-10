@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\App\Settings;
+namespace Tests\Feature\App\Reserves;
 
 use App\Enums\DayOfWeek;
 use App\Enums\OpenTimeType;
