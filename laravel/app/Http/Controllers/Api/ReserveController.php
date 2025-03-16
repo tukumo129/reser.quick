@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Enums\ReserveStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reserves\CreateReserveRequest;
 use App\Http\Requests\Reserves\GetReservesRequest;
@@ -12,7 +11,6 @@ use App\Models\User;
 use App\Services\ReserveService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
 
 class ReserveController extends Controller
 {
@@ -67,12 +65,7 @@ class ReserveController extends Controller
         $user = auth()->user();
         $reserveData = $request->input('reserve');
         $reserveData['contract_id'] = $user->contract_id;
-        $reserveData['uuid'] = Str::uuid()->toString();
-        if(!isset($reserveData['status'])) {
-            // 作成時にstatusが指定されていない場合はNO_COMPLETEを設定
-            $reserveData['status'] = ReserveStatus::NO_COMPLETE;
-        }
-        $reserve = $this->reserveService->createReserve($reserveData);
+        $reserve = $this->reserveService->createReserve($user->contract, $reserveData);
         return response()->json([
             'reserve' => new ReserveResource($reserve),
         ], Response::HTTP_OK);

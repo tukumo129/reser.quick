@@ -17,6 +17,7 @@ class ReserveResource extends JsonResource
         return [
             'id' => $this->id,
             'contractId' => $this->contract_id,
+            'reserveId' => $this->reserve_id,
             'name' => $this->name,
             'guestNumber' => $this->guest_number,
             'startDateTime' => $this->start_date_time,

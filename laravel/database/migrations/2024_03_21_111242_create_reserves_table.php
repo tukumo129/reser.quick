@@ -15,7 +15,8 @@ class CreateReservesTable extends Migration
     {
         Schema::create('reserves', function (Blueprint $table) {
             $table->id();
-            $table->integer('contract_id');
+            $table->unsignedBigInteger('contract_id');
+            $table->unsignedBigInteger('reserve_id')->nullable();
             $table->string('name');
             $table->integer('guest_number')->nullable();
             $table->string('start_date_time');

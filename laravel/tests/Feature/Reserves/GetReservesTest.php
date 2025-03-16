@@ -34,6 +34,7 @@ class GetReservesTest extends TestCase
                 0 => [
                     'id' => $reserves[0]->id,
                     'contractId' => $reserves[0]->contract_id,
+                    'reserveId' => $reserves[0]->reserve_id,
                     'name' => $reserves[0]->name,
                     'guestNumber' => $reserves[0]->guest_number,
                     'startDateTime' => $reserves[0]->start_date_time,
@@ -62,6 +63,7 @@ class GetReservesTest extends TestCase
                 0 => [
                     'id' => $reserves[1]->id,
                     'contractId' => $reserves[1]->contract_id,
+                    'reserveId' => $reserves[1]->reserve_id,
                     'name' => $reserves[1]->name,
                     'guestNumber' => $reserves[1]->guest_number,
                     'startDateTime' => $reserves[1]->start_date_time,

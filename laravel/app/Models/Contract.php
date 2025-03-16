@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasSequence;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -15,6 +16,7 @@ class Contract extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use HasSequence;
 
     protected $table = 'contracts';
 

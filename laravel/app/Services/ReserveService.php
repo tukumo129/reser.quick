@@ -3,12 +3,15 @@
 namespace App\Services;
 
 use App\Enums\OpenTimeType;
+use App\Enums\ReserveStatus;
+use App\Enums\SequenceKey;
 use App\Models\Contract;
 use App\Models\Reserve;
 use App\Models\Setting;
 use App\Repositories\ReserveRepository;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class ReserveService
 {
@@ -53,11 +56,19 @@ class ReserveService
     }
 
     /**
+     * @param Contract $contract
      * @param array<string, mixed> $reserveData
      * @return Reserve
      */
-    public function createReserve(array $reserveData): Reserve
+    public function createReserve(Contract $contract, array $reserveData): Reserve
     {
+        $reserveData['uuid'] = Str::uuid()->toString();
+        if(!isset($reserveData['status'])) {
+            // 作成時にstatusが指定されていない場合はNO_COMPLETEを設定
+            $reserveData['status'] = ReserveStatus::NO_COMPLETE;
+        }
+        // TODO シーケンスを入れる
+        $reserveData['reserve_id'] = $contract->getNextSequence(SequenceKey::Reserve);
         return $this->reserveRepository->create($reserveData);
     }
 

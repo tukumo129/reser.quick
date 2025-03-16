@@ -31,6 +31,7 @@ class GetReserveTest extends TestCase
             'reserve' => [
                 'id' => $reserve->id,
                 'contractId' => $reserve->contract_id,
+                'reserveId' => $reserve->reserve_id,
                 'name' => $reserve->name,
                 'guestNumber' => $reserve->guest_number,
                 'startDateTime' => $reserve->start_date_time,

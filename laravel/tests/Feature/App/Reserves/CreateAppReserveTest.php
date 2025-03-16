@@ -37,6 +37,7 @@ class CreateAppReserveTest extends TestCase
 
         $reserve = Reserve::orderby('id', 'desc')->first();
         $this->assertEquals($reserve->contract_id, $contract->id);
+        $this->assertEquals($reserve->reserve_id, 1);
         $this->assertEquals($reserve->name, '鈴木 一郎');
         $this->assertEquals($reserve->guest_number, 1);
         $this->assertEquals($reserve->start_date_time, '2024-01-02 12:34');
@@ -67,6 +68,7 @@ class CreateAppReserveTest extends TestCase
 
         $reserve = Reserve::orderby('id', 'desc')->first();
         $this->assertEquals($reserve->contract_id, $contract->id);
+        $this->assertEquals($reserve->reserve_id, 1);
         $this->assertEquals($reserve->name, '鈴木 一郎');
         $this->assertEquals($reserve->guest_number, 1);
         $this->assertEquals($reserve->start_date_time, '2024-01-02 12:34');

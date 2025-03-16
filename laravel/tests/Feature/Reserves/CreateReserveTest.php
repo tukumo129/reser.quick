@@ -3,6 +3,7 @@
 namespace Tests\Feature\Reserves;
 
 use App\Enums\ReserveStatus;
+use App\Models\Contract;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
@@ -20,8 +21,9 @@ class CreateReserveTest extends TestCase
      */
     public function testSuccess(): void
     {
+        $contract = Contract::factory()->create();
         /** @var User $user */
-        $user = User::factory()->create();
+        $user = User::factory()->create(['contract_id' => $contract->id]);
         $this->actingAs($user, 'web');
 
         $params = [
@@ -39,6 +41,7 @@ class CreateReserveTest extends TestCase
             'reserve' => [
                 'id' => true,
                 'contractId' => $user->contract_id,
+                'reserveId' => 1,
                 'name' => '鈴木 一郎',
                 'guestNumber' => 1,
                 'startDateTime' => '2024-01-02 12:34:56',

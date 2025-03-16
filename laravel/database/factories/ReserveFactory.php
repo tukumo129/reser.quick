@@ -17,6 +17,7 @@ class ReserveFactory extends Factory
     {
         return [
             'contract_id' => random_int(1, 9999),
+            'reserve_id' => random_int(1, 9999),
             'name' => $this->faker->name(),
             'guest_number' => random_int(1, 5),
             'start_date_time' => Carbon::now()->format('Y-m-d'),

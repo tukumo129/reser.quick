@@ -42,6 +42,7 @@ class UpdateReserveTest extends TestCase
             'reserve' => [
                 'id' => true,
                 'contractId' => $user->contract_id,
+                'reserveId' => $reserve->reserve_id,
                 'name' => '鈴木 一郎',
                 'guestNumber' => 1,
                 'startDateTime' => '2024-01-02 12:34:56',
