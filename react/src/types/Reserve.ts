@@ -1,5 +1,6 @@
 export type Reserve = {
   id: number;
+  reserveId: number;
   contractId: number;
   name: string;
   guestNumber: number;

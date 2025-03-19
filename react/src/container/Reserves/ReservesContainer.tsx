@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { Box, Flex, Text, useBreakpointValue,  Button, useStyleConfig, Select, Stack } from '@chakra-ui/react';
+import { Box, Flex, Text, useBreakpointValue, Button, useStyleConfig, Select, Stack } from '@chakra-ui/react';
 import { useNavigate } from "react-router-dom";
 import { Reserve } from "../../types/Reserve";
 import { routePath } from "../../enums/routePath";
@@ -15,7 +15,7 @@ export const ReserveList = ({ reserves }: ReserveListProps) => {
 
   return (
     reserves.length === 0 ? (
-      <Box bg="yellow.200" p={4}role="alert">
+      <Box bg="yellow.200" p={4} role="alert">
         <Text>予約がありません</Text>
       </Box>
     ) : (
@@ -34,11 +34,11 @@ export const ReserveList = ({ reserves }: ReserveListProps) => {
               onClick={() => navigate(routePath.ReserveDetail.replace(':reserveId', String(reserve.id)))}
             >
               <Stack spacing={2}>
-                <Text fontWeight="bold">予約番号: {reserve.id}</Text>
+                <Text fontWeight="bold">予約番号: {`R${String(reserve.reserveId).padStart(8, "0")}`}</Text>
                 <Text>名前: {reserve.name}</Text>
                 <Text>人数: {reserve.guestNumber}</Text>
                 <Text>
-                    予約時間: {`${format(new Date(reserve.startDateTime), 'yyyy/MM/dd HH:mm')} ～ ${format(new Date(reserve.endDateTime), 'yyyy/MM/dd HH:mm')}`}
+                  予約時間: {`${format(new Date(reserve.startDateTime), 'yyyy/MM/dd HH:mm')} ～ ${format(new Date(reserve.endDateTime), 'yyyy/MM/dd HH:mm')}`}
                 </Text>
               </Stack>
             </Box>
@@ -64,20 +64,20 @@ export const PaginationContainer = ({
   const pageNumbers = [];
   pageNumbers.push(1)
 
-  if(pagination.last_page > 1) {
+  if (pagination.last_page > 1) {
     if (pagination.page > 6) {
       pageNumbers.push("...");
     }
     const startPage = Math.max(2, pagination.page - 5);
     const endPage = Math.min(pagination.last_page - 1, pagination.page + 5);
-    
+
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i);
     }
     if (pagination.page + 5 < pagination.last_page - 1) {
       pageNumbers.push("...");
     }
-    pageNumbers.push(pagination.last_page);  
+    pageNumbers.push(pagination.last_page);
   }
   const buttonStyles = useStyleConfig('Button', { variant: 'outline' });
 
@@ -88,7 +88,7 @@ export const PaginationContainer = ({
         <Button
           onClick={() => setPage(pagination.page - 1)}
           colorScheme="yellow"
-          isDisabled={pagination.page === 1}        
+          isDisabled={pagination.page === 1}
           sx={buttonStyles}
           borderRadius="md"
           variant="solid"
