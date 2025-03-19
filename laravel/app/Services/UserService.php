@@ -48,6 +48,16 @@ class UserService
     }
 
     /**
+     * @param string $email
+     * @return User|null
+     */
+    public function getUserByEmail(string $email): ?User
+    {
+        $criteria = ['email' => $email];
+        return $this->userRepository->getBy($criteria)->first();
+    }
+
+    /**
      * @param array<string, mixed> $userData
      * @return User
      */

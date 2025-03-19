@@ -1,12 +1,12 @@
-import { LoginForm } from "../components/LoginFormComponent";
+import { CreateUserForm } from "../components/CreateUserFormComponent";
 import { AdminNoLoginHeaderContainer } from "../container/AdminLayoutContainer";
 
-export function LoginView() {
+export function CreateUserView() {
 
   return (
     <>
       <AdminNoLoginHeaderContainer />
-      <LoginForm />;
+      <CreateUserForm />;
     </>
   )
 }

@@ -3,34 +3,54 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\CreateUserRequest;
 use App\Http\Requests\Users\UserLoginRequest;
-use App\Http\Requests\Users\UserRegisterRequest;
 use App\Http\Resources\UserResource;
+use App\Services\ContractService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
     protected UserService $userService;
 
+    protected ContractService $contractService;
+
     public function __construct(
-        UserService $userService
+        UserService $userService,
+        ContractService $contractService
     ) {
         $this->userService = $userService;
+        $this->contractService = $contractService;
     }
 
     /**
-     * @param UserRegisterRequest $request
+     * @param CreateUserRequest $request
      * @return Response
      */
-    public function userRegister(UserRegisterRequest $request): JsonResponse
+    public function createUser(CreateUserRequest $request): JsonResponse
     {
-        $userData = $request->input('user');
-        $password = $userData['password'];
-        $userData['password'] = Hash::make($password); // パスワードをハッシュ化した値で上書き
+        // emailが既に登録されているか確認
+        $user = $this->userService->getUserByEmail($request->input('email'));
+        if($user) {
+            return response()->json([], Response::HTTP_CONFLICT);
+        }
+
+        $contractData = [
+            'uuid' => Str::uuid()->toString(),
+            'name' => '契約名', // TODO 53 仮で作成、契約自体をどう作るのか、ユーザーの紐づけをどうするか用検討
+        ];
+        $contract = $this->contractService->createContract($contractData);
+
+        $userData = [
+            'contract_id' => $contract->id,
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+        ];
 
         $user = $this->userService->createUser($userData);
         $token = $user->createToken('AccessToken')->plainTextToken;

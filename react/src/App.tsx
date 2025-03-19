@@ -12,6 +12,7 @@ import { AppAuth } from "./App/components/AppAuthComponent";
 import { RecoilRoot } from "recoil";
 import { ErrorView } from "./pages/ErrorView";
 import { AppReserveCreateView } from "./App/pages/Reserves/AppReserveCreateView";
+import { CreateUserView } from "./pages/CreateUserView";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,6 +33,7 @@ const App: React.FC = () => {
             {/* 管理画面 */}
             <Route path={routePath.Login} element={<LoginView />} />
             <Route path={routePath.Top} element={<TopView />} />
+            <Route path={routePath.CreateUser} element={<CreateUserView />} />
             <Route path={routePath.Reserves} element={<ReserveView />} />
             <Route path={routePath.ReserveCreate} element={<ReserveCreateView />} />
             <Route path={routePath.ReserveDetail} element={<ReserveDetailView />} />

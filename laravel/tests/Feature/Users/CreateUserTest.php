@@ -8,9 +8,9 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
- * php artisan test tests/Feature/Users/UserRegisterTest.php
+ * php artisan test tests/Feature/Users/CreateUserTest.php
  */
-class UserRegisterTest extends TestCase
+class CreateUserTest extends TestCase
 {
     use WithFaker;
     use DatabaseTransactions;
@@ -20,22 +20,18 @@ class UserRegisterTest extends TestCase
      */
     public function testSuccess(): void
     {
-        $contractId = 1;
         $email = $this->faker->unique()->safeEmail;
 
         $params = [
-            'user' => [
-                'contract_id' => $contractId,
-                'email' => $email,
-                'password' => '1234',
-            ],
+            'email' => $email,
+            'password' => '1234',
         ];
 
-        $response = $this->json('POST', '/api/user/register', $params);
+        $response = $this->json('POST', '/api/user', $params);
         $response->assertJson([
             'user' => [
                 'id' => true,
-                'contractId' => $contractId,
+                'contractId' => true,
                 'email' => $email,
             ],
             'token' => true,

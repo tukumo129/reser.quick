@@ -102,7 +102,7 @@ class ReserveService
     public function getMonthReserveAvailableDates(Contract $contract, string $date): array
     {
         $setting = $contract->setting;
-        $reserveDateTimes = [];
+        $availableDates = [];
 
         $targetDate = Carbon::parse($date);
         $reserveDateTimes = $this->getReserveDateTimes($setting, $targetDate->copy()->startOfMonth(), $targetDate->copy()->endOfMonth());
@@ -116,12 +116,13 @@ class ReserveService
             ];
         }
 
-        return collect($availableDates)->groupBy('date')->map(function ($groups) {
-            return [
-                'date' => $groups[0]['date'],
-                'available' => $groups->contains('available', true),
-            ];
-        })->values()->toArray();
+        return collect($availableDates)->isEmpty() ? [] :
+            collect($availableDates)->groupBy('date')->map(function ($groups) {
+                return [
+                    'date' => $groups[0]['date'],
+                    'available' => $groups->contains('available', true),
+                ];
+            })->values()->toArray();
     }
 
     /**
