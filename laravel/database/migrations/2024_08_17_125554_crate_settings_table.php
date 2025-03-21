@@ -16,8 +16,8 @@ class CrateSettingsTable extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->integer('contract_id');
-            $table->string('store_name');
-            $table->string('reserve_slot_time');
+            $table->string('store_name')->default('テスト店舗');
+            $table->string('reserve_slot_time')->default('30');
             $table->integer('max_reserve_number')->nullable();
             $table->integer('reserve_months_limit')->nullable();
             $table->integer('max_available_reserve')->nullable();

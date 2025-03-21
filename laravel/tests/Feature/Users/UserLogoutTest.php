@@ -22,7 +22,6 @@ class UserLogoutTest extends TestCase
      */
     public function testSuccess(): void
     {
-        $contractId = 1;
         $email = $this->faker->unique()->safeEmail;
         $password = '1234';
 
