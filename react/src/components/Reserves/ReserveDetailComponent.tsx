@@ -1,8 +1,10 @@
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, HStack, Input, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Divider, FormControl, FormErrorMessage, FormLabel, HStack, Input, Select, Stack, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useReserveUpdateForm } from "../../container/Reserves/ReserveUpdateFormContainer";
 import { routePath } from "../../enums/routePath";
 import { useEffect } from "react";
+import { LoadingSpinner } from "../LoadingSpinnerComponent";
+import { useGetSetting } from "../../services/SettingService/UseGetSetting";
 
 export type ReserveFormProps = {
   reserve: {
@@ -16,10 +18,26 @@ export type ReserveFormProps = {
   }
 }
 
-export function UpdateReserveForm({reserve}: ReserveFormProps) {
+export function UpdateReserveForm({ reserve }: ReserveFormProps) {
   const navigate = useNavigate()
-  const { ReserveUpdateData, handleSubmit, onSubmit , errors, reset} = useReserveUpdateForm(reserve.id);
+  const { setting, isLoading, error } = useGetSetting();
+  const { ReserveUpdateData, handleSubmit, onSubmit, errors, reset } = useReserveUpdateForm(reserve.id)
 
+  if (isLoading) return <LoadingSpinner />
+  if (error) return <div>Error reserves</div>
+
+  function generateTimeSlots(reserveSlotTime: string): string[] {
+    const timeSlots: string[] = [];
+
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += parseInt(reserveSlotTime, 10)) {
+        const formattedTime = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+        timeSlots.push(formattedTime);
+      }
+    }
+
+    return timeSlots;
+  }
   useEffect(() => {
     if (reserve) {
       reset(reserve)
@@ -27,75 +45,95 @@ export function UpdateReserveForm({reserve}: ReserveFormProps) {
   }, [reserve])
 
   return (
-    <Box p={{base: 4, md: 8}} mx="right" bg="white">
-      <form onSubmit={handleSubmit(onSubmit)} id="createReserveForm">
-        <Stack spacing={4}>
+    <Box p={{ base: 6, md: 10 }} bg="white" borderRadius="lg" boxShadow="xl">
+      <form onSubmit={handleSubmit(onSubmit)} id="updateReserveForm">
+        <Stack spacing={6}>
           <FormControl isInvalid={!!errors.name} id="name">
-            <FormLabel>
-              名前<Text as="span" color="red">*</Text>
+            <FormLabel fontWeight="semibold">
+              名前<Text as="span" color="red.500">*</Text>
             </FormLabel>
             <Input
               defaultValue={reserve.name}
-              {...ReserveUpdateData('name')}
+              {...ReserveUpdateData("name")}
               placeholder="名前を入力してください"
-              w="full"
-              maxW={{ base: "100%", md: "20rem" }}
+              size="lg"
+              borderRadius="md"
+              _focus={{ borderColor: "blue.400", boxShadow: "0 0 0 2px rgba(66, 153, 225, 0.6)" }}
             />
             <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
           </FormControl>
-
-          <Box borderWidth="1px" borderColor="bray.300" />
-
-          <HStack spacing={4} align="start">
-            <FormControl isInvalid={!!errors.startDate} id="startDate" w={{ base: "100%", md: "10rem" }}>
-              <FormLabel>
-                開始日時<Text as="span" color="red">*</Text>
+          <Divider borderColor="gray.300" />
+          <HStack spacing={6} align="start">
+            <FormControl isInvalid={!!errors.startDate} id="startDate" w="full">
+              <FormLabel fontWeight="semibold">
+                開始日時<Text as="span" color="red.500">*</Text>
               </FormLabel>
-              <Input type="date" {...ReserveUpdateData('startDate')} defaultValue={reserve.startDate}/>
+              <Input
+                type="date"
+                {...ReserveUpdateData("startDate")}
+                defaultValue={reserve.startDate}
+                size="lg"
+                borderRadius="md"
+              />
               <FormErrorMessage>{errors.startDate?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.startTime} id="startTime"  w={{ base: "100%", md: "9rem" }}>
-              <FormLabel visibility={{ base: "hidden", md: "visible" }}>
-                開始時刻<Text as="span" color="red">*</Text>
+            <FormControl isInvalid={!!errors.startTime} id="startTime" w="full">
+              <FormLabel fontWeight="semibold">
+                開始時刻<Text as="span" color="red.500">*</Text>
               </FormLabel>
-              <Input {...ReserveUpdateData('startTime')} defaultValue={reserve.startTime} placeholder="00:00"/>
+              <Select {...ReserveUpdateData("startTime")} size="lg" borderRadius="md">
+                {generateTimeSlots(setting.reserveSlotTime).map((time) => (
+                  <option key={time} value={time}>
+                    {time}
+                  </option>
+                ))}
+              </Select>
               <FormErrorMessage>{errors.startTime?.message}</FormErrorMessage>
             </FormControl>
           </HStack>
-
-          <Box borderWidth="1px" borderColor="bray.300" />
-
-          <HStack spacing={4} align="start">
-            <FormControl isInvalid={!!errors.endDate} id="endDate" w={{ base: "100%", md: "10rem" }}>
-              <FormLabel>
-                終了日時<Text as="span" color="red">*</Text>
+          <Divider borderColor="gray.300" />
+          <HStack spacing={6} align="start">
+            <FormControl isInvalid={!!errors.endDate} id="endDate" w="full">
+              <FormLabel fontWeight="semibold">
+                終了日時<Text as="span" color="red.500">*</Text>
               </FormLabel>
-              <Input type="date" {...ReserveUpdateData('endDate')} defaultValue={reserve.endDate}/>
+              <Input
+                type="date"
+                {...ReserveUpdateData("endDate")}
+                defaultValue={reserve.endDate}
+                size="lg"
+                borderRadius="md"
+              />
               <FormErrorMessage>{errors.endDate?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.endTime} id="endTime" w={{ base: "100%", md: "9rem" }}>
-              <FormLabel visibility={{ base: "hidden", md: "visible" }}>
-                終了時刻<Text as="span" color="red">*</Text>
+            <FormControl isInvalid={!!errors.endTime} id="endTime" w="full">
+              <FormLabel fontWeight="semibold">
+                終了時刻<Text as="span" color="red.500">*</Text>
               </FormLabel>
-              <Input {...ReserveUpdateData('endTime')} defaultValue={reserve.endTime} placeholder="00:00" />
+              <Select {...ReserveUpdateData("endTime")} size="lg" borderRadius="md">
+                {generateTimeSlots(setting.reserveSlotTime).map((time) => (
+                  <option key={time} value={time}>
+                    {time}
+                  </option>
+                ))}
+              </Select>
               <FormErrorMessage>{errors.endTime?.message}</FormErrorMessage>
             </FormControl>
           </HStack>
-
-          <Box borderWidth="1px" borderColor="bray.300" />
-
+          <Divider borderColor="gray.300" />
           <FormControl isInvalid={!!errors.guestNumber} id="guestNumber">
-            <FormLabel>
-              人数<Text as="span" color="red">*</Text>
+            <FormLabel fontWeight="semibold">
+              人数<Text as="span" color="red.500">*</Text>
             </FormLabel>
             <Input
-              w="full"
               type="number"
               defaultValue={reserve.guestNumber}
-              {...ReserveUpdateData('guestNumber', { valueAsNumber: true })}
-              maxW={{ base: "100%", md: "5rem" }}
+              {...ReserveUpdateData("guestNumber", { valueAsNumber: true })}
+              size="lg"
+              borderRadius="md"
+              w={{ base: "100%", md: "6rem" }}
             />
             <FormErrorMessage>{errors.guestNumber?.message}</FormErrorMessage>
           </FormControl>
@@ -110,28 +148,33 @@ export function UpdateReserveForm({reserve}: ReserveFormProps) {
         bg="white"
         borderTopWidth="1px"
         borderTopColor="gray.300"
-        p={4}
+        p={5}
         display="flex"
         justifyContent="right"
         alignItems="center"
-        boxShadow="md"
+        boxShadow="xl"
       >
-        <HStack spacing={4}>
+        <HStack spacing={6}>
           <Button
             colorScheme="gray"
-            borderWidth="1px"
-            borderColor="gray.300"
+            bg="gray.600"
+            color="white"
+            _hover={{ bg: "gray.700", transform: "scale(1.05)", transition: "0.2s" }}
             w={{ base: "100%", md: "10rem" }}
             onClick={() => navigate(routePath.Reserves)}
+            borderRadius="md"
           >
             キャンセル
           </Button>
           <Button
             colorScheme="blue"
-            borderWidth="1px"
-            type="submit"
+            bgGradient="linear(to-r, blue.500, blue.400)"
+            color="white"
+            _hover={{ bgGradient: "linear(to-r, blue.600, blue.500)", transform: "scale(1.05)", transition: "0.2s" }}
             w={{ base: "100%", md: "10rem" }}
-            form="createReserveForm"
+            type="submit"
+            form="updateReserveForm"
+            borderRadius="md"
           >
             登録
           </Button>

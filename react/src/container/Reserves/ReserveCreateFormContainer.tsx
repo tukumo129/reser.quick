@@ -7,12 +7,15 @@ import { routePath } from "../../enums/routePath";
 import { useToast } from "@chakra-ui/react";
 
 const schema = z.object({
-  name: z.string().min(1, {message: '名前を入力してください'}).max(50, '50文字以内で入力してください'),
-  startDate: z.string().min(1, {message: '開始日を入力してください'}),
-  startTime: z.string().min(1, {message: '開始時刻を入力してください'}),
-  endDate: z.string().min(1, {message: '終了日を入力してください'}),
-  endTime: z.string().min(1, {message: '終了時刻を入力してください'}),
-  guestNumber: z.number(),
+  name: z.string().min(1, { message: '名前を入力してください' }).max(50, '50文字以内で入力してください'),
+  startDate: z.string().min(1, { message: '開始日を入力してください' }),
+  startTime: z.string().min(1, { message: '開始時刻を入力してください' }),
+  endDate: z.string().min(1, { message: '終了日を入力してください' }),
+  endTime: z.string().min(1, { message: '終了時刻を入力してください' }),
+  guestNumber: z.coerce
+    .number()
+    .min(1, { message: "1以上の値を入力してください" })
+    .max(1000, { message: "1000以下の値を設定してください" }),
 }).superRefine((data, ctx) => {
   const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
   if (!timeRegex.test(data.startTime)) {
@@ -31,28 +34,14 @@ const schema = z.object({
   }
   const startDateTime = new Date(`${data.startDate} ${data.startTime}`)
   const endDateTime = new Date(`${data.endDate} ${data.endTime}`)
-  if(startDateTime >= endDateTime) {
+  if (startDateTime >= endDateTime) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ['endDate'],
       message: '終了日時は開始日時より後にしてください',
     })
   }
-  if(data.guestNumber <= 0) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ['guestNumber'],
-      message: '0以上の値を設定してください',
-    })
-  }
-  if(data.guestNumber > 1000) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ['guestNumber'],
-      message: '1000以下の値を設定してください',
-    })
-  }
-}) 
+})
 
 type useCreateReserveSchema = z.infer<typeof schema>
 

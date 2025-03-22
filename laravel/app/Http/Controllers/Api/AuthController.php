@@ -7,6 +7,7 @@ use App\Http\Requests\Users\CreateUserRequest;
 use App\Http\Requests\Users\UserLoginRequest;
 use App\Http\Resources\UserResource;
 use App\Services\ContractService;
+use App\Services\SettingService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,12 +21,16 @@ class AuthController extends Controller
 
     protected ContractService $contractService;
 
+    protected SettingService $settingService;
+
     public function __construct(
         UserService $userService,
-        ContractService $contractService
+        ContractService $contractService,
+        SettingService $settingService
     ) {
         $this->userService = $userService;
         $this->contractService = $contractService;
+        $this->settingService = $settingService;
     }
 
     /**
@@ -45,6 +50,7 @@ class AuthController extends Controller
             'name' => '契約名', // TODO 53 仮で作成、契約自体をどう作るのか、ユーザーの紐づけをどうするか用検討
         ];
         $contract = $this->contractService->createContract($contractData);
+        $this->settingService->updateOrCreateSettings($contract->id, []);
 
         $userData = [
             'contract_id' => $contract->id,
