@@ -24,7 +24,7 @@ class SettingService
      * @param array<string, mixed> $settingData
      * @return Setting
      */
-    public function updateOrCreate(int $contractId, array $settingData): Setting
+    public function updateOrCreateSettingAndOpenTimes(int $contractId, array $settingData): Setting
     {
         $setting = $this->settingRepository->updateOrCreate($contractId, $settingData);
 
@@ -44,7 +44,7 @@ class SettingService
      * @param array<string, mixed> $settingData
      * @return Setting
      */
-    public function updateOrCreateSettings(int $contractId, array $settingData): Setting
+    public function updateOrCreateSetting(int $contractId, array $settingData): Setting
     {
         return $this->settingRepository->updateOrCreate($contractId, $settingData);
     }

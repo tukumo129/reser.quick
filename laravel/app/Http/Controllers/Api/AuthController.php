@@ -50,7 +50,7 @@ class AuthController extends Controller
             'name' => '契約名', // TODO 53 仮で作成、契約自体をどう作るのか、ユーザーの紐づけをどうするか用検討
         ];
         $contract = $this->contractService->createContract($contractData);
-        $this->settingService->updateOrCreateSettings($contract->id, []);
+        $this->settingService->updateOrCreateSetting($contract->id, []);
 
         $userData = [
             'contract_id' => $contract->id,

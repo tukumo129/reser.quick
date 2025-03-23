@@ -46,7 +46,7 @@ class SettingController extends Controller
         /** @var User $user */
         $user = auth()->user();
         $settingData = $request->input('setting');
-        $setting = $this->settingService->updateOrCreateSettings($user->contract_id, $settingData);
+        $setting = $this->settingService->updateOrCreateSettingAndOpenTimes($user->contract_id, $settingData);
         return response()->json([
             'setting' => new SettingResource($setting),
         ], Response::HTTP_OK);
