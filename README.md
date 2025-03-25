@@ -1,7 +1,7 @@
 # 予約管理アプリ
 
 # 環境構築方法
-## dockerdesctopをインストール
+## Docker Desktopをインストール
 - https://www.docker.com/ja-jp/products/docker-desktop/
 
 ## gitをインストール
@@ -66,4 +66,28 @@ npm run build
 notepad C:\Windows\System32\drivers\etc\hosts
 # 最下段に下記を追加
 127.0.0.1 reser.quick
+```
+
+# サーバーデプロイ方法
+
+## サーバー起動
+- AWSの管理画面へログイン
+- EC2画面でインスタンス起動
+- ElasticIPを割り当て
+- route53でAレコード作成（IP部分のみ入力）
+
+## 変更の反映
+- SSH接続
+- 下記コマンドを実行
+``` sh
+cd reser.quick
+docker compose up -d --build
+docker compose exec app bash
+cd laravel
+composer i
+php artisan migrate
+cd ../react
+npm i
+npm run build
+# (必要な場合envを更新)
 ```

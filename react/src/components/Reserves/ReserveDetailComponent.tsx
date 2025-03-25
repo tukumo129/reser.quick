@@ -23,6 +23,12 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
   const { setting, isLoading, error } = useGetSetting();
   const { ReserveUpdateData, handleSubmit, onSubmit, errors, reset } = useReserveUpdateForm(reserve.id)
 
+  useEffect(() => {
+    if (reserve) {
+      reset(reserve)
+    }
+  }, [reserve])
+
   if (isLoading) return <LoadingSpinner />
   if (error) return <div>Error reserves</div>
 
@@ -38,11 +44,6 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
 
     return timeSlots;
   }
-  useEffect(() => {
-    if (reserve) {
-      reset(reserve)
-    }
-  }, [reserve])
 
   return (
     <Box p={{ base: 6, md: 10 }} bg="white" borderRadius="lg" boxShadow="xl">

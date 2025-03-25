@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Reserves\CreateReserveRequest;
 use App\Http\Requests\Reserves\GetReservesRequest;
 use App\Http\Requests\Reserves\UpdateReserveRequest;
+use App\Http\Requests\Reserves\UpdateReserveStatusRequest;
 use App\Http\Resources\ReserveResource;
 use App\Models\User;
 use App\Services\ReserveService;
@@ -82,6 +83,22 @@ class ReserveController extends Controller
         $user = auth()->user();
         $reserveData = $request->input('reserve');
         $reserve = $this->reserveService->updateReserve($user->contract_id, $reserveId, $reserveData);
+        return response()->json([
+            'reserve' => new ReserveResource($reserve),
+        ], Response::HTTP_OK);
+    }
+
+    /**
+     * @param int $reserveId
+     * @param UpdateReserveStatusRequest $request
+     * @return Response
+     */
+    public function updateReserveStatus(int $reserveId, UpdateReserveStatusRequest $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        $status = $request->input('status');
+        $reserve = $this->reserveService->updateReserve($user->contract_id, $reserveId, ['status' => $status]);
         return response()->json([
             'reserve' => new ReserveResource($reserve),
         ], Response::HTTP_OK);

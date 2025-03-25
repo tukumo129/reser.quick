@@ -1,9 +1,10 @@
 import { format } from "date-fns";
-import { Box, Flex, Text, useBreakpointValue, Button, useStyleConfig, Select, Stack } from '@chakra-ui/react';
+import { Box, Flex, Text, useBreakpointValue, Button, Select, Stack, Checkbox, Grid } from '@chakra-ui/react';
 import { useNavigate } from "react-router-dom";
 import { Reserve } from "../../types/Reserve";
 import { routePath } from "../../enums/routePath";
 import { Pagination } from "../../types/Pagination";
+import { useState } from "react";
 
 type ReserveListProps = {
   reserves: Reserve[];
@@ -12,41 +13,68 @@ type ReserveListProps = {
 export const ReserveList = ({ reserves }: ReserveListProps) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
   const navigate = useNavigate();
+  const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>({});
 
-  return (
-    reserves.length === 0 ? (
-      <Box bg="yellow.200" p={4} role="alert">
-        <Text>予約がありません</Text>
-      </Box>
-    ) : (
-      <Box>
-        <Flex direction={isMobile ? 'column' : 'row'} wrap="wrap" gap={4}>
-          {reserves.map((reserve, index) => (
+  const handleCheck = (id: number, checked: boolean) => {
+    setCheckedItems((prev) => ({ ...prev, [id]: checked }));
+    // onSubmit(); 後でAPIリクエストを送信する関数を追加する
+  };
+
+  return reserves.length === 0 ? (
+    <Box bg="yellow.100" p={4} borderRadius="md" textAlign="center" role="alert">
+      <Text fontWeight="bold" color="gray.600">
+        予約がありません
+      </Text>
+    </Box>
+  ) : (
+    <Box>
+      <Grid templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"} gap={4}>
+        {reserves.map((reserve) => {
+          const isChecked = checkedItems[reserve.id] || false
+          return (
             <Box
+              key={reserve.id}
+              position="relative"
               borderWidth="1px"
               borderRadius="lg"
               overflow="hidden"
               p={4}
-              key={index}
-              cursor="pointer"
-              bg="white"
+              bg={isChecked ? "gray.400" : "white"}
               borderColor="gray.300"
-              onClick={() => navigate(routePath.ReserveDetail.replace(':reserveId', String(reserve.id)))}
+              boxShadow="md"
+              _hover={{ boxShadow: "lg", borderColor: "blue.400" }}
             >
-              <Stack spacing={2}>
-                <Text fontWeight="bold">予約番号: {`R${String(reserve.reserveId).padStart(8, "0")}`}</Text>
-                <Text>名前: {reserve.name}</Text>
-                <Text>人数: {reserve.guestNumber}</Text>
-                <Text>
-                  予約時間: {`${format(new Date(reserve.startDateTime), 'yyyy/MM/dd HH:mm')} ～ ${format(new Date(reserve.endDateTime), 'yyyy/MM/dd HH:mm')}`}
-                </Text>
-              </Stack>
+              <Flex align="center">
+                <Checkbox
+                  mr={3}
+                  colorScheme="blue"
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={(e) => handleCheck(reserve.id, e.target.checked)}
+                />
+
+                <Stack
+                  spacing={2}
+                  flex="1"
+                  cursor="pointer"
+                  onClick={() => navigate(routePath.ReserveDetail.replace(":reserveId", String(reserve.id)))}
+                >
+                  <Text fontWeight="bold" fontSize="lg">
+                    予約番号: R{String(reserve.reserveId).padStart(8, "0")}
+                  </Text>
+                  <Text fontSize="md">名前: {reserve.name}</Text>
+                  <Text fontSize="md">人数: {reserve.guestNumber} 人</Text>
+                  <Text fontSize="sm" color="gray.600">
+                    予約時間: {format(new Date(reserve.startDateTime), "yyyy/MM/dd HH:mm")} ～{" "}
+                    {format(new Date(reserve.endDateTime), "yyyy/MM/dd HH:mm")}
+                  </Text>
+                </Stack>
+              </Flex>
             </Box>
-          ))}
-        </Flex>
-      </Box>
-    )
-  );
+          )
+        })}
+      </Grid>
+    </Box>
+  )
 }
 
 type PaginationContainerProps = {
@@ -62,80 +90,97 @@ export const PaginationContainer = ({
   setLimit,
 }: PaginationContainerProps) => {
   const pageNumbers = [];
-  pageNumbers.push(1)
+  pageNumbers.push(1);
 
   if (pagination.last_page > 1) {
-    if (pagination.page > 6) {
+    if (pagination.page > 4) {
       pageNumbers.push("...");
     }
-    const startPage = Math.max(2, pagination.page - 5);
-    const endPage = Math.min(pagination.last_page - 1, pagination.page + 5);
+
+    const startPage = Math.max(2, pagination.page - 2);
+    const endPage = Math.min(pagination.last_page - 1, pagination.page + 2);
 
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(i);
     }
-    if (pagination.page + 5 < pagination.last_page - 1) {
+
+    if (pagination.page + 2 < pagination.last_page - 1) {
       pageNumbers.push("...");
     }
+
     pageNumbers.push(pagination.last_page);
   }
-  const buttonStyles = useStyleConfig('Button', { variant: 'outline' });
 
   return (
-    <Flex direction="row" align="center" justify="space-between" mt={4} px={{ base: 2, md: 4 }} >
+    <Flex direction="row" align="center" justify="space-between" mt={6} px={4}>
       <Box flex="1" />
-      <Flex direction="row" align="center" justify="center" flex="1" gap={2} >
+      <Flex direction="row" align="center" justify="center" flex="1" gap={2}>
         <Button
           onClick={() => setPage(pagination.page - 1)}
-          colorScheme="yellow"
+          colorScheme="blue"
           isDisabled={pagination.page === 1}
-          sx={buttonStyles}
-          borderRadius="md"
-          variant="solid"
+          borderRadius="full"
+          variant="ghost"
+          size="sm"
+          _hover={{ bg: "blue.100" }}
         >
           &lt;
         </Button>
+
         {pageNumbers.map((number, index) =>
-          typeof number === 'number' ? (
+          typeof number === "number" ? (
             <Button
               key={index}
               onClick={() => setPage(number)}
-              colorScheme="yellow"
-              bg='yellow.400'
+              colorScheme={number === pagination.page ? "blue" : "gray"}
+              bg={number === pagination.page ? "blue.400" : "gray.100"}
+              color={number === pagination.page ? "white" : "black"}
               isDisabled={number === pagination.page}
-              sx={buttonStyles}
-              borderRadius="md"
-              variant={number === pagination.page ? 'solid' : 'outline'}
+              borderRadius="full"
+              variant={number === pagination.page ? "solid" : "ghost"}
+              size="sm"
+              px={4}
+              boxShadow={number === pagination.page ? "md" : "none"}
+              _hover={{ bg: number === pagination.page ? "blue.500" : "gray.200" }}
             >
               {number}
             </Button>
           ) : (
-            <Text key={index} px={3} py={1} borderRadius="md" >
+            <Text key={index} px={2} py={1} borderRadius="full" color="gray.500" fontSize="sm">
               {number}
             </Text>
           )
         )}
+
         <Button
           onClick={() => setPage(pagination.page + 1)}
           isDisabled={pagination.page === pagination.last_page}
-          colorScheme='yellow'
-          sx={buttonStyles}
-          borderRadius="md"
-          variant="solid"
+          colorScheme="blue"
+          borderRadius="full"
+          variant="ghost"
+          size="sm"
+          _hover={{ bg: "blue.100" }}
         >
           &gt;
         </Button>
       </Flex>
       <Box flex="1" />
+
       <Select
         value={limit}
-        onChange={(e) => { setLimit(Number(e.target.value)); setPage(1); }}
-        borderRadius="md"
+        onChange={(e) => {
+          setLimit(Number(e.target.value));
+          setPage(1);
+        }}
+        borderRadius="full"
         borderColor="gray.300"
-        p={2}
-        ml={2}
         bg="white"
-        w='auto'
+        size="sm"
+        fontWeight="semibold"
+        boxShadow="sm"
+        _focus={{ borderColor: "blue.400", boxShadow: "0 0 5px rgba(0, 122, 255, 0.5)" }}
+        w="auto"
+        minW="80px"
       >
         <option value={10}>10件</option>
         <option value={50}>50件</option>
