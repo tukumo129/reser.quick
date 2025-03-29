@@ -24,6 +24,7 @@ class GetReservesRequest extends FormRequest
     public function rules()
     {
         return [
+            'status' => ['string', 'nullable'],
             'sorts' => ['array', 'nullable'],
             'sorts.*' => ['string', 'nullable'],
             'page' => ['integer', 'nullable'],

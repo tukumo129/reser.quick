@@ -7,4 +7,5 @@ export type Reserve = {
   startDateTime: string;
   endDateTime: string;
   uuid: string;
+  status: string;
 };

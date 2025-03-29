@@ -35,14 +35,18 @@ class ReserveService
 
     /**
      * @param int $contractId
+     * @param string|null $status
      * @param array<string, string>|null $sorts
      * @param int|null $page
      * @param int|null $limit
      * @return array<string, mixed>
      */
-    public function getReserves(int $contractId, ?array $sorts, ?int $page, ?int $limit): array
+    public function getReserves(int $contractId, ?string $status, ?array $sorts, ?int $page, ?int $limit): array
     {
         $criteria = ['contract_id' => $contractId];
+        if($status) {
+            $criteria['status'] = $status;
+        }
 
         if($page && $limit) {
             return $this->reserveRepository->getWithPagination($criteria, $sorts, $page, $limit);

@@ -1,27 +1,61 @@
 import { format } from "date-fns";
-import { Box, Flex, Text, useBreakpointValue, Button, Select, Stack, Checkbox, Grid } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Text,
+  useBreakpointValue,
+  Button,
+  Select,
+  Stack,
+  Checkbox,
+  Grid,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { Reserve } from "../../types/Reserve";
 import { routePath } from "../../enums/routePath";
 import { Pagination } from "../../types/Pagination";
-import { useState } from "react";
+import { useReserveUpdateStatusForm } from "./ReserveUpdateStatusFormContainer";
+import { reserveStatus } from "../../enums/reserveStatus";
+import { useEffect, useState } from "react";
 
 type ReserveListProps = {
   reserves: Reserve[];
-}
+};
 
 export const ReserveList = ({ reserves }: ReserveListProps) => {
   const isMobile = useBreakpointValue({ base: true, md: false });
   const navigate = useNavigate();
-  const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>({});
-
+  const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>(
+    {},
+  );
   const handleCheck = (id: number, checked: boolean) => {
     setCheckedItems((prev) => ({ ...prev, [id]: checked }));
-    // onSubmit(); 後でAPIリクエストを送信する関数を追加する
   };
 
+  useEffect(() => {
+    setCheckedItems(() => {
+      return reserves.reduce(
+        (acc, reserve) => {
+          if (reserve.status === reserveStatus.Complete) {
+            acc[reserve.id] = true;
+          }
+          return acc;
+        },
+        {} as { [key: number]: boolean },
+      );
+    });
+  }, [reserves]);
+
+  const { onSubmit } = useReserveUpdateStatusForm();
+
   return reserves.length === 0 ? (
-    <Box bg="yellow.100" p={4} borderRadius="md" textAlign="center" role="alert">
+    <Box
+      bg="yellow.100"
+      p={4}
+      borderRadius="md"
+      textAlign="center"
+      role="alert"
+    >
       <Text fontWeight="bold" color="gray.600">
         予約がありません
       </Text>
@@ -30,7 +64,7 @@ export const ReserveList = ({ reserves }: ReserveListProps) => {
     <Box>
       <Grid templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"} gap={4}>
         {reserves.map((reserve) => {
-          const isChecked = checkedItems[reserve.id] || false
+          const isChecked = checkedItems[reserve.id] ?? false;
           return (
             <Box
               key={reserve.id}
@@ -49,14 +83,26 @@ export const ReserveList = ({ reserves }: ReserveListProps) => {
                   mr={3}
                   colorScheme="blue"
                   onClick={(e) => e.stopPropagation()}
-                  onChange={(e) => handleCheck(reserve.id, e.target.checked)}
+                  onChange={(e) => {
+                    handleCheck(reserve.id, e.target.checked);
+                    onSubmit(reserve.id, e.target.checked);
+                  }}
+                  isChecked={isChecked}
+                  // defaultChecked={reserve.status === reserveStatus.Complete}
                 />
 
                 <Stack
                   spacing={2}
                   flex="1"
                   cursor="pointer"
-                  onClick={() => navigate(routePath.ReserveDetail.replace(":reserveId", String(reserve.id)))}
+                  onClick={() =>
+                    navigate(
+                      routePath.ReserveDetail.replace(
+                        ":reserveId",
+                        String(reserve.id),
+                      ),
+                    )
+                  }
                 >
                   <Text fontWeight="bold" fontSize="lg">
                     予約番号: R{String(reserve.reserveId).padStart(8, "0")}
@@ -64,18 +110,23 @@ export const ReserveList = ({ reserves }: ReserveListProps) => {
                   <Text fontSize="md">名前: {reserve.name}</Text>
                   <Text fontSize="md">人数: {reserve.guestNumber} 人</Text>
                   <Text fontSize="sm" color="gray.600">
-                    予約時間: {format(new Date(reserve.startDateTime), "yyyy/MM/dd HH:mm")} ～{" "}
+                    予約時間:{" "}
+                    {format(
+                      new Date(reserve.startDateTime),
+                      "yyyy/MM/dd HH:mm",
+                    )}{" "}
+                    ～{" "}
                     {format(new Date(reserve.endDateTime), "yyyy/MM/dd HH:mm")}
                   </Text>
                 </Stack>
               </Flex>
             </Box>
-          )
+          );
         })}
       </Grid>
     </Box>
-  )
-}
+  );
+};
 
 type PaginationContainerProps = {
   pagination: Pagination;
@@ -141,15 +192,24 @@ export const PaginationContainer = ({
               size="sm"
               px={4}
               boxShadow={number === pagination.page ? "md" : "none"}
-              _hover={{ bg: number === pagination.page ? "blue.500" : "gray.200" }}
+              _hover={{
+                bg: number === pagination.page ? "blue.500" : "gray.200",
+              }}
             >
               {number}
             </Button>
           ) : (
-            <Text key={index} px={2} py={1} borderRadius="full" color="gray.500" fontSize="sm">
+            <Text
+              key={index}
+              px={2}
+              py={1}
+              borderRadius="full"
+              color="gray.500"
+              fontSize="sm"
+            >
               {number}
             </Text>
-          )
+          ),
         )}
 
         <Button
@@ -178,7 +238,10 @@ export const PaginationContainer = ({
         size="sm"
         fontWeight="semibold"
         boxShadow="sm"
-        _focus={{ borderColor: "blue.400", boxShadow: "0 0 5px rgba(0, 122, 255, 0.5)" }}
+        _focus={{
+          borderColor: "blue.400",
+          boxShadow: "0 0 5px rgba(0, 122, 255, 0.5)",
+        }}
         w="auto"
         minW="80px"
       >

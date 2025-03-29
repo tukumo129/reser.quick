@@ -16,14 +16,17 @@ const defaultPagination: Pagination = {
 };
 
 type useGetReservesProps = {
+  status?: string;
   sorts?: string;
   page?: string;
-  limit?: string;  
-}
+  limit?: string;
+};
 
 export const useGetReserves = (params?: useGetReservesProps) => {
   const { data, isLoading, error } = useQuery<GetReservesData, Error>(
-    [ApiPath.RESERVES, params], () => callGet(ApiPath.RESERVES, params));
+    [ApiPath.RESERVES, params],
+    () => callGet(ApiPath.RESERVES, params),
+  );
   return {
     reserves: data?.reserves || [],
     pagination: data?.pagination || defaultPagination,

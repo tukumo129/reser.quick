@@ -1,21 +1,30 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Box, Button, Flex, Input } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, Switch, Text } from "@chakra-ui/react";
 import { useGetReserves } from "../../services/ReserveService/UseGetReserves";
 import { LoadingSpinner } from "../LoadingSpinnerComponent";
 import { routePath } from "../../enums/routePath";
-import { PaginationContainer, ReserveList } from "../../container/Reserves/ReservesContainer";
+import {
+  PaginationContainer,
+  ReserveList,
+} from "../../container/Reserves/ReservesContainer";
 import { AddIcon, SearchIcon } from "@chakra-ui/icons";
+import { reserveStatus } from "../../enums/reserveStatus";
 
 // TODO #24 検索機能実装
 export const ReservesContents = () => {
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
-  const { reserves, pagination, isLoading, error } = useGetReserves({ page: String(page), limit: String(limit) });
-  const navigate = useNavigate()
+  const [showAllReserve, setShowAllReserve] = useState<boolean>(false);
+  const { reserves, pagination, isLoading, error } = useGetReserves({
+    page: String(page),
+    limit: String(limit),
+    status: showAllReserve ? "" : reserveStatus.NoComplete,
+  });
+  const navigate = useNavigate();
 
-  if (isLoading) return <LoadingSpinner />
-  if (error) return <div>Error reserves</div>
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <div>Error reserves</div>;
 
   return (
     <>
@@ -28,7 +37,10 @@ export const ReservesContents = () => {
           flex={1}
           borderRadius="full"
           boxShadow="sm"
-          _focus={{ borderColor: "blue.400", boxShadow: "0 0 5px rgba(0, 122, 255, 0.5)" }}
+          _focus={{
+            borderColor: "blue.400",
+            boxShadow: "0 0 5px rgba(0, 122, 255, 0.5)",
+          }}
         />
         <Button
           colorScheme="blue"
@@ -42,27 +54,44 @@ export const ReservesContents = () => {
         </Button>
       </Flex>
 
-      <Button
-        onClick={() => navigate(routePath.ReserveCreate)}
-        leftIcon={<AddIcon />}
-        colorScheme="blue"
-        size="lg"
-        px={6}
-        py={4}
-        mt={4}
-        mb={4}
-        borderRadius="full"
-        boxShadow="lg"
-        _hover={{ bg: "blue.600" }}
-      >
-        新規登録
-      </Button>
+      <Flex justify="space-between" align="center">
+        <Button
+          onClick={() => navigate(routePath.ReserveCreate)}
+          leftIcon={<AddIcon />}
+          colorScheme="blue"
+          size="lg"
+          px={6}
+          py={4}
+          mt={4}
+          mb={4}
+          borderRadius="full"
+          boxShadow="lg"
+          _hover={{ bg: "blue.600" }}
+        >
+          新規登録
+        </Button>
+        <Flex align="center">
+          <Switch
+            colorScheme="blue"
+            isChecked={showAllReserve}
+            onChange={() => setShowAllReserve((prev) => !prev)}
+          />
+          <Text ml={2} fontSize="sm" color="gray.700">
+            すべて表示
+          </Text>
+        </Flex>
+      </Flex>
       <Box>
-        <ReserveList reserves={reserves} />
+        <ReserveList reserves={reserves} key={reserves.length} />
         <div className="mt-4">
-          <PaginationContainer pagination={pagination} setPage={setPage} limit={limit} setLimit={setLimit} />
+          <PaginationContainer
+            pagination={pagination}
+            setPage={setPage}
+            limit={limit}
+            setLimit={setLimit}
+          />
         </div>
       </Box>
     </>
-  )
+  );
 };

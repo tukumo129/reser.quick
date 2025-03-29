@@ -46,10 +46,11 @@ class ReserveController extends Controller
     {
         /** @var User $user */
         $user = auth()->user();
+        $status = $request->input('status');
         $sorts = $request->input('sorts', []);
         $page = $request->input('page');
         $limit = $request->input('limit');
-        $reserves = $this->reserveService->getReserves($user->contract_id, $sorts, $page, $limit);
+        $reserves = $this->reserveService->getReserves($user->contract_id, $status,$sorts, $page, $limit);
         return response()->json([
             'reserves' => ReserveResource::collection($reserves['reserves']),
             'pagination' => $reserves['pagination'] ?? null,
