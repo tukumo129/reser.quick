@@ -8,19 +8,22 @@ export type useAppCreateReserveParams = {
     name: string;
     guest_number: number;
     start_date_time: string;
-  }
-}
+  };
+};
 
 export type AppCreateReserveData = {
   reserve: Reserve;
 };
 
-export const useAppCreateReserveMutation = (uuid: string,): UseMutationResult<
+export const useAppCreateReserveMutation = (
+  uuid: string,
+): UseMutationResult<
   AppCreateReserveData,
   Error,
   useAppCreateReserveParams
 > => {
   return useMutation<AppCreateReserveData, Error, useAppCreateReserveParams>(
-    (params: useAppCreateReserveParams) => callPost(ApiPath.APP_RESERVES.replace(':uuid', uuid.toString()), params),
-  )
-}
+    (params: useAppCreateReserveParams) =>
+      callPost(ApiPath.APP_RESERVES.replace(":uuid", uuid.toString()), params),
+  );
+};

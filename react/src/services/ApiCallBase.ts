@@ -15,18 +15,16 @@ const axiosClient: AxiosInstance = axios.create({
 });
 
 axiosClient.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     if (error.response.status === 401 && error.config.url !== ApiPath.LOGIN) {
-      window.location.replace(routePath.Login)
+      window.location.replace(routePath.Login);
     }
     return Promise.reject(error);
-  }
+  },
 );
 
-export const callGet = async <
-  TParam extends Record<string, string>,
->(
+export const callGet = async <TParam extends Record<string, string>>(
   path: string,
   pathParam: TParam = {} as TParam,
 ) => {
@@ -44,9 +42,7 @@ export const callPost = async <TBody extends Record<string, unknown>>(
   return response.data;
 };
 
-export const callPut = async <
-  TBody extends Record<string, unknown>,
->(
+export const callPut = async <TBody extends Record<string, unknown>>(
   path: string,
   body: TBody = {} as TBody,
 ) => {
@@ -74,6 +70,6 @@ export const callLogin = async <TBody extends Record<string, unknown>>(
   const response = await axiosClient.post(ApiPath.LOGIN, body);
   const token = response.data?.token;
   localStorage.setItem("token", token);
-  axiosClient.defaults.headers.Authorization = `Bearer ${token}`
+  axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
   return response.data;
 };

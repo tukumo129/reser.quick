@@ -10,17 +10,19 @@ export type GetReserveData = {
 const defaultValues = {
   id: 0,
   contractId: 0,
-  name: '',
+  name: "",
   guestNumber: 0,
-  startDateTime: '',
-  endDateTime: '',
-  uuid: '',
-}
+  startDateTime: "",
+  endDateTime: "",
+  uuid: "",
+};
 
 export const useGetReserve = (reserveId: number) => {
-  const path = ApiPath.RESERVE.replace(':reserveId', reserveId.toString())
+  const path = ApiPath.RESERVE.replace(":reserveId", reserveId.toString());
   const { data, isLoading, error } = useQuery<GetReserveData, Error>(
-    [ApiPath.RESERVE, reserveId], () => callGet(path));
+    [ApiPath.RESERVE, reserveId],
+    () => callGet(path),
+  );
   return {
     reserve: data?.reserve || defaultValues,
     isLoading,

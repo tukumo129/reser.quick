@@ -1,8 +1,8 @@
 import { atom, useRecoilState } from "recoil";
 
 const appUuidState = atom<string>({
-  key: 'appUuid',
-  default: '',
+  key: "appUuid",
+  default: "",
 });
 
 export function useAppUuidRecoil() {
@@ -11,5 +11,5 @@ export function useAppUuidRecoil() {
   return {
     appUuid,
     setAppUuid,
-  }
+  };
 }

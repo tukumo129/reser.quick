@@ -3,6 +3,6 @@ import { CreateReserveForm } from "../../components/Reserves/ReserveCreateFormCo
 
 export function ReserveCreateView() {
   return (
-    <AdminLayout pageName={"予約登録"}mainContents={<CreateReserveForm />}/>
+    <AdminLayout pageName={"予約登録"} mainContents={<CreateReserveForm />} />
   );
 }

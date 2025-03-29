@@ -7,27 +7,25 @@ import { useAppSettingsRecoil } from "../recoils/AppSettingsRecoil";
 import { useAppUuidRecoil } from "../recoils/AppUuidRecoil";
 
 type AppAuthProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 export const AppAuth = ({ children }: AppAuthProps) => {
-  const { appUuid, setAppUuid } = useAppUuidRecoil()
-  const { setAppSettings } = useAppSettingsRecoil()
-  const { uuid } = useParams()
-  const navigate = useNavigate()
-  const { settings, isLoading, error } = useGetAppSettings(String(uuid))
+  const { appUuid, setAppUuid } = useAppUuidRecoil();
+  const { setAppSettings } = useAppSettingsRecoil();
+  const { uuid } = useParams();
+  const navigate = useNavigate();
+  const { settings, isLoading, error } = useGetAppSettings(String(uuid));
 
   useEffect(() => {
-    setAppUuid(uuid ?? '')
+    setAppUuid(uuid ?? "");
     if (settings) {
-      setAppSettings(settings)
+      setAppSettings(settings);
     }
-  }, [settings])
+  }, [settings]);
 
-  if (isLoading) return <LoadingSpinner />
-  if (error) navigate(getRoutePath(routePath.AppErrorPage, appUuid))
+  if (isLoading) return <LoadingSpinner />;
+  if (error) navigate(getRoutePath(routePath.AppErrorPage, appUuid));
 
-  return (
-    <>{children}</>
-  )
+  return <>{children}</>;
 };

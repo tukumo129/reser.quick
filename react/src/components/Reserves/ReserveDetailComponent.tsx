@@ -1,4 +1,16 @@
-import { Box, Button, Divider, FormControl, FormErrorMessage, FormLabel, HStack, Input, Select, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  HStack,
+  Input,
+  Select,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useReserveUpdateForm } from "../../container/Reserves/ReserveUpdateFormContainer";
 import { routePath } from "../../enums/routePath";
@@ -8,35 +20,40 @@ import { useGetSetting } from "../../services/SettingService/UseGetSetting";
 
 export type ReserveFormProps = {
   reserve: {
-    id: number
-    name: string,
-    startDate: string,
-    startTime: string,
-    endDate: string,
-    endTime: string,
-    guestNumber: number,
-  }
-}
+    id: number;
+    name: string;
+    startDate: string;
+    startTime: string;
+    endDate: string;
+    endTime: string;
+    guestNumber: number;
+  };
+};
 
 export function UpdateReserveForm({ reserve }: ReserveFormProps) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { setting, isLoading, error } = useGetSetting();
-  const { ReserveUpdateData, handleSubmit, onSubmit, errors, reset } = useReserveUpdateForm(reserve.id)
+  const { ReserveUpdateData, handleSubmit, onSubmit, errors, reset } =
+    useReserveUpdateForm(reserve.id);
 
   useEffect(() => {
     if (reserve) {
-      reset(reserve)
+      reset(reserve);
     }
-  }, [reserve])
+  }, [reserve]);
 
-  if (isLoading) return <LoadingSpinner />
-  if (error) return <div>Error reserves</div>
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <div>Error reserves</div>;
 
   function generateTimeSlots(reserveSlotTime: string): string[] {
     const timeSlots: string[] = [];
 
     for (let hour = 0; hour < 24; hour++) {
-      for (let minute = 0; minute < 60; minute += parseInt(reserveSlotTime, 10)) {
+      for (
+        let minute = 0;
+        minute < 60;
+        minute += parseInt(reserveSlotTime, 10)
+      ) {
         const formattedTime = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
         timeSlots.push(formattedTime);
       }
@@ -51,7 +68,10 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
         <Stack spacing={6}>
           <FormControl isInvalid={!!errors.name} id="name">
             <FormLabel fontWeight="semibold">
-              名前<Text as="span" color="red.500">*</Text>
+              名前
+              <Text as="span" color="red.500">
+                *
+              </Text>
             </FormLabel>
             <Input
               defaultValue={reserve.name}
@@ -59,7 +79,10 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
               placeholder="名前を入力してください"
               size="lg"
               borderRadius="md"
-              _focus={{ borderColor: "blue.400", boxShadow: "0 0 0 2px rgba(66, 153, 225, 0.6)" }}
+              _focus={{
+                borderColor: "blue.400",
+                boxShadow: "0 0 0 2px rgba(66, 153, 225, 0.6)",
+              }}
             />
             <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
           </FormControl>
@@ -67,7 +90,10 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
           <HStack spacing={6} align="start">
             <FormControl isInvalid={!!errors.startDate} id="startDate" w="full">
               <FormLabel fontWeight="semibold">
-                開始日時<Text as="span" color="red.500">*</Text>
+                開始日時
+                <Text as="span" color="red.500">
+                  *
+                </Text>
               </FormLabel>
               <Input
                 type="date"
@@ -81,9 +107,16 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
 
             <FormControl isInvalid={!!errors.startTime} id="startTime" w="full">
               <FormLabel fontWeight="semibold">
-                開始時刻<Text as="span" color="red.500">*</Text>
+                開始時刻
+                <Text as="span" color="red.500">
+                  *
+                </Text>
               </FormLabel>
-              <Select {...ReserveUpdateData("startTime")} size="lg" borderRadius="md">
+              <Select
+                {...ReserveUpdateData("startTime")}
+                size="lg"
+                borderRadius="md"
+              >
                 {generateTimeSlots(setting.reserveSlotTime).map((time) => (
                   <option key={time} value={time}>
                     {time}
@@ -97,7 +130,10 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
           <HStack spacing={6} align="start">
             <FormControl isInvalid={!!errors.endDate} id="endDate" w="full">
               <FormLabel fontWeight="semibold">
-                終了日時<Text as="span" color="red.500">*</Text>
+                終了日時
+                <Text as="span" color="red.500">
+                  *
+                </Text>
               </FormLabel>
               <Input
                 type="date"
@@ -111,9 +147,16 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
 
             <FormControl isInvalid={!!errors.endTime} id="endTime" w="full">
               <FormLabel fontWeight="semibold">
-                終了時刻<Text as="span" color="red.500">*</Text>
+                終了時刻
+                <Text as="span" color="red.500">
+                  *
+                </Text>
               </FormLabel>
-              <Select {...ReserveUpdateData("endTime")} size="lg" borderRadius="md">
+              <Select
+                {...ReserveUpdateData("endTime")}
+                size="lg"
+                borderRadius="md"
+              >
                 {generateTimeSlots(setting.reserveSlotTime).map((time) => (
                   <option key={time} value={time}>
                     {time}
@@ -126,7 +169,10 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
           <Divider borderColor="gray.300" />
           <FormControl isInvalid={!!errors.guestNumber} id="guestNumber">
             <FormLabel fontWeight="semibold">
-              人数<Text as="span" color="red.500">*</Text>
+              人数
+              <Text as="span" color="red.500">
+                *
+              </Text>
             </FormLabel>
             <Input
               type="number"
@@ -160,7 +206,11 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
             colorScheme="gray"
             bg="gray.600"
             color="white"
-            _hover={{ bg: "gray.700", transform: "scale(1.05)", transition: "0.2s" }}
+            _hover={{
+              bg: "gray.700",
+              transform: "scale(1.05)",
+              transition: "0.2s",
+            }}
             w={{ base: "100%", md: "10rem" }}
             onClick={() => navigate(routePath.Reserves)}
             borderRadius="md"
@@ -171,7 +221,11 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
             colorScheme="blue"
             bgGradient="linear(to-r, blue.500, blue.400)"
             color="white"
-            _hover={{ bgGradient: "linear(to-r, blue.600, blue.500)", transform: "scale(1.05)", transition: "0.2s" }}
+            _hover={{
+              bgGradient: "linear(to-r, blue.600, blue.500)",
+              transform: "scale(1.05)",
+              transition: "0.2s",
+            }}
             w={{ base: "100%", md: "10rem" }}
             type="submit"
             form="updateReserveForm"

@@ -1,5 +1,16 @@
 import { useLoginForm } from "../container/LoginFormContainer";
-import { Alert, Box, Button, Card, Center, FormControl, FormLabel, Input, Stack, Text } from "@chakra-ui/react";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Center,
+  FormControl,
+  FormLabel,
+  Input,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 
 export function LoginForm() {
   const { loginData, handleSubmit, onSubmit, errorMessage } = useLoginForm();
@@ -21,7 +32,9 @@ export function LoginForm() {
           <Box as="form" onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={4}>
               <FormControl>
-                <FormLabel fontSize="sm" fontWeight="medium" color="gray.600">メールアドレス</FormLabel>
+                <FormLabel fontSize="sm" fontWeight="medium" color="gray.600">
+                  メールアドレス
+                </FormLabel>
                 <Input
                   {...loginData("email")}
                   type="email"
@@ -33,7 +46,9 @@ export function LoginForm() {
                 />
               </FormControl>
               <FormControl>
-                <FormLabel fontSize="sm" fontWeight="medium" color="gray.600">パスワード</FormLabel>
+                <FormLabel fontSize="sm" fontWeight="medium" color="gray.600">
+                  パスワード
+                </FormLabel>
                 <Input
                   {...loginData("password")}
                   type="password"
@@ -44,7 +59,13 @@ export function LoginForm() {
                   _focus={{ borderColor: "blue.500", bg: "white" }}
                 />
               </FormControl>
-              <Button type="submit" mt={4} w="full" colorScheme="blue" borderRadius="md">
+              <Button
+                type="submit"
+                mt={4}
+                w="full"
+                colorScheme="blue"
+                borderRadius="md"
+              >
                 ログイン
               </Button>
             </Stack>

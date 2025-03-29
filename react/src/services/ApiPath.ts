@@ -1,4 +1,4 @@
-const appUrl = import.meta.env.VITE_APP_URL
+const appUrl = import.meta.env.VITE_APP_URL;
 
 export const ApiPath = {
   BASE_PATH: `${appUrl}/api`,
@@ -6,6 +6,7 @@ export const ApiPath = {
   LOGOUT: "/user/logout",
   USER: "/user",
   RESERVE: "/reserve/:reserveId",
+  RESERVE_STATUS: "/reserve/:reserveId/status",
   RESERVES: "/reserves",
   SETTING: "/setting",
 
@@ -16,5 +17,5 @@ export const ApiPath = {
 } as const;
 
 export const getRoutePath = (path: string, uuid: string) => {
-  return path.replace(":uuid", uuid ?? '');
-}
+  return path.replace(":uuid", uuid ?? "");
+};

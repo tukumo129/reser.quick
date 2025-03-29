@@ -4,13 +4,13 @@ import { ApiPath } from "../ApiPath";
 import { Reserve } from "../../types/Reserve";
 
 export type useCreateReserveParams = {
-  reserve:{
+  reserve: {
     name: string;
     guest_number: number;
     start_date_time: string;
     end_date_time: string;
-  }
-}
+  };
+};
 
 export type CreateReserveData = {
   reserve: Reserve;

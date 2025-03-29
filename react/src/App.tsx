@@ -20,8 +20,8 @@ const queryClient = new QueryClient({
       retry: false,
       refetchOnWindowFocus: false,
       useErrorBoundary: false,
-    }
-  }
+    },
+  },
 });
 
 const App: React.FC = () => {
@@ -35,13 +35,33 @@ const App: React.FC = () => {
             <Route path={routePath.Top} element={<TopView />} />
             <Route path={routePath.CreateUser} element={<CreateUserView />} />
             <Route path={routePath.Reserves} element={<ReserveView />} />
-            <Route path={routePath.ReserveCreate} element={<ReserveCreateView />} />
-            <Route path={routePath.ReserveDetail} element={<ReserveDetailView />} />
+            <Route
+              path={routePath.ReserveCreate}
+              element={<ReserveCreateView />}
+            />
+            <Route
+              path={routePath.ReserveDetail}
+              element={<ReserveDetailView />}
+            />
             <Route path={routePath.Setting} element={<SettingUpdateView />} />
 
             {/* ユーザー画面 */}
-            <Route path={routePath.AppTop} element={<AppAuth><AppTopView /></AppAuth>} />
-            <Route path={routePath.AppReserveCreate} element={<AppAuth><AppReserveCreateView /></AppAuth>} />
+            <Route
+              path={routePath.AppTop}
+              element={
+                <AppAuth>
+                  <AppTopView />
+                </AppAuth>
+              }
+            />
+            <Route
+              path={routePath.AppReserveCreate}
+              element={
+                <AppAuth>
+                  <AppReserveCreateView />
+                </AppAuth>
+              }
+            />
             {/* エラー画面 */}
             <Route path={routePath.AppErrorPage} element={<ErrorView />} />
             <Route path="*" element={<ErrorView />} />

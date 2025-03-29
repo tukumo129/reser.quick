@@ -19,23 +19,28 @@ import {
   FormControl,
 } from "@chakra-ui/react";
 import { Control, useFieldArray } from "react-hook-form";
-import { openTimesSchema, useUpdateSettingSchema } from "./SettingUpdateFormContainer";
+import {
+  openTimesSchema,
+  useUpdateSettingSchema,
+} from "./SettingUpdateFormContainer";
 import { openTimeType } from "../../enums/openTimeType";
 import { useState } from "react";
 
 type DayOpenTimesComponentProps = {
-  control: Control<useUpdateSettingSchema>
-}
+  control: Control<useUpdateSettingSchema>;
+};
 
-export const DayOpenTimesContainer = ({ control }: DayOpenTimesComponentProps) => {
+export const DayOpenTimesContainer = ({
+  control,
+}: DayOpenTimesComponentProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const { fields, replace } = useFieldArray({
     control,
-    name: 'openTimes',
-    keyName: 'key',
-  })
+    name: "openTimes",
+    keyName: "key",
+  });
 
   const [tempOpenTimes, setTempOpenTimes] = useState<openTimesSchema[]>(fields);
 
@@ -62,19 +67,19 @@ export const DayOpenTimesContainer = ({ control }: DayOpenTimesComponentProps) =
   };
 
   const handleRemoveTime = (index: number) => {
-    setTempOpenTimes((prev) => prev.filter((_, i) => (i !== index)));
+    setTempOpenTimes((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSave = () => {
-    const newErrors: { [key: number]: string } = {}
+    const newErrors: { [key: number]: string } = {};
     tempOpenTimes.forEach((tempOpenTime, index) => {
       if (tempOpenTime.type == openTimeType.Day && !tempOpenTime.date) {
-        newErrors[index] = "日付は必須です"
+        newErrors[index] = "日付は必須です";
       }
     });
 
     setErrors(newErrors);
-    if (Object.keys(newErrors).length != 0) return
+    if (Object.keys(newErrors).length != 0) return;
 
     replace(tempOpenTimes);
     onClose();
@@ -83,7 +88,10 @@ export const DayOpenTimesContainer = ({ control }: DayOpenTimesComponentProps) =
   return (
     <Box>
       <Flex direction={isMobile ? "column" : "row"}>
-        <FormLabel w={isMobile ? "auto" : 40} m={isMobile ? "auto 2" : "auto 0"}>
+        <FormLabel
+          w={isMobile ? "auto" : 40}
+          m={isMobile ? "auto 2" : "auto 0"}
+        >
           営業時間（日付）
         </FormLabel>
         <Button onClick={handleOpen} colorScheme="blue">
@@ -95,7 +103,7 @@ export const DayOpenTimesContainer = ({ control }: DayOpenTimesComponentProps) =
         <ModalContent maxWidth="800px">
           <ModalHeader>
             営業時間設定
-            <Text color='gray.500' mt={2} fontSize='xs'>
+            <Text color="gray.500" mt={2} fontSize="xs">
               同じ時間で設定することでその日を定休日にできます
             </Text>
           </ModalHeader>
@@ -118,11 +126,14 @@ export const DayOpenTimesContainer = ({ control }: DayOpenTimesComponentProps) =
                         direction={isMobile ? "column" : "row"}
                         width="100%"
                       >
-                        <FormControl id={`openTimes.${index}.date`} isInvalid={!!errors[index]} >
+                        <FormControl
+                          id={`openTimes.${index}.date`}
+                          isInvalid={!!errors[index]}
+                        >
                           <Input
                             type="date"
                             width={isMobile ? "100%" : "45%"}
-                            value={openTime.date ?? ''}
+                            value={openTime.date ?? ""}
                             onChange={(e) => {
                               if (errors[index]) {
                                 setErrors((prev) => {
@@ -133,37 +144,51 @@ export const DayOpenTimesContainer = ({ control }: DayOpenTimesComponentProps) =
                               }
                               setTempOpenTimes((prev) =>
                                 prev.map((t, i) =>
-                                  i === index ? { ...t, date: e.target.value } : t
-                                )
-                              )
+                                  i === index
+                                    ? { ...t, date: e.target.value }
+                                    : t,
+                                ),
+                              );
                             }}
                           />
-                          <FormErrorMessage>{errors[index] && errors[index]}</FormErrorMessage>
+                          <FormErrorMessage>
+                            {errors[index] && errors[index]}
+                          </FormErrorMessage>
                         </FormControl>
-                        <Flex width={isMobile ? "100%" : "40%"} justifyContent="space-between" m={2}>
+                        <Flex
+                          width={isMobile ? "100%" : "40%"}
+                          justifyContent="space-between"
+                          m={2}
+                        >
                           <Input
                             type="time"
                             width="45%"
-                            value={openTime.startTime ?? ''}
+                            value={openTime.startTime ?? ""}
                             onChange={(e) =>
                               setTempOpenTimes((prev) =>
                                 prev.map((t, i) =>
-                                  i === index ? { ...t, startTime: e.target.value } : t
-                                )
+                                  i === index
+                                    ? { ...t, startTime: e.target.value }
+                                    : t,
+                                ),
                               )
                             }
                           />
-                          <Text alignSelf="center" px={2}>to</Text>
+                          <Text alignSelf="center" px={2}>
+                            to
+                          </Text>
                           <Input
                             type="time"
                             width="45%"
                             required={false}
-                            value={openTime.endTime ?? ''}
+                            value={openTime.endTime ?? ""}
                             onChange={(e) =>
                               setTempOpenTimes((prev) =>
                                 prev.map((t, i) =>
-                                  i === index ? { ...t, endTime: e.target.value } : t
-                                )
+                                  i === index
+                                    ? { ...t, endTime: e.target.value }
+                                    : t,
+                                ),
                               )
                             }
                           />
@@ -178,25 +203,40 @@ export const DayOpenTimesContainer = ({ control }: DayOpenTimesComponentProps) =
                         </Button>
                       </Flex>
                     </div>
-                  )
+                  );
                 }
               })}
-              <Button size="sm" onClick={handleAddTime} colorScheme="blue" mt={2}>
+              <Button
+                size="sm"
+                onClick={handleAddTime}
+                colorScheme="blue"
+                mt={2}
+              >
                 営業時間追加
               </Button>
             </Stack>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} borderWidth="1px" onClick={handleSave}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              borderWidth="1px"
+              onClick={handleSave}
+            >
               保存
             </Button>
-            <Button colorScheme="gray" borderColor="gray.300" borderWidth="1px" onClick={onClose}>
+            <Button
+              colorScheme="gray"
+              borderColor="gray.300"
+              borderWidth="1px"
+              onClick={onClose}
+            >
               キャンセル
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Box >
+    </Box>
   );
 };

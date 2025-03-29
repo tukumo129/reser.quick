@@ -6,10 +6,15 @@ import { useGetSetting } from "../../services/SettingService/UseGetSetting";
 export function SettingUpdateView() {
   const { setting, reserveSiteUrl, isLoading, error } = useGetSetting();
 
-  if (isLoading) return <LoadingSpinner />
-  if (error) return <div>Error reserves</div>
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <div>Error reserves</div>;
 
   return (
-    <AdminLayout pageName={"設定"} mainContents={<SettingComponent setting={setting} reserveSiteUrl={reserveSiteUrl} />} />
+    <AdminLayout
+      pageName={"設定"}
+      mainContents={
+        <SettingComponent setting={setting} reserveSiteUrl={reserveSiteUrl} />
+      }
+    />
   );
 }

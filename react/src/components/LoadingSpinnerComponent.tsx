@@ -1,7 +1,6 @@
-import { Flex, Spinner } from "@chakra-ui/react"
+import { Flex, Spinner } from "@chakra-ui/react";
 
 export const LoadingSpinner = () => {
-
   return (
     <Flex justify="center" align="center" height="100%">
       <Spinner
@@ -11,6 +10,6 @@ export const LoadingSpinner = () => {
         color="gray.500"
         size="xl"
       />
-    </Flex>  
-  )
-}
+    </Flex>
+  );
+};

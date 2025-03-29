@@ -1,8 +1,27 @@
 import { useCreateUserForm } from "../container/CreateUserFormContainer";
-import { Alert, Box, Button, Card, Center, FormControl, FormErrorMessage, FormLabel, Input, Stack, Text } from "@chakra-ui/react";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Center,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 
 export function CreateUserForm() {
-  const { createUserData, handleSubmit, watch, onSubmit, errors, errorMessage } = useCreateUserForm();
+  const {
+    createUserData,
+    handleSubmit,
+    watch,
+    onSubmit,
+    errors,
+    errorMessage,
+  } = useCreateUserForm();
 
   return (
     <Box h="100vh" bg="gray.100" py={12} px={4}>
@@ -26,7 +45,10 @@ export function CreateUserForm() {
                 </FormLabel>
                 <Input
                   {...createUserData("email", {
-                    required: { value: true, message: "メールアドレスを入力してください" },
+                    required: {
+                      value: true,
+                      message: "メールアドレスを入力してください",
+                    },
                     pattern: {
                       value: /^\S+@\S+\.\S+$/,
                       message: "正しいメールアドレスの形式で入力してください",
@@ -48,8 +70,14 @@ export function CreateUserForm() {
                 </FormLabel>
                 <Input
                   {...createUserData("password", {
-                    required: { value: true, message: "パスワードを入力してください" },
-                    minLength: { value: 8, message: "パスワードは8文字以上で入力してください" },
+                    required: {
+                      value: true,
+                      message: "パスワードを入力してください",
+                    },
+                    minLength: {
+                      value: 8,
+                      message: "パスワードは8文字以上で入力してください",
+                    },
                     pattern: {
                       value: /^(?=.*[a-zA-Z])(?=.*\d)/,
                       message: "パスワードは英字と数字を含めてください",
@@ -71,7 +99,10 @@ export function CreateUserForm() {
                 </FormLabel>
                 <Input
                   {...createUserData("confirmPassword", {
-                    required: { value: true, message: "確認用パスワードを入力してください" },
+                    required: {
+                      value: true,
+                      message: "確認用パスワードを入力してください",
+                    },
                     validate: (value) =>
                       value === watch("password") || "パスワードが一致しません",
                   })}
@@ -82,9 +113,17 @@ export function CreateUserForm() {
                   borderColor="gray.300"
                   _focus={{ borderColor: "blue.500", bg: "white" }}
                 />
-                <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {errors.confirmPassword?.message}
+                </FormErrorMessage>
               </FormControl>
-              <Button type="submit" mt={4} w="full" colorScheme="blue" borderRadius="md">
+              <Button
+                type="submit"
+                mt={4}
+                w="full"
+                colorScheme="blue"
+                borderRadius="md"
+              >
                 登録する
               </Button>
             </Stack>
@@ -94,4 +133,3 @@ export function CreateUserForm() {
     </Box>
   );
 }
-

@@ -1,4 +1,17 @@
-import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, Select, Text, useBreakpointValue, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  HStack,
+  Input,
+  Select,
+  Text,
+  useBreakpointValue,
+  VStack,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { getRoutePath, routePath } from "../../../enums/routePath";
 import { useAppCreateReserveForm } from "../../container/Reserve/useAppCreateReserveContainer";
@@ -9,41 +22,69 @@ import { useEffect } from "react";
 import { useAppSettingsRecoil } from "../../recoils/AppSettingsRecoil";
 
 type AppCreateReserveFormComponentProps = {
-  startDate: string
-}
-export function AppCreateReserveFormComponent({ startDate }: AppCreateReserveFormComponentProps) {
-  const { appUuid } = useAppUuidRecoil()
-  const { appSettings } = useAppSettingsRecoil()
+  startDate: string;
+};
+export function AppCreateReserveFormComponent({
+  startDate,
+}: AppCreateReserveFormComponentProps) {
+  const { appUuid } = useAppUuidRecoil();
+  const { appSettings } = useAppSettingsRecoil();
   const currentDate = new Date(startDate);
-  const { AppCreateReserveData, handleSubmit, onSubmit, errors, reset } = useAppCreateReserveForm(startDate);
-  const { availableTimes, isLoading, error } = useGetReserveAvailableTimes(appUuid, { date: currentDate.toISOString() });
-  const navigate = useNavigate()
+  const { AppCreateReserveData, handleSubmit, onSubmit, errors, reset } =
+    useAppCreateReserveForm(startDate);
+  const { availableTimes, isLoading, error } = useGetReserveAvailableTimes(
+    appUuid,
+    { date: currentDate.toISOString() },
+  );
+  const navigate = useNavigate();
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const maxReserveNumber = appSettings.maxReserveNumber || 100
+  const maxReserveNumber = appSettings.maxReserveNumber || 100;
 
   useEffect(() => {
-    if (availableTimes.length > 0 && availableTimes.filter((availableTime) => availableTime.available).length === 0) {
-      navigate(getRoutePath(routePath.AppTop, appUuid))
+    if (
+      availableTimes.length > 0 &&
+      availableTimes.filter((availableTime) => availableTime.available)
+        .length === 0
+    ) {
+      navigate(getRoutePath(routePath.AppTop, appUuid));
     }
-    reset()
-  }, [availableTimes])
+    reset();
+  }, [availableTimes]);
 
-  if (isLoading) return <LoadingSpinner />
-  if (error) navigate(getRoutePath(routePath.AppErrorPage, appUuid))
+  if (isLoading) return <LoadingSpinner />;
+  if (error) navigate(getRoutePath(routePath.AppErrorPage, appUuid));
 
   return (
-    <Box maxWidth="md" margin="auto" mt={8} p={{ base: 2, md: 6 }} borderWidth={1} borderRadius="lg" boxShadow="lg" bg="white">
+    <Box
+      maxWidth="md"
+      margin="auto"
+      mt={8}
+      p={{ base: 2, md: 6 }}
+      borderWidth={1}
+      borderRadius="lg"
+      boxShadow="lg"
+      bg="white"
+    >
       <form onSubmit={handleSubmit(onSubmit)} id="createReserveForm">
         <VStack spacing={6}>
           <FormControl isInvalid={!!errors.name} id="name">
-            <Flex direction={isMobile ? 'column' : 'row'}>
-              <FormLabel w={isMobile ? "auto" : 20} m={isMobile ? "auto 2" : "auto 0"}>
-                名前<Text as="span" color="red">*</Text>
+            <Flex direction={isMobile ? "column" : "row"}>
+              <FormLabel
+                w={isMobile ? "auto" : 20}
+                m={isMobile ? "auto 2" : "auto 0"}
+              >
+                名前
+                <Text as="span" color="red">
+                  *
+                </Text>
               </FormLabel>
               <Input
-                {...AppCreateReserveData('name', {
-                  required: { value: true, message: '名前を入力してください' },
-                  maxLength: { value: 20, message: '20文字以内で入力してください' }
+                {...AppCreateReserveData("name", {
+                  required: { value: true, message: "名前を入力してください" },
+                  maxLength: {
+                    value: 20,
+                    message: "20文字以内で入力してください",
+                  },
                 })}
                 placeholder="名前を入力してください"
                 w="full"
@@ -56,12 +97,18 @@ export function AppCreateReserveFormComponent({ startDate }: AppCreateReserveFor
           <Box borderWidth="1px" borderColor="bray.300" />
 
           <FormControl isInvalid={!!errors.startTime} id="startTime">
-            <Flex direction={isMobile ? 'column' : 'row'}>
-              <FormLabel w={isMobile ? "auto" : 20} m={isMobile ? "auto 2" : "auto 0"}>
-                時刻<Text as="span" color="red">*</Text>
+            <Flex direction={isMobile ? "column" : "row"}>
+              <FormLabel
+                w={isMobile ? "auto" : 20}
+                m={isMobile ? "auto 2" : "auto 0"}
+              >
+                時刻
+                <Text as="span" color="red">
+                  *
+                </Text>
               </FormLabel>
               <Select
-                {...AppCreateReserveData('startTime')}
+                {...AppCreateReserveData("startTime")}
                 maxW={{ base: "100%", md: "20rem" }}
               >
                 {availableTimes.map((availableTime) => {
@@ -70,11 +117,16 @@ export function AppCreateReserveFormComponent({ startDate }: AppCreateReserveFor
                       key={availableTime.startTime}
                       value={availableTime.startTime}
                       disabled={!availableTime.available}
-                      style={{ backgroundColor: availableTime.available ? "white" : "#D6D6D6" }}
+                      style={{
+                        backgroundColor: availableTime.available
+                          ? "white"
+                          : "#D6D6D6",
+                      }}
                     >
-                      {availableTime.startTime}{availableTime.available ? ' ✔' : ' ✖'}
+                      {availableTime.startTime}
+                      {availableTime.available ? " ✔" : " ✖"}
                     </option>
-                  )
+                  );
                 })}
               </Select>
             </Flex>
@@ -84,20 +136,29 @@ export function AppCreateReserveFormComponent({ startDate }: AppCreateReserveFor
           <Box borderWidth="1px" borderColor="bray.300" />
 
           <FormControl isInvalid={!!errors.guestNumber} id="guestNumber">
-            <Flex direction={isMobile ? 'column' : 'row'}>
-              <FormLabel w={isMobile ? "auto" : 20} m={isMobile ? "auto 2" : "auto 0"}>
-                人数<Text as="span" color="red">*</Text>
+            <Flex direction={isMobile ? "column" : "row"}>
+              <FormLabel
+                w={isMobile ? "auto" : 20}
+                m={isMobile ? "auto 2" : "auto 0"}
+              >
+                人数
+                <Text as="span" color="red">
+                  *
+                </Text>
               </FormLabel>
               <Input
                 w="full"
                 type="number"
                 defaultValue={0}
-                {...AppCreateReserveData('guestNumber', {
+                {...AppCreateReserveData("guestNumber", {
                   setValueAs: (value) => {
-                    return value ? parseInt(value, 10) : undefined
+                    return value ? parseInt(value, 10) : undefined;
                   },
-                  max: { value: maxReserveNumber, message: `${maxReserveNumber}以下の値を設定してください` },
-                  min: { value: 1, message: '1以上の値を設定してください' },
+                  max: {
+                    value: maxReserveNumber,
+                    message: `${maxReserveNumber}以下の値を設定してください`,
+                  },
+                  min: { value: 1, message: "1以上の値を設定してください" },
                 })}
                 maxW={{ base: "100%", md: "5rem" }}
               />

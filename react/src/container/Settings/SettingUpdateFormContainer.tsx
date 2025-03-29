@@ -1,33 +1,42 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useUpdateSettingMutation, useUpdateSettingParams } from "../../services/SettingService/UseUpdateSetting";
+import {
+  useUpdateSettingMutation,
+  useUpdateSettingParams,
+} from "../../services/SettingService/UseUpdateSetting";
 import { routePath } from "../../enums/routePath";
 import { useToast } from "@chakra-ui/react";
 
 export type useUpdateSettingSchema = {
   storeName: string;
-  reserveSlotTime: string,
-  maxReserveNumber: number | null,
-  reserveMonthsLimit: number | null,
-  maxAvailableReserve: number | null,
-  openTimes: openTimesSchema[]
-}
+  reserveSlotTime: string;
+  maxReserveNumber: number | null;
+  reserveMonthsLimit: number | null;
+  maxAvailableReserve: number | null;
+  openTimes: openTimesSchema[];
+};
 
 export type openTimesSchema = {
-  id: number | null
-  type: number
-  date: string | null
-  week: number | null
-  startTime: string | null
-  endTime: string | null
-  maxAvailableReserve: number | null
-}
+  id: number | null;
+  type: number;
+  date: string | null;
+  week: number | null;
+  startTime: string | null;
+  endTime: string | null;
+  maxAvailableReserve: number | null;
+};
 
 export const useSettingUpdateForm = () => {
-  const { register: SettingUpdateData, control, handleSubmit, formState: { errors }, reset } = useForm<useUpdateSettingSchema>();
+  const {
+    register: SettingUpdateData,
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<useUpdateSettingSchema>();
   const { mutate } = useUpdateSettingMutation();
   const navigate = useNavigate();
-  const toast = useToast()
+  const toast = useToast();
 
   const onSubmit = (data: useUpdateSettingSchema) => {
     const params: useUpdateSettingParams = {
@@ -46,8 +55,8 @@ export const useSettingUpdateForm = () => {
           end_time: item.endTime ?? null,
           max_available_reserve: item.maxAvailableReserve ?? null,
         })),
-      }
-    }
+      },
+    };
 
     mutate(params, {
       onSuccess: () => {
@@ -61,7 +70,7 @@ export const useSettingUpdateForm = () => {
         });
       },
       onError: () => {
-        navigate(routePath.Top)
+        navigate(routePath.Top);
         toast({
           title: "登録に失敗しました",
           description: "予期しないエラーが発生しました",
@@ -74,4 +83,4 @@ export const useSettingUpdateForm = () => {
     });
   };
   return { SettingUpdateData, control, handleSubmit, onSubmit, errors, reset };
-}
+};

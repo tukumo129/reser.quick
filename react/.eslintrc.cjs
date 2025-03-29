@@ -10,20 +10,18 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "prettier",
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ["dist", ".eslintrc.cjs"],
   parserOptions: {
     ecmaVersion: 12,
     sourceType: "module",
   },
-  plugins: [
-    "react",
-    "@typescript-eslint",
-  ],
+  plugins: ["react", "@typescript-eslint"],
   rules: {
-    "no-unused-vars": ["warn", { "args": "none" }],
+    "no-unused-vars": ["warn", { args: "none" }],
     "no-console": "off",
     "react/react-in-jsx-scope": "off",
-    "indent": ["error", 2],
+    indent: ["error", 2],
+    semi: ["error", "always"],
   },
   settings: {
     react: {

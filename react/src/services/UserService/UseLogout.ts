@@ -11,7 +11,7 @@ export const useUserLogoutMutation = (): UseMutationResult<
   Error,
   useUserLogoutParams
 > => {
-  return useMutation<userLogoutData, Error, useUserLogoutParams>(
-    () => callPost(ApiPath.LOGOUT),
+  return useMutation<userLogoutData, Error, useUserLogoutParams>(() =>
+    callPost(ApiPath.LOGOUT),
   );
 };

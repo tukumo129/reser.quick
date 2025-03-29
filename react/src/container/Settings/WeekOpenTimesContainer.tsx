@@ -19,22 +19,26 @@ import {
 } from "@chakra-ui/react";
 import { dayOfWeek } from "../../enums/dayOfWeek";
 import { Control, useFieldArray } from "react-hook-form";
-import { openTimesSchema, useUpdateSettingSchema } from "./SettingUpdateFormContainer";
+import {
+  openTimesSchema,
+  useUpdateSettingSchema,
+} from "./SettingUpdateFormContainer";
 import { openTimeType } from "../../enums/openTimeType";
 
 type WeekOpenTimesComponentProps = {
   control: Control<useUpdateSettingSchema>;
 };
 
-export const WeekOpenTimesContainer = ({ control }: WeekOpenTimesComponentProps) => {
+export const WeekOpenTimesContainer = ({
+  control,
+}: WeekOpenTimesComponentProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useBreakpointValue({ base: true, md: false });
-
 
   const { fields, replace } = useFieldArray({
     control,
     name: "openTimes",
-    keyName: 'key'
+    keyName: "key",
   });
 
   const [tempOpenTimes, setTempOpenTimes] = useState<openTimesSchema[]>(fields);
@@ -71,7 +75,10 @@ export const WeekOpenTimesContainer = ({ control }: WeekOpenTimesComponentProps)
   return (
     <Box>
       <Flex direction={isMobile ? "column" : "row"}>
-        <FormLabel w={isMobile ? "auto" : 40} m={isMobile ? "auto 2" : "auto 0"}>
+        <FormLabel
+          w={isMobile ? "auto" : 40}
+          m={isMobile ? "auto 2" : "auto 0"}
+        >
           営業時間（曜日）
         </FormLabel>
         <Button onClick={handleOpen} colorScheme="blue">
@@ -87,7 +94,9 @@ export const WeekOpenTimesContainer = ({ control }: WeekOpenTimesComponentProps)
             <Stack spacing={4}>
               {Object.keys(dayOfWeek).map((week) => {
                 const openTimes = tempOpenTimes.filter(
-                  (openTime) => dayOfWeek[week] === openTime.week && openTime.type === openTimeType.Week
+                  (openTime) =>
+                    dayOfWeek[week] === openTime.week &&
+                    openTime.type === openTimeType.Week,
                 );
                 return (
                   <Box
@@ -99,11 +108,18 @@ export const WeekOpenTimesContainer = ({ control }: WeekOpenTimesComponentProps)
                     bg={openTimes.length === 0 ? "gray.300" : "white"}
                   >
                     <Flex justifyContent="space-between">
-                      <Text fontWeight="bold" mb={2}>{week}</Text>
-                      {openTimes.length === 0 && <Text color="gray.500">定休日</Text>}
+                      <Text fontWeight="bold" mb={2}>
+                        {week}
+                      </Text>
+                      {openTimes.length === 0 && (
+                        <Text color="gray.500">定休日</Text>
+                      )}
                     </Flex>
                     {tempOpenTimes.map((time, index) => {
-                      if (dayOfWeek[week] === time.week && time.type === openTimeType.Week) {
+                      if (
+                        dayOfWeek[week] === time.week &&
+                        time.type === openTimeType.Week
+                      ) {
                         return (
                           <Flex
                             key={`${week}-${index}`}
@@ -120,14 +136,17 @@ export const WeekOpenTimesContainer = ({ control }: WeekOpenTimesComponentProps)
                             <Flex width="100%" justifyContent="space-between">
                               <Input
                                 type="time"
-                                value={time.startTime ?? ''}
+                                value={time.startTime ?? ""}
                                 onChange={(e) =>
                                   setTempOpenTimes((prev) =>
                                     prev.map((t, i) =>
-                                      i === tempOpenTimes.findIndex((_, idx) => idx === index)
+                                      i ===
+                                      tempOpenTimes.findIndex(
+                                        (_, idx) => idx === index,
+                                      )
                                         ? { ...t, startTime: e.target.value }
-                                        : t
-                                    )
+                                        : t,
+                                    ),
                                   )
                                 }
                                 width="45%"
@@ -137,14 +156,17 @@ export const WeekOpenTimesContainer = ({ control }: WeekOpenTimesComponentProps)
                               </Text>
                               <Input
                                 type="time"
-                                value={time.endTime ?? ''}
+                                value={time.endTime ?? ""}
                                 onChange={(e) =>
                                   setTempOpenTimes((prev) =>
                                     prev.map((t, i) =>
-                                      i === tempOpenTimes.findIndex((_, idx) => idx === index)
+                                      i ===
+                                      tempOpenTimes.findIndex(
+                                        (_, idx) => idx === index,
+                                      )
                                         ? { ...t, endTime: e.target.value }
-                                        : t
-                                    )
+                                        : t,
+                                    ),
                                   )
                                 }
                                 width="45%"
@@ -160,10 +182,15 @@ export const WeekOpenTimesContainer = ({ control }: WeekOpenTimesComponentProps)
                               削除
                             </Button>
                           </Flex>
-                        )
+                        );
                       }
                     })}
-                    <Button size="sm" onClick={() => handleAddTime(week)} mt={2} colorScheme="blue">
+                    <Button
+                      size="sm"
+                      onClick={() => handleAddTime(week)}
+                      mt={2}
+                      colorScheme="blue"
+                    >
                       時間追加
                     </Button>
                   </Box>
@@ -175,7 +202,12 @@ export const WeekOpenTimesContainer = ({ control }: WeekOpenTimesComponentProps)
             <Button colorScheme="blue" mr={3} onClick={handleSave}>
               保存
             </Button>
-            <Button colorScheme="gray" borderColor="gray.300" borderWidth="1px" onClick={onClose}>
+            <Button
+              colorScheme="gray"
+              borderColor="gray.300"
+              borderWidth="1px"
+              onClick={onClose}
+            >
               キャンセル
             </Button>
           </ModalFooter>
