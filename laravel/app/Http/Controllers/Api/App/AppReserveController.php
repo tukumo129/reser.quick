@@ -22,8 +22,6 @@ class AppReserveController extends Controller
     }
 
     /**
-     * @param GetAppReserveAvailableDatesRequest $request
-     * @param int $reserveId
      * @return Response
      */
     public function getReserveAvailableDates(GetAppReserveAvailableDatesRequest $request): JsonResponse
@@ -38,8 +36,6 @@ class AppReserveController extends Controller
     }
 
     /**
-     * @param GetAppReserveAvailableTimesRequest $request
-     * @param int $reserveId
      * @return Response
      */
     public function getReserveAvailableTimes(GetAppReserveAvailableTimesRequest $request): JsonResponse
@@ -54,7 +50,6 @@ class AppReserveController extends Controller
     }
 
     /**
-     * @param CreateAppReserveRequest $request
      * @return Response
      */
     public function createAppReserve(CreateAppReserveRequest $request): JsonResponse

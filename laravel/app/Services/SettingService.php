@@ -9,6 +9,7 @@ use App\Repositories\SettingRepository;
 class SettingService
 {
     protected SettingRepository $settingRepository;
+
     protected OpenTimeRepository $openTimeRepository;
 
     public function __construct(
@@ -20,9 +21,7 @@ class SettingService
     }
 
     /**
-     * @param int $contractId
      * @param array<string, mixed> $settingData
-     * @return Setting
      */
     public function updateOrCreateSettingAndOpenTimes(int $contractId, array $settingData): Setting
     {
@@ -39,10 +38,9 @@ class SettingService
 
         return $setting->refresh();
     }
+
     /**
-     * @param int $contractId
      * @param array<string, mixed> $settingData
-     * @return Setting
      */
     public function updateOrCreateSetting(int $contractId, array $settingData): Setting
     {

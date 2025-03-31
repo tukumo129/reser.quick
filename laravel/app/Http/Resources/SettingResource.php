@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Setting;
 use App\Models\OpenTime;
+use App\Models\Setting;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SettingResource extends JsonResource

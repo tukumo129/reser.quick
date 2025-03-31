@@ -31,12 +31,8 @@ class Setting extends Model
         'max_available_reserve',
     ];
 
-    /**
-     * @return HasMany
-     */
     public function openTimes(): HasMany
     {
         return $this->hasMany(OpenTime::class);
     }
-
 }

@@ -3,15 +3,11 @@
 namespace App\Repositories;
 
 use App\Exceptions\UserNotFoundException;
-use Illuminate\Support\Collection;
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 class UserRepository
 {
-    /**
-     * @param int $id
-     * @return User
-     */
     public function get(int $id): User
     {
         $user = User::get($id);
@@ -38,8 +34,6 @@ class UserRepository
      * 条件に基づいてデータを検索し、ページネーションを適用する場合にはその情報も提供する。
      * @param array<string, mixed> $criteria
      * @param array<string, string>|null $sorts
-     * @param int|null $page
-     * @param int|null $limit
      * @return array<string, mixed>
      */
     public function getWithPagination(array $criteria, array $sorts = [], ?int $page = 1, ?int $limit = 10): array
@@ -67,7 +61,6 @@ class UserRepository
 
     /**
      * @param array<string, mixed> $data
-     * @return User
      */
     public function create(array $data): User
     {
@@ -77,9 +70,7 @@ class UserRepository
     }
 
     /**
-     * @param int $id
      * @param array<string, mixed> $data
-     * @return User
      */
     public function update(int $id, array $data): User
     {

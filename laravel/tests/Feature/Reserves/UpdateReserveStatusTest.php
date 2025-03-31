@@ -16,9 +16,6 @@ class UpdateReserveStatusTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /**
-     * @return void
-     */
     public function testSuccess(): void
     {
         /** @var User $user */
@@ -47,9 +44,6 @@ class UpdateReserveStatusTest extends TestCase
         ])->assertStatus(Response::HTTP_OK);
     }
 
-    /**
-     * @return void
-     */
     public function testReserveNotFound(): void
     {
         /** @var User $user */

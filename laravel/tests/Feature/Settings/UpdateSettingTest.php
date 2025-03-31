@@ -18,9 +18,6 @@ class UpdateSettingTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /**
-     * @return void
-     */
     public function testSuccess(): void
     {
         /** @var User $user */
@@ -98,9 +95,6 @@ class UpdateSettingTest extends TestCase
         $this->assertNull($deleteOpenTime);
     }
 
-    /**
-     * @return void
-     */
     public function testCreateSuccess(): void
     {
         /** @var User $user */

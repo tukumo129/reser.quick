@@ -17,7 +17,6 @@ class ContractService
 
     /**
      * @param array<string, mixed> $contractData
-     * @return Contract
      */
     public function createContract(array $contractData): Contract
     {

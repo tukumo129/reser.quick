@@ -17,9 +17,6 @@ class UserLoginTest extends TestCase
     use WithFaker;
     use DatabaseTransactions;
 
-    /**
-     * @return void
-     */
     public function testSuccess(): void
     {
         $email = $this->faker->unique()->safeEmail;
@@ -48,7 +45,6 @@ class UserLoginTest extends TestCase
 
     /**
      * ログイン失敗時のテスト
-     * @return void
      */
     public function testLoginFailed(): void
     {

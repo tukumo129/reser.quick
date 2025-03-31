@@ -17,9 +17,6 @@ class CreateAppReserveTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /**
-     * @return void
-     */
     public function testSuccess(): void
     {
         $contract = Contract::factory()->create();
@@ -48,7 +45,6 @@ class CreateAppReserveTest extends TestCase
 
     /**
      * 予約枠単位によって終了時間が変わることを確認
-     * @return void
      */
     public function testAddSettingSuccess(): void
     {

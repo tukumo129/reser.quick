@@ -15,9 +15,6 @@ class DeleteReserveTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /**
-     * @return void
-     */
     public function testSuccess(): void
     {
         /** @var User $user */

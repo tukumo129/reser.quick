@@ -8,7 +8,6 @@ class SettingRepository
 {
     /**
      * @param array<string, mixed> $criteria
-     * @return Setting|null
      */
     public function getBy(array $criteria): ?Setting
     {
@@ -20,9 +19,7 @@ class SettingRepository
     }
 
     /**
-     * @param int $contractId
      * @param array<string, mixed> $data
-     * @return Setting
      */
     public function updateOrCreate(int $contractId, array $data): Setting
     {

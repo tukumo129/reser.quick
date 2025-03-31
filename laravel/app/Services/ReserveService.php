@@ -23,22 +23,13 @@ class ReserveService
         $this->reserveRepository = $reserveRepository;
     }
 
-    /**
-     * @param int $contractId
-     * @param int $reserveId
-     * @return Reserve
-     */
     public function getReserve(int $contractId, int $reserveId): Reserve
     {
         return $this->reserveRepository->get($contractId, $reserveId);
     }
 
     /**
-     * @param int $contractId
-     * @param string|null $status
      * @param array<string, string>|null $sorts
-     * @param int|null $page
-     * @param int|null $limit
      * @return array<string, mixed>
      */
     public function getReserves(int $contractId, ?string $status, ?array $sorts, ?int $page, ?int $limit): array
@@ -60,9 +51,7 @@ class ReserveService
     }
 
     /**
-     * @param Contract $contract
      * @param array<string, mixed> $reserveData
-     * @return Reserve
      */
     public function createReserve(Contract $contract, array $reserveData): Reserve
     {
@@ -77,21 +66,13 @@ class ReserveService
     }
 
     /**
-     * @param int $contractId
-     * @param int $reserveId
      * @param array<string, mixed> $reserveData
-     * @return Reserve
      */
     public function updateReserve(int $contractId, int $reserveId, array $reserveData): Reserve
     {
         return $this->reserveRepository->update($contractId, $reserveId, $reserveData);
     }
 
-    /**
-     * @param int $contractId
-     * @param int $reserveId
-     * @return void
-     */
     public function deleteReserve(int $contractId, int $reserveId): void
     {
         $this->reserveRepository->delete($contractId, $reserveId);
@@ -99,8 +80,6 @@ class ReserveService
 
     /**
      * 設定から予約できる日時を取得し、実際に予約が可能かを判定るする
-     * @param Contract $contract
-     * @param string $date
      * @return array<string, string>
      */
     public function getMonthReserveAvailableDates(Contract $contract, string $date): array
@@ -131,8 +110,6 @@ class ReserveService
 
     /**
      * 指定日付の予約可能な時間を取得
-     * @param Contract $contract
-     * @param string $date
      * @return array<string, string>
      */
     public function getReserveAvailableTimes(Contract $contract, string $date): array
@@ -156,9 +133,6 @@ class ReserveService
 
     /**
      * 指定した日付間の設定から予約できる日時を取得
-     * @param Contract $contract
-     * @param Carbon $startDate
-     * @param Carbon $endDate
      * @return array<string, string>
      */
     public function getReserveDateTimes(Setting $setting, Carbon $startDate, Carbon $endDate): array

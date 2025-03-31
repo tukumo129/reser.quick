@@ -3,15 +3,11 @@
 namespace App\Repositories;
 
 use App\Exceptions\ContractNotFoundException;
-use Illuminate\Support\Collection;
 use App\Models\Contract;
+use Illuminate\Support\Collection;
 
 class ContractRepository
 {
-    /**
-     * @param int $id
-     * @return Contract
-     */
     public function get(int $id): Contract
     {
         $contract = Contract::get($id);
@@ -36,7 +32,6 @@ class ContractRepository
 
     /**
      * @param array<string, mixed> $data
-     * @return Contract
      */
     public function create(array $data): Contract
     {
@@ -46,9 +41,7 @@ class ContractRepository
     }
 
     /**
-     * @param int $id
      * @param array<string, mixed> $data
-     * @return Contract
      */
     public function update(int $id, array $data): Contract
     {

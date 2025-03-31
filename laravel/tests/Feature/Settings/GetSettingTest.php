@@ -17,9 +17,6 @@ class GetSettingTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /**
-     * @return void
-     */
     public function testSuccess(): void
     {
         $contract = Contract::factory()->create();
@@ -50,14 +47,11 @@ class GetSettingTest extends TestCase
                     ['id' => $openTimes[2]->id],
                 ],
             ],
-            'reserveSiteUrl' => env('APP_URL')."/app/{$user->contract->uuid}",
+            'reserveSiteUrl' => env('APP_URL') . "/app/{$user->contract->uuid}",
         ]);
         $response->assertStatus(Response::HTTP_OK);
     }
 
-    /**
-     * @return void
-     */
     public function testEmptySuccess(): void
     {
         $contract = Contract::factory()->create();

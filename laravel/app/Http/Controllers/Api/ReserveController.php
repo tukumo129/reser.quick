@@ -24,7 +24,6 @@ class ReserveController extends Controller
     }
 
     /**
-     * @param int $reserveId
      * @return Response
      */
     public function getReserve(int $reserveId): JsonResponse
@@ -39,7 +38,6 @@ class ReserveController extends Controller
     }
 
     /**
-     * @param GetReservesRequest $request
      * @return Response
      */
     public function getReserves(GetReservesRequest $request): JsonResponse
@@ -50,7 +48,7 @@ class ReserveController extends Controller
         $sorts = $request->input('sorts', []);
         $page = $request->input('page');
         $limit = $request->input('limit');
-        $reserves = $this->reserveService->getReserves($user->contract_id, $status,$sorts, $page, $limit);
+        $reserves = $this->reserveService->getReserves($user->contract_id, $status, $sorts, $page, $limit);
         return response()->json([
             'reserves' => ReserveResource::collection($reserves['reserves']),
             'pagination' => $reserves['pagination'] ?? null,
@@ -58,7 +56,6 @@ class ReserveController extends Controller
     }
 
     /**
-     * @param CreateReserveRequest $request
      * @return Response
      */
     public function createReserve(CreateReserveRequest $request): JsonResponse
@@ -74,8 +71,6 @@ class ReserveController extends Controller
     }
 
     /**
-     * @param int $reserveId
-     * @param UpdateReserveRequest $request
      * @return Response
      */
     public function updateReserve(int $reserveId, UpdateReserveRequest $request): JsonResponse
@@ -90,8 +85,6 @@ class ReserveController extends Controller
     }
 
     /**
-     * @param int $reserveId
-     * @param UpdateReserveStatusRequest $request
      * @return Response
      */
     public function updateReserveStatus(int $reserveId, UpdateReserveStatusRequest $request): JsonResponse
@@ -106,7 +99,6 @@ class ReserveController extends Controller
     }
 
     /**
-     * @param int $reserveId
      * @return Response
      */
     public function deleteReserve(int $reserveId): JsonResponse

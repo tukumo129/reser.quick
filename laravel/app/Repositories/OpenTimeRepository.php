@@ -7,11 +7,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class OpenTimeRepository
 {
-    /**
-     * @param int $settingId
-     * @param int $id
-     * @return OpenTime
-     */
     public function get(int $settingId, int $id): OpenTime
     {
         return OpenTime::where('setting_id', $settingId)->where('id', $id)->first();
@@ -31,9 +26,7 @@ class OpenTimeRepository
     }
 
     /**
-     * @param int $settingId
      * @param array<string, mixed> $data
-     * @return OpenTime
      */
     public function updateOrCreate(int $settingId, array $data): OpenTime
     {
@@ -51,8 +44,6 @@ class OpenTimeRepository
 
     /**
      * @param integer $settingId
-     * @param array $openTimeIds
-     * @return void
      */
     public function cleanupDelete(int $settingId, array $openTimeIds): void
     {

@@ -17,9 +17,6 @@ class UserLogoutTest extends TestCase
     use WithFaker;
     use DatabaseTransactions;
 
-    /**
-     * @return void
-     */
     public function testSuccess(): void
     {
         $email = $this->faker->unique()->safeEmail;

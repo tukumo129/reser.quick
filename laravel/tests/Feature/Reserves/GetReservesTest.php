@@ -15,9 +15,6 @@ class GetReservesTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /**
-     * @return void
-     */
     public function testSuccess(): void
     {
         // パラメーターなし、全件取得

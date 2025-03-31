@@ -26,9 +26,6 @@ class Sequence extends Model
         'sequence_number',
     ];
 
-    /**
-     * @return morphTo
-     */
     public function sequencable(): MorphTo
     {
         return $this->morphTo();

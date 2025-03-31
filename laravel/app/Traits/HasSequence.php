@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 trait HasSequence
 {
-    /**
-     * @param string $key
-     * @return int
-     */
     public function getNextSequence(string $key): int
     {
         return DB::transaction(function () use ($key) {

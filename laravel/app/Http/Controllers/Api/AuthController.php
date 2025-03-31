@@ -34,7 +34,6 @@ class AuthController extends Controller
     }
 
     /**
-     * @param CreateUserRequest $request
      * @return Response
      */
     public function createUser(CreateUserRequest $request): JsonResponse
@@ -67,7 +66,6 @@ class AuthController extends Controller
     }
 
     /**
-     * @param UserLoginRequest $request
      * @return Response
      */
     public function userLogin(UserLoginRequest $request): JsonResponse

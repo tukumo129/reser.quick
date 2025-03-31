@@ -21,7 +21,6 @@ class AppSettingController extends Controller
     }
 
     /**
-     * @param Request $request
      * @return Response
      */
     public function getAppSettings(Request $request): JsonResponse
