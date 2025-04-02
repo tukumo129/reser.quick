@@ -16,10 +16,13 @@ export const ReservesContents = () => {
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [showAllReserve, setShowAllReserve] = useState<boolean>(false);
+  const [searchKey, setSearchKey] = useState<string>("");
+  const [inputValue, setInputValue] = useState("");
   const { reserves, pagination, isLoading, error } = useGetReserves({
     page: String(page),
     limit: String(limit),
     status: showAllReserve ? "" : reserveStatus.NoComplete,
+    search_key: searchKey,
   });
   const navigate = useNavigate();
 
@@ -37,6 +40,8 @@ export const ReservesContents = () => {
           flex={1}
           borderRadius="full"
           boxShadow="sm"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
           _focus={{
             borderColor: "blue.400",
             boxShadow: "0 0 5px rgba(0, 122, 255, 0.5)",
@@ -49,6 +54,9 @@ export const ReservesContents = () => {
           py={3}
           boxShadow="md"
           leftIcon={<SearchIcon />}
+          onClick={() => {
+            setSearchKey(inputValue);
+          }}
         >
           検索
         </Button>

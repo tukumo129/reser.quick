@@ -17,6 +17,7 @@ const defaultPagination: Pagination = {
 
 type useGetReservesProps = {
   status?: string;
+  search_key?: string;
   sorts?: string;
   page?: string;
   limit?: string;

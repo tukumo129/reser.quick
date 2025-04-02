@@ -36,11 +36,16 @@ class ReserveRepository
      * @param array<string, string>|null $sorts
      * @return array<string, mixed>
      */
-    public function getWithPagination(array $criteria, array $sorts = [], ?int $page = 1, ?int $limit = 10): array
+    public function getWithPagination(array $criteria, ?string $searchKey = null, array $sorts = [], ?int $page = 1, ?int $limit = 10): array
     {
         $query = Reserve::query();
         foreach ($criteria as $key => $value) {
             $query->where($key, $value);
+        }
+        if ($searchKey) {
+            $query->where('name', 'like', "%{$searchKey}%")
+                ->orWhere('uuid')
+                ->orWhere('reserve_id', 'like', "%{$searchKey}%");
         }
 
         foreach ($sorts as $column => $direction) {

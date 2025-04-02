@@ -105,7 +105,7 @@ export const ReserveList = ({ reserves }: ReserveListProps) => {
                   }
                 >
                   <Text fontWeight="bold" fontSize="lg">
-                    予約番号: R{String(reserve.reserveId).padStart(8, "0")}
+                    予約番号: {reserve.reserveId}
                   </Text>
                   <Text fontSize="md">名前: {reserve.name}</Text>
                   <Text fontSize="md">人数: {reserve.guestNumber} 人</Text>

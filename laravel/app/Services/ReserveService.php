@@ -32,7 +32,7 @@ class ReserveService
      * @param array<string, string>|null $sorts
      * @return array<string, mixed>
      */
-    public function getReserves(int $contractId, ?string $status, ?array $sorts, ?int $page, ?int $limit): array
+    public function getReserves(int $contractId, ?string $status, ?string $searchKey, ?array $sorts, ?int $page, ?int $limit): array
     {
         $criteria = ['contract_id' => $contractId];
         if($status) {
@@ -40,7 +40,7 @@ class ReserveService
         }
 
         if($page && $limit) {
-            return $this->reserveRepository->getWithPagination($criteria, $sorts, $page, $limit);
+            return $this->reserveRepository->getWithPagination($criteria, $searchKey, $sorts, $page, $limit);
         }
 
         $reserves = $this->reserveRepository->getBy($criteria);
@@ -60,8 +60,7 @@ class ReserveService
             // 作成時にstatusが指定されていない場合はNO_COMPLETEを設定
             $reserveData['status'] = ReserveStatus::NO_COMPLETE;
         }
-        // TODO シーケンスを入れる
-        $reserveData['reserve_id'] = $contract->getNextSequence(SequenceKey::Reserve);
+        $reserveData['reserve_id'] = 'R' . str_pad($contract->getNextSequence(SequenceKey::Reserve), 8, '0', STR_PAD_LEFT);
         return $this->reserveRepository->create($reserveData);
     }
 

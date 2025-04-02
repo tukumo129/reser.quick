@@ -38,7 +38,7 @@ class CreateReserveTest extends TestCase
             'reserve' => [
                 'id' => true,
                 'contractId' => $user->contract_id,
-                'reserveId' => 1,
+                'reserveId' => 'R00000001',
                 'name' => '鈴木 一郎',
                 'guestNumber' => 1,
                 'startDateTime' => '2024-01-02 12:34:56',
