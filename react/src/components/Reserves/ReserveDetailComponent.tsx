@@ -22,6 +22,7 @@ export type ReserveFormProps = {
   reserve: {
     id: number;
     name: string;
+    reserveId: string;
     startDate: string;
     startTime: string;
     endDate: string;
@@ -66,6 +67,15 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
     <Box p={{ base: 6, md: 10 }} bg="white" borderRadius="lg" boxShadow="xl">
       <form onSubmit={handleSubmit(onSubmit)} id="updateReserveForm">
         <Stack spacing={6}>
+          <Stack>
+            <Text fontWeight="semibold">
+              予約番号
+            </Text>
+            <Text>
+              {reserve.reserveId}
+            </Text>
+          </Stack>
+          <Divider borderColor="gray.300" />
           <FormControl isInvalid={!!errors.name} id="name">
             <FormLabel fontWeight="semibold">
               名前

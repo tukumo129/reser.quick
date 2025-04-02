@@ -11,6 +11,7 @@ export function ReserveDetailView() {
   const reserveDetail = {
     id: reserve.id,
     name: reserve.name,
+    reserveId: reserve.reserveId,
     startDate: reserve.startDateTime.split(" ")[0],
     startTime: reserve.startDateTime.split(" ")[1],
     endDate: reserve.endDateTime.split(" ")[0],
