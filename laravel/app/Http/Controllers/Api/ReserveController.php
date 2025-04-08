@@ -44,12 +44,13 @@ class ReserveController extends Controller
     {
         /** @var User $user */
         $user = auth()->user();
-        $status = $request->input('status');
+        $criteria = $request->input('criteria', []);
+        $periodCriteria = $request->input('period_criteria', []);
         $searchKey = $request->input('search_key');
         $sorts = $request->input('sorts', []);
         $page = $request->input('page');
         $limit = $request->input('limit');
-        $reserves = $this->reserveService->getReserves($user->contract_id, $status, $searchKey, $sorts, $page, $limit);
+        $reserves = $this->reserveService->getReserves($user->contract_id, $criteria, $periodCriteria, $searchKey, $sorts, $page, $limit);
         return response()->json([
             'reserves' => ReserveResource::collection($reserves['reserves']),
             'pagination' => $reserves['pagination'] ?? null,

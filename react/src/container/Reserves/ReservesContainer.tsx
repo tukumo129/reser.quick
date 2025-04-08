@@ -88,7 +88,6 @@ export const ReserveList = ({ reserves }: ReserveListProps) => {
                     onSubmit(reserve.id, e.target.checked);
                   }}
                   isChecked={isChecked}
-                  // defaultChecked={reserve.status === reserveStatus.Complete}
                 />
 
                 <Stack

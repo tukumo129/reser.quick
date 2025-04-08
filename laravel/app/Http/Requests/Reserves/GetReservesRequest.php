@@ -24,7 +24,12 @@ class GetReservesRequest extends FormRequest
     public function rules()
     {
         return [
-            'status' => ['string', 'nullable'],
+            'criteria' => ['array', 'nullable'],
+            'criteria.status' => ['string', 'nullable'],
+            'period_criteria' => ['array', 'nullable'],
+            'period_criteria.start_date_time' => ['string', 'nullable', 'required_with:period_criteria.end_data_time'],
+            'period_criteria.end_date_time' => ['string', 'nullable', 'required_with:period_criteria.start_data_time'],
+            'search_key' => ['string', 'nullable'],
             'sorts' => ['array', 'nullable'],
             'sorts.*' => ['string', 'nullable'],
             'page' => ['integer', 'nullable'],

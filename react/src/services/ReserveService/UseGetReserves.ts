@@ -16,7 +16,13 @@ const defaultPagination: Pagination = {
 };
 
 type useGetReservesProps = {
-  status?: string;
+  criteria?: {
+    status?: string;
+  };
+  period_criteria?: {
+    start_date_time?: string;
+    end_date_time?: string;
+  };
   search_key?: string;
   sorts?: string;
   page?: string;

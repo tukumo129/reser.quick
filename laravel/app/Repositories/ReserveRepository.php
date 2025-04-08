@@ -19,25 +19,18 @@ class ReserveRepository
 
     /**
      * @param array<string, mixed> $criteria
-     * @return Collection<Reserve>|null
-     */
-    public function getBy(array $criteria): ?Collection
-    {
-        $query = Reserve::query();
-        foreach ($criteria as $key => $value) {
-            $query->where($key, $value);
-        }
-        return $query->get();
-    }
-
-    /**
-     * 条件に基づいてデータを検索し、ページネーションを適用する場合にはその情報も提供する。
-     * @param array<string, mixed> $criteria
+     * @param array<string, mixed> $periodCriteria
      * @param array<string, string>|null $sorts
      * @return array<string, mixed>
      */
-    public function getWithPagination(array $criteria, ?string $searchKey = null, array $sorts = [], ?int $page = 1, ?int $limit = 10): array
-    {
+    public function getWithPagination(
+        array $criteria,
+        array $periodCriteria = [],
+        ?string $searchKey = null,
+        array $sorts = [],
+        ?int $page = null,
+        ?int $limit = null
+    ): array {
         $query = Reserve::query();
         foreach ($criteria as $key => $value) {
             $query->where($key, $value);
@@ -47,20 +40,30 @@ class ReserveRepository
                 ->orWhere('uuid')
                 ->orWhere('reserve_id', 'like', "%{$searchKey}%");
         }
+        if(isset($periodCriteria['start_date_time'], $periodCriteria['end_date_time'])) {
+            $query->whereBetween('start_date_time', [$periodCriteria['start_date_time'], $periodCriteria['end_date_time']]);
+        }
 
         foreach ($sorts as $column => $direction) {
             $query->orderBy($column, $direction);
         }
 
-        $paginator = $query->paginate($limit, ['*'], 'page', $page);
+        if($page && $limit) {
+            $paginator = $query->paginate($limit, ['*'], 'page', $page);
+
+            return [
+                'reserves' => $paginator->items(),
+                'pagination' => [
+                    'total' => $paginator->total(),
+                    'last_page' => $paginator->lastPage(),
+                    'page' => $paginator->currentPage(),
+                ],
+            ];
+        }
 
         return [
-            'reserves' => $paginator->items(),
-            'pagination' => [
-                'total' => $paginator->total(),
-                'last_page' => $paginator->lastPage(),
-                'page' => $paginator->currentPage(),
-            ],
+            'reserves' => $query->get(),
+            'pagination' => null,
         ];
     }
 

@@ -24,13 +24,11 @@ axiosClient.interceptors.response.use(
   },
 );
 
-export const callGet = async <TParam extends Record<string, string>>(
+export const callGet = async <TParam extends Record<string, unknown>>(
   path: string,
   pathParam: TParam = {} as TParam,
 ) => {
-  const queryString = new URLSearchParams(pathParam).toString();
-  const url = queryString ? `${path}?${queryString}` : path;
-  const response = await axiosClient.get(url);
+  const response = await axiosClient.get(path, { params: pathParam });
   return response.data;
 };
 

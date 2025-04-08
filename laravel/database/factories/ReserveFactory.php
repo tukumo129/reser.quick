@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\ReserveStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -23,7 +24,7 @@ class ReserveFactory extends Factory
             'start_date_time' => Carbon::now()->format('Y-m-d'),
             'end_date_time' => Carbon::now()->addHour(1)->format('Y-m-d'),
             'uuid' => Str::uuid()->toString(),
-            'status' => random_int(1, 5),
+            'status' => ReserveStatus::NO_COMPLETE,
         ];
     }
 }

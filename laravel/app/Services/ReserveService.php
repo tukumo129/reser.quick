@@ -29,25 +29,22 @@ class ReserveService
     }
 
     /**
+     * @param array<string, string>|null $criteria
+     * @param array<string, string>|null $periodCriteria
      * @param array<string, string>|null $sorts
      * @return array<string, mixed>
      */
-    public function getReserves(int $contractId, ?string $status, ?string $searchKey, ?array $sorts, ?int $page, ?int $limit): array
-    {
-        $criteria = ['contract_id' => $contractId];
-        if($status) {
-            $criteria['status'] = $status;
-        }
-
-        if($page && $limit) {
-            return $this->reserveRepository->getWithPagination($criteria, $searchKey, $sorts, $page, $limit);
-        }
-
-        $reserves = $this->reserveRepository->getBy($criteria);
-        return [
-            'reserves' => $reserves,
-            'pagination' => null,
-        ];
+    public function getReserves(
+        int $contractId,
+        array $criteria = [],
+        array $periodCriteria = [],
+        ?string $searchKey,
+        ?array $sorts,
+        ?int $page,
+        ?int $limit
+    ): array {
+        $criteria['contract_id'] = $contractId;
+        return $this->reserveRepository->getWithPagination($criteria, $periodCriteria, $searchKey, $sorts, $page, $limit);
     }
 
     /**

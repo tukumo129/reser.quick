@@ -11,7 +11,6 @@ import {
 import { AddIcon, SearchIcon } from "@chakra-ui/icons";
 import { reserveStatus } from "../../enums/reserveStatus";
 
-// TODO #24 検索機能実装
 export const ReservesContents = () => {
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
@@ -21,7 +20,9 @@ export const ReservesContents = () => {
   const { reserves, pagination, isLoading, error } = useGetReserves({
     page: String(page),
     limit: String(limit),
-    status: showAllReserve ? "" : reserveStatus.NoComplete,
+    ...(showAllReserve
+      ? {}
+      : { criteria: { status: reserveStatus.NoComplete } }),
     search_key: searchKey,
   });
   const navigate = useNavigate();

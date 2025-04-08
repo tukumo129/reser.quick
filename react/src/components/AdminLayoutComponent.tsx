@@ -17,12 +17,29 @@ export const AdminLayout = ({ pageName, mainContents }: AdminLayoutProps) => {
       <AdminHeaderContainer onMenuToggle={onMenuToggle} />
       <Flex flex="1" overflow="hidden">
         <AdminMenubarContainer isMenuOpen={isMenuOpen} />
-        <Box flex="1" p={{ base: 4, md: 8 }} bg="gray.100" overflowY="auto">
-          <Heading mb={4} size="md">
-            {pageName}
-          </Heading>
-          {mainContents}
-        </Box>
+        <Flex
+          p={{ base: 4, md: 8 }}
+          bg="gray.100"
+          overflowY="auto"
+          w="100%"
+          justify="center"
+        >
+          <Flex w="100%">
+            <Box flexShrink={0} width="100%" maxW="1200px">
+              <Heading mb={4} size="md">
+                {pageName}
+              </Heading>
+              {mainContents}
+            </Box>
+            <Box
+              flexShrink={0}
+              w="250px"
+              bg="gray.100"
+              p={{ base: 2, md: 4 }}
+              display={{ base: "none", md: "block" }}
+            />
+          </Flex>
+        </Flex>
       </Flex>
     </Flex>
   );

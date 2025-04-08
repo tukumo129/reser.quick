@@ -68,12 +68,8 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
       <form onSubmit={handleSubmit(onSubmit)} id="updateReserveForm">
         <Stack spacing={6}>
           <Stack>
-            <Text fontWeight="semibold">
-              予約番号
-            </Text>
-            <Text>
-              {reserve.reserveId}
-            </Text>
+            <Text fontWeight="semibold">予約番号</Text>
+            <Text>{reserve.reserveId}</Text>
           </Stack>
           <Divider borderColor="gray.300" />
           <FormControl isInvalid={!!errors.name} id="name">

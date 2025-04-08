@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Reserves;
 
+use App\Enums\ReserveStatus;
 use App\Models\Reserve;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -79,5 +81,46 @@ class GetReservesTest extends TestCase
         // ゼロ件取得
         Reserve::query()->forceDelete();
         $response = $this->json('GET', '/api/reserves/', []);
+
+        // 条件で絞り込み
+        // 取得対象
+        $reserves = Reserve::factory()->count(2)->create(['contract_id' => $user->contract_id,'status' => ReserveStatus::COMPLETE,'start_date_time' => Carbon::now()->format('Y-m-d H:i'),]);
+
+        //　ステータス違い
+        $reserves = Reserve::factory()->create([
+            'contract_id' => $user->contract_id,
+            'status' => ReserveStatus::NO_COMPLETE,
+            'start_date_time' => Carbon::now()->format('Y-m-d H:i'),
+        ]);
+
+        // 期間前の予約時間
+        $reserves = Reserve::factory()->create([
+            'contract_id' => $user->contract_id,
+            'status' => ReserveStatus::COMPLETE,
+            'start_date_time' => Carbon::now()->subMinutes(31)->format('Y-m-d H:i'),
+        ]);
+
+        // 期間後の予約時間
+        $reserves = Reserve::factory()->create([
+            'contract_id' => $user->contract_id,
+            'status' => ReserveStatus::COMPLETE,
+            'start_date_time' => Carbon::now()->addMinutes(31)->format('Y-m-d H:i'),
+        ]);
+
+        $param = [
+            'criteria' => [
+                'status' => ReserveStatus::COMPLETE,
+            ],
+            'period_criteria' => [
+                'start_date_time' => Carbon::now()->subMinutes(30)->format('Y-m-d H:i'),
+                'end_date_time' => Carbon::now()->addMinutes(30)->format('Y-m-d H:i'),
+            ],
+        ];
+        $response = $this->json('GET', '/api/reserves/', $param);
+        $response->assertJson([
+            'reserves' => [],
+        ]);
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonCount(2, 'reserves');
     }
 }
