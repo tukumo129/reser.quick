@@ -68,6 +68,24 @@ class ReserveRepository
     }
 
     /**
+     * @param array<string, mixed> $criteria
+     * @param array<string, mixed> $periodCriteria
+     */
+    public function getCount(
+        array $criteria,
+        array $periodCriteria = []
+    ): int {
+        $query = Reserve::query();
+        foreach ($criteria as $key => $value) {
+            $query->where($key, $value);
+        }
+        if(isset($periodCriteria['start_date_time'], $periodCriteria['end_date_time'])) {
+            $query->whereBetween('start_date_time', [$periodCriteria['start_date_time'], $periodCriteria['end_date_time']]);
+        }
+        return $query->count();
+    }
+
+    /**
      * @return Collection<Reserve>|null
      */
     public function getByStartDateTime(int $contractId, string $date, string $time): Collection

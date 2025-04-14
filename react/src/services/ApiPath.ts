@@ -8,6 +8,7 @@ export const ApiPath = {
   RESERVE: "/reserve/:reserveId",
   RESERVE_STATUS: "/reserve/:reserveId/status",
   RESERVES: "/reserves",
+  RESERVES_COUNT: "/reserves/count",
   SETTING: "/setting",
 
   APP_AUTH: "/app/:uuid/auth",

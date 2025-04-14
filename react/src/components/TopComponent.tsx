@@ -1,4 +1,5 @@
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
+import { ja } from "date-fns/locale";
 import { useGetReserves } from "../services/ReserveService/UseGetReserves";
 import { LoadingSpinner } from "./LoadingSpinnerComponent";
 import {
@@ -30,6 +31,7 @@ import { reserveStatus } from "../enums/reserveStatus";
 import { routePath } from "../enums/routePath";
 import { useReserveUpdateStatusForm } from "../container/Reserves/ReserveUpdateStatusFormContainer";
 import { Reserve } from "../types/Reserve";
+import { useGetReservesCount } from "../services/ReserveService/UseGetReservesCount";
 
 Chart.register(
   CategoryScale,
@@ -40,19 +42,6 @@ Chart.register(
   Tooltip,
   Legend,
 );
-
-const graphData = {
-  labels: ["月", "火", "水", "木", "金", "土", "日"],
-  datasets: [
-    {
-      label: "予約数",
-      data: [12, 19, 3, 5, 2, 3, 7],
-      fill: false,
-      borderColor: "blue",
-      tension: 0.1,
-    },
-  ],
-};
 
 export const TopContents = () => {
   const navigate = useNavigate();
@@ -91,8 +80,83 @@ export const TopContents = () => {
     limit: "6",
   });
 
-  if (currentIsLoading || nextIsLoading) return <LoadingSpinner />;
-  if (currentError || nextError) return <div>Error reserves</div>;
+  const {
+    dailyReserveCountPerHour,
+    weeklyReserveCountPerDay,
+    monthlyReserveCountPerDay,
+    isLoading: getCountIsLoading,
+    error: getCountError,
+  } = useGetReservesCount({
+    date_time: format(new Date(), "yyyy-MM-dd HH:mm"),
+  });
+
+  const options = {
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          precision: 0,
+        },
+      },
+    },
+  };
+
+  const dailyLabels = dailyReserveCountPerHour.map((item) =>
+    format(parseISO(item.dateTime), "HH:mm"),
+  );
+  const dailyData = dailyReserveCountPerHour.map((item) => item.count);
+
+  const weeklyLabels = weeklyReserveCountPerDay.map(
+    (item) => format(parseISO(item.dateTime), "eee", { locale: ja }), // 曜日 (例: "月", "火")
+  );
+  const weeklyData = weeklyReserveCountPerDay.map((item) => item.count);
+
+  const monthlyLabels = monthlyReserveCountPerDay.map((item) =>
+    format(parseISO(item.dateTime), "d日"),
+  );
+  const monthlyData = monthlyReserveCountPerDay.map((item) => item.count);
+
+  const dailyGraphData = {
+    labels: dailyLabels,
+    datasets: [
+      {
+        label: "予約数 (時間別)",
+        data: dailyData,
+        fill: false,
+        borderColor: "blue",
+        tension: 0.1,
+      },
+    ],
+  };
+  const weeklyGraphData = {
+    labels: weeklyLabels,
+    datasets: [
+      {
+        label: "予約数 (曜日別)",
+        data: weeklyData,
+        fill: false,
+        borderColor: "green",
+        tension: 0.1,
+      },
+    ],
+  };
+  const monthlyGraphData = {
+    labels: monthlyLabels,
+    datasets: [
+      {
+        label: "予約数 (日別)",
+        data: monthlyData,
+        fill: false,
+        borderColor: "purple",
+        tension: 0.1,
+      },
+    ],
+  };
+
+  if (currentIsLoading || nextIsLoading || getCountIsLoading)
+    return <LoadingSpinner />;
+  if (currentError || nextError || getCountError)
+    return <div>Error reserves</div>;
 
   return (
     <Box p={4}>
@@ -135,7 +199,7 @@ export const TopContents = () => {
               <Heading size="md" mb={4}>
                 当日の予約数推移
               </Heading>
-              <Line data={graphData} />
+              <Line data={dailyGraphData} options={options} />
             </Box>
 
             <Box
@@ -149,7 +213,7 @@ export const TopContents = () => {
               <Heading size="md" mb={4}>
                 1週間の予約数推移
               </Heading>
-              <Line data={graphData} />
+              <Line data={weeklyGraphData} options={options} />
             </Box>
           </Flex>
 
@@ -157,7 +221,7 @@ export const TopContents = () => {
             <Heading size="md" mb={4}>
               1か月の予約数推移
             </Heading>
-            <Line data={graphData} />
+            <Line data={monthlyGraphData} options={options} />
           </Box>
         </Box>
       </VStack>

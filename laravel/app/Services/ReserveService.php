@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Enums\OpenTimeType;
+use App\Enums\ReserveCountPeriod;
+use App\Enums\ReserveCountType;
 use App\Enums\ReserveStatus;
 use App\Enums\SequenceKey;
 use App\Models\Contract;
@@ -10,6 +12,7 @@ use App\Models\Reserve;
 use App\Models\Setting;
 use App\Repositories\ReserveRepository;
 use Carbon\CarbonPeriod;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
@@ -48,12 +51,62 @@ class ReserveService
     }
 
     /**
+     * @return array<string, mixed>
+     */
+    public function getReservesCount(
+        int $contractId,
+        int $countType,
+        string $dateTime,
+        int $period
+    ): array {
+        $criteria['contract_id'] = $contractId;
+        [$startDateTime, $endDateTime] = $this->getPeriod(Carbon::parse($dateTime), $period);
+
+        $periodText = '';
+        $addHours = 0;
+        if ($countType === ReserveCountType::DAILY) {
+            $periodText = '1 days';
+            $addHours = 24;
+        } elseif ($countType === ReserveCountType::HOURLY && $period === ReserveCountPeriod::DAY) {
+            $periodText = '1 hours';
+            $addHours = 1;
+        }
+        $datePeriods = CarbonPeriod::create($startDateTime, $periodText, $endDateTime);
+        $result = [];
+        foreach ($datePeriods as $datePeriod) {
+            $periodCriteria = [
+                'start_date_time' => $datePeriod->copy()->format('Y-m-d H:i'),
+                'end_date_time' => $datePeriod->copy()->addHours($addHours)->subSeconds(1)->format('Y-m-d H:i'),
+            ];
+            $result[] = [
+                'dateTime' => $datePeriod->format('Y-m-d H:i'),
+                'count' => $this->reserveRepository->getCount($criteria, $periodCriteria),
+            ];
+        }
+        return $result;
+    }
+
+    private function getPeriod(Carbon $dateTime, string $period): array
+    {
+        switch ($period) {
+            case ReserveCountPeriod::DAY:
+                return [$dateTime->copy()->startOfDay(), $dateTime->copy()->endOfDay()];
+            case ReserveCountPeriod::WEEK:
+                return [$dateTime->copy()->startOfWeek(), $dateTime->copy()->endOfWeek()];
+            case ReserveCountPeriod::MONTH:
+                return [$dateTime->copy()->startOfMonth(), $dateTime->copy()->endOfMonth()];
+            default:
+                throw new Exception('InvalidPeriod');
+        }
+    }
+
+    /**
      * @param array<string, mixed> $reserveData
      */
     public function createReserve(Contract $contract, array $reserveData): Reserve
     {
         $reserveData['uuid'] = Str::uuid()->toString();
-        if(!isset($reserveData['status'])) {
+        if (!isset($reserveData['status'])) {
             // 作成時にstatusが指定されていない場合はNO_COMPLETEを設定
             $reserveData['status'] = ReserveStatus::NO_COMPLETE;
         }
@@ -85,7 +138,7 @@ class ReserveService
 
         $targetDate = Carbon::parse($date);
         $reserveDateTimes = $this->getReserveDateTimes($setting, $targetDate->copy()->startOfMonth(), $targetDate->copy()->endOfMonth());
-        foreach($reserveDateTimes as $reserveDateTime) {
+        foreach ($reserveDateTimes as $reserveDateTime) {
             $availableDateTimeCount = $this->reserveRepository->getByStartDateTime($contract->id, $reserveDateTime['date'], $reserveDateTime['start_time'])->count();
             $availableDates[] = [
                 'date' => $reserveDateTime['date'],
@@ -115,7 +168,7 @@ class ReserveService
 
         $targetDate = Carbon::parse($date);
         $reserveDateTimes = $this->getReserveDateTimes($setting, $targetDate, $targetDate);
-        foreach($reserveDateTimes as $reserveDateTime) {
+        foreach ($reserveDateTimes as $reserveDateTime) {
             $availableDateTimeCount = $this->reserveRepository->getByStartDateTime($contract->id, $reserveDateTime['date'], $reserveDateTime['start_time'])->count();
             $availableDates[] = [
                 'date' => $reserveDateTime['date'],
@@ -142,12 +195,12 @@ class ReserveService
         $dayArray = [];
         $unsetWeekDates = [];
 
-        foreach($calender as $date) {
+        foreach ($calender as $date) {
             // 週当たりの設定から対象日付を追加
             $weekOpenTimes = $openTimes->where('type', OpenTimeType::WEEK)->where('week', $date->dayOfWeek);
-            foreach($weekOpenTimes as $weekOpenTime) {
+            foreach ($weekOpenTimes as $weekOpenTime) {
                 $weekEndTime = Carbon::parse($weekOpenTime->end_time)->subMinutes($reserveSlotTime)->format('H:i');
-                foreach(CarbonPeriod::create($weekOpenTime->start_time, "{$reserveSlotTime} minutes", $weekEndTime) as $day) {
+                foreach (CarbonPeriod::create($weekOpenTime->start_time, "{$reserveSlotTime} minutes", $weekEndTime) as $day) {
                     $weekArray[] = [
                         'date' => $date->format('Y-m-d'),
                         'start_time' => $day->format('H:i'),
@@ -159,21 +212,21 @@ class ReserveService
 
         // 日付当たりの設定から対象日付を追加
         $dayOpenTimes = $openTimes->where('type', OpenTimeType::DAY);
-        foreach($dayOpenTimes as $dayOpenTime) {
+        foreach ($dayOpenTimes as $dayOpenTime) {
             $openDate = Carbon::parse($dayOpenTime->date);
-            if(!$openDate->between($startDate, $endDate)) {
+            if (!$openDate->between($startDate, $endDate)) {
                 // 指定した日付の区間外の場合スキップ
                 continue;
             }
             // 日付での指定がある場合はweekの設定を消す
             $unsetWeekDates[] = $dayOpenTime->date;
 
-            if($dayOpenTime->start_time === null || $dayOpenTime->start_time === $dayOpenTime->end_time) {
+            if ($dayOpenTime->start_time === null || $dayOpenTime->start_time === $dayOpenTime->end_time) {
                 // 開始と終了が同一時刻または開始時間がnullの場合営業なし
                 continue;
             } else {
                 $weekEndTime = Carbon::parse($dayOpenTime->end_time)->subMinutes($reserveSlotTime)->format('H:i');
-                foreach(CarbonPeriod::create($dayOpenTime->start_time, "{$reserveSlotTime} minutes", $weekEndTime) as $day) {
+                foreach (CarbonPeriod::create($dayOpenTime->start_time, "{$reserveSlotTime} minutes", $weekEndTime) as $day) {
                     $dayArray[] = [
                         'date' => $openDate->format('Y-m-d'),
                         'start_time' => $day->format('H:i'),
