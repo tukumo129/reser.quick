@@ -6,6 +6,7 @@ const baseURL = ApiPath.BASE_PATH;
 
 const axiosClient: AxiosInstance = axios.create({
   baseURL,
+  withCredentials: false,
   headers: {
     "Content-Type": "application/json",
     Authorization: localStorage.getItem("token")

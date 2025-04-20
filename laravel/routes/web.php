@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,5 +14,3 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/error/404', fn () => abort(404));
-
-Route::get('/{any}', fn () => File::get(public_path() . '/react-build/index.html'))->where('any', '.*');
