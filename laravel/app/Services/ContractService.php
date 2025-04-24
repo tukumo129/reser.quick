@@ -16,7 +16,7 @@ class ContractService
     }
 
     /**
-     * @param array<string, mixed> $contractData
+     * @param  array<string, mixed>  $contractData
      */
     public function createContract(array $contractData): Contract
     {

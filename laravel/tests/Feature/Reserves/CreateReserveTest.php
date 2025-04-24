@@ -16,8 +16,9 @@ class CreateReserveTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
+        /** @var Contract $contract */
         $contract = Contract::factory()->create();
         /** @var User $user */
         $user = User::factory()->create(['contract_id' => $contract->id]);

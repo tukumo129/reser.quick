@@ -19,8 +19,9 @@ class GetReserveAvailableDatesTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
+        /** @var Contract $contract */
         $contract = Contract::factory()->create();
 
         /** @var Setting $setting */

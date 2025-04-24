@@ -8,6 +8,7 @@ use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 /**
@@ -17,8 +18,9 @@ class GetSettingTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
+        /** @var Contract $contract */
         $contract = Contract::factory()->create();
         /** @var User $user */
         $user = User::factory()->create(['contract_id' => $contract->id]);
@@ -26,6 +28,7 @@ class GetSettingTest extends TestCase
 
         /** @var Setting $setting */
         $setting = Setting::factory()->create(['contract_id' => $user->contract_id]);
+        /** @var Collection<OpenTime> $openTimes */
         $openTimes = OpenTime::factory()->count(3)->create(['setting_id' => $setting->id]);
 
         $params = [];
@@ -47,13 +50,14 @@ class GetSettingTest extends TestCase
                     ['id' => $openTimes[2]->id],
                 ],
             ],
-            'reserveSiteUrl' => env('APP_URL') . "/app/{$user->contract->uuid}",
+            'reserveSiteUrl' => config('app.url')."/app/{$contract->uuid}",
         ]);
         $response->assertStatus(Response::HTTP_OK);
     }
 
-    public function testEmptySuccess(): void
+    public function test_empty_success(): void
     {
+        /** @var Contract $contract */
         $contract = Contract::factory()->create();
         /** @var User $user */
         $user = User::factory()->create(['contract_id' => $contract->id]);

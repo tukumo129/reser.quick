@@ -37,7 +37,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/setting', [SettingController::class, 'updateSetting']);
 });
 
-
 // アプリ用ルート
 Route::middleware(['app.auth'])->group(function () {
     Route::prefix('/app/{uuid}')->where(['uuid' => '[a-zA-Z0-9_-]+'])->group(function () {

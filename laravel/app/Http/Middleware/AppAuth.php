@@ -17,10 +17,11 @@ class AppAuth
         $uuid = $request->route('uuid');
         $contractRepository = resolve(ContractRepository::class);
         $contract = $contractRepository->getBy(['uuid' => $uuid])->first();
-        if(!$contract) {
+        if (! $contract) {
             throw new ContractNotFoundException("Contract not found uuid: {$uuid}.");
         }
         $request->attributes->set('contract', $contract);
+
         return $next($request);
     }
 }

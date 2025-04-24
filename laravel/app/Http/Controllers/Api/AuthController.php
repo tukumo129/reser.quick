@@ -33,14 +33,11 @@ class AuthController extends Controller
         $this->settingService = $settingService;
     }
 
-    /**
-     * @return Response
-     */
     public function createUser(CreateUserRequest $request): JsonResponse
     {
         // emailが既に登録されているか確認
         $user = $this->userService->getUserByEmail($request->input('email'));
-        if($user) {
+        if ($user) {
             return response()->json([], Response::HTTP_CONFLICT);
         }
 
@@ -59,22 +56,20 @@ class AuthController extends Controller
 
         $user = $this->userService->createUser($userData);
         $token = $user->createToken('AccessToken')->plainTextToken;
+
         return response()->json([
             'user' => new UserResource($user),
             'token' => $token,
         ], Response::HTTP_OK);
     }
 
-    /**
-     * @return Response
-     */
     public function userLogin(UserLoginRequest $request): JsonResponse
     {
         $email = $request->input('email');
         $password = $request->input('password');
 
         $user = $this->userService->login($email, $password);
-        if(!$user) {
+        if (! $user) {
             return response()->json([], Response::HTTP_UNAUTHORIZED);
         }
         $token = $user->createToken('AccessToken')->plainTextToken;
@@ -85,12 +80,10 @@ class AuthController extends Controller
         ], Response::HTTP_OK);
     }
 
-    /**
-     * @return Response
-     */
     public function userLogout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
+
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

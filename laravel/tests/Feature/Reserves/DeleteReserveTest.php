@@ -15,12 +15,13 @@ class DeleteReserveTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
         /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user, 'web');
 
+        /** @var Reserve $reserve */
         $reserve = Reserve::factory()->create(['contract_id' => $user->contract_id]);
 
         $response = $this->json('delete', "/api/reserve/{$reserve->id}", []);

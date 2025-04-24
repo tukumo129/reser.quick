@@ -8,7 +8,6 @@ use App\Http\Resources\App\AppSettingResource;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class AppSettingController extends Controller
 {
@@ -20,15 +19,13 @@ class AppSettingController extends Controller
         $this->userService = $userService;
     }
 
-    /**
-     * @return Response
-     */
     public function getAppSettings(Request $request): JsonResponse
     {
         $contract = $request->attributes->get('contract');
-        if(!$contract->setting) {
+        if (! $contract->setting) {
             throw new ContractNotFoundException($contract->id);
         }
+
         return response()->json([
             'setting' => new AppSettingResource($contract->setting),
         ]);

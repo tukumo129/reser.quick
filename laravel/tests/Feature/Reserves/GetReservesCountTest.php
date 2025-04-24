@@ -16,7 +16,7 @@ class GetReservesCountTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
         Reserve::query()->forceDelete();
         /** @var User $user */

@@ -10,17 +10,19 @@ class ReserveRepository
 {
     public function get(int $contractId, int $id): Reserve
     {
+        /** @var Reserve|null $reserve */
         $reserve = Reserve::where('contract_id', $contractId)->where('id', $id)->first();
-        if (!$reserve) {
+        if (! $reserve) {
             throw new ReserveNotFoundException($id);
         }
+
         return $reserve;
     }
 
     /**
-     * @param array<string, mixed> $criteria
-     * @param array<string, mixed> $periodCriteria
-     * @param array<string, string>|null $sorts
+     * @param  array<string, mixed>  $criteria
+     * @param  array<string, mixed>  $periodCriteria
+     * @param  array<string, string>  $sorts
      * @return array<string, mixed>
      */
     public function getWithPagination(
@@ -40,7 +42,7 @@ class ReserveRepository
                 ->orWhere('uuid')
                 ->orWhere('reserve_id', 'like', "%{$searchKey}%");
         }
-        if(isset($periodCriteria['start_date_time'], $periodCriteria['end_date_time'])) {
+        if (isset($periodCriteria['start_date_time'], $periodCriteria['end_date_time'])) {
             $query->whereBetween('start_date_time', [$periodCriteria['start_date_time'], $periodCriteria['end_date_time']]);
         }
 
@@ -48,7 +50,7 @@ class ReserveRepository
             $query->orderBy($column, $direction);
         }
 
-        if($page && $limit) {
+        if ($page && $limit) {
             $paginator = $query->paginate($limit, ['*'], 'page', $page);
 
             return [
@@ -68,8 +70,8 @@ class ReserveRepository
     }
 
     /**
-     * @param array<string, mixed> $criteria
-     * @param array<string, mixed> $periodCriteria
+     * @param  array<string, mixed>  $criteria
+     * @param  array<string, mixed>  $periodCriteria
      */
     public function getCount(
         array $criteria,
@@ -79,14 +81,15 @@ class ReserveRepository
         foreach ($criteria as $key => $value) {
             $query->where($key, $value);
         }
-        if(isset($periodCriteria['start_date_time'], $periodCriteria['end_date_time'])) {
+        if (isset($periodCriteria['start_date_time'], $periodCriteria['end_date_time'])) {
             $query->whereBetween('start_date_time', [$periodCriteria['start_date_time'], $periodCriteria['end_date_time']]);
         }
+
         return $query->count();
     }
 
     /**
-     * @return Collection<Reserve>|null
+     * @return Collection<Reserve>
      */
     public function getByStartDateTime(int $contractId, string $date, string $time): Collection
     {
@@ -97,27 +100,25 @@ class ReserveRepository
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function create(array $data): Reserve
     {
-        $reserve = new Reserve();
+        $reserve = new Reserve;
         $reserve->fill($data)->save();
+
         return $reserve;
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function update(int $contractId, int $id, array $data): Reserve
     {
         $reserve = $this->get($contractId, $id);
-        if (!$reserve) {
-            throw new ReserveNotFoundException($id);
-        }
         $reserve->fill($data)->save();
-        return $reserve;
 
+        return $reserve;
     }
 
     public function delete(int $contractId, int $id): void

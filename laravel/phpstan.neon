@@ -1,0 +1,18 @@
+parameters:
+    level: 4
+
+    paths:
+        - app
+        - routes
+        - database
+        - tests
+
+    excludePaths:
+        - tests/Fixtures/*
+        - tests/Unit/ExampleTest.php
+        - database/migrations/*
+        - app/Http/Middleware/TrustProxies.php
+        - app/Providers/RouteServiceProvider.php
+
+    ignoreErrors:
+        - '#should return Illuminate\\Database\\Eloquent\\Relations\\BelongsTo<.*> but returns Illuminate\\Database\\Eloquent\\Relations\\BelongsTo<.*\$this\(.*\)>#'

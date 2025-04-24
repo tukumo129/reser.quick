@@ -17,8 +17,9 @@ class CreateAppReserveTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
+        /** @var Contract $contract */
         $contract = Contract::factory()->create();
 
         $params = [
@@ -32,6 +33,7 @@ class CreateAppReserveTest extends TestCase
         $response = $this->json('POST', "/api/app/{$contract->uuid}/reserves", $params);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
 
+        /** @var Reserve $reserve */
         $reserve = Reserve::orderby('id', 'desc')->first();
         $this->assertEquals($reserve->contract_id, $contract->id);
         $this->assertEquals($reserve->reserve_id, 'R00000001');
@@ -46,8 +48,9 @@ class CreateAppReserveTest extends TestCase
     /**
      * 予約枠単位によって終了時間が変わることを確認
      */
-    public function testAddSettingSuccess(): void
+    public function test_add_setting_success(): void
     {
+        /** @var Contract $contract */
         $contract = Contract::factory()->create();
         Setting::factory()->create(['contract_id' => $contract->id, 'reserve_slot_time' => 30]);
 
@@ -62,6 +65,7 @@ class CreateAppReserveTest extends TestCase
         $response = $this->json('POST', "/api/app/{$contract->uuid}/reserves", $params);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
 
+        /** @var Reserve $reserve */
         $reserve = Reserve::orderby('id', 'desc')->first();
         $this->assertEquals($reserve->contract_id, $contract->id);
         $this->assertEquals($reserve->reserve_id, 'R00000001');

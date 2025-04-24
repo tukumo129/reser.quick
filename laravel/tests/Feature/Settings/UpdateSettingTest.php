@@ -18,14 +18,16 @@ class UpdateSettingTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
         /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user, 'web');
         /** @var Setting $setting */
         $setting = Setting::factory()->create(['contract_id' => $user->contract_id]);
+        /** @var OpenTime $openTime */
         $openTime = OpenTime::factory()->create(['setting_id' => $setting->id]);
+        /** @var OpenTime $deleteOpenTime */
         $deleteOpenTime = OpenTime::factory()->create(['setting_id' => $setting->id]);
         $params = [
             'setting' => [
@@ -95,7 +97,7 @@ class UpdateSettingTest extends TestCase
         $this->assertNull($deleteOpenTime);
     }
 
-    public function testCreateSuccess(): void
+    public function test_create_success(): void
     {
         /** @var User $user */
         $user = User::factory()->create();

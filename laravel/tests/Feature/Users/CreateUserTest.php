@@ -12,10 +12,10 @@ use Tests\TestCase;
  */
 class CreateUserTest extends TestCase
 {
-    use WithFaker;
     use DatabaseTransactions;
+    use WithFaker;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
         $email = $this->faker->unique()->safeEmail;
 

@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Services\ReserveService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class ReserveController extends Controller
 {
@@ -26,13 +27,10 @@ class ReserveController extends Controller
         $this->reserveService = $reserveService;
     }
 
-    /**
-     * @return Response
-     */
     public function getReserve(int $reserveId): JsonResponse
     {
         /** @var User $user */
-        $user = auth()->user();
+        $user = Auth::user();
         $reserve = $this->reserveService->getReserve($user->contract_id, $reserveId);
 
         return response()->json([
@@ -40,13 +38,10 @@ class ReserveController extends Controller
         ], Response::HTTP_OK);
     }
 
-    /**
-     * @return Response
-     */
     public function getReserves(GetReservesRequest $request): JsonResponse
     {
         /** @var User $user */
-        $user = auth()->user();
+        $user = Auth::user();
         $criteria = $request->input('criteria', []);
         $periodCriteria = $request->input('period_criteria', []);
         $searchKey = $request->input('search_key');
@@ -54,19 +49,17 @@ class ReserveController extends Controller
         $page = $request->input('page');
         $limit = $request->input('limit');
         $reserves = $this->reserveService->getReserves($user->contract_id, $criteria, $periodCriteria, $searchKey, $sorts, $page, $limit);
+
         return response()->json([
             'reserves' => ReserveResource::collection($reserves['reserves']),
             'pagination' => $reserves['pagination'] ?? null,
         ], Response::HTTP_OK);
     }
 
-    /**
-     * @return Response
-     */
     public function getReservesCount(GetReservesCountRequest $request): JsonResponse
     {
         /** @var User $user */
-        $user = auth()->user();
+        $user = Auth::user();
         $dateTime = $request->input('date_time');
 
         $dailyReserveCountPerHour = $this->reserveService->getReservesCount($user->contract_id, ReserveCountType::HOURLY, $dateTime, ReserveCountPeriod::DAY);
@@ -82,57 +75,49 @@ class ReserveController extends Controller
         ], Response::HTTP_OK);
     }
 
-    /**
-     * @return Response
-     */
     public function createReserve(CreateReserveRequest $request): JsonResponse
     {
         /** @var User $user */
-        $user = auth()->user();
+        $user = Auth::user();
         $reserveData = $request->input('reserve');
         $reserveData['contract_id'] = $user->contract_id;
         $reserve = $this->reserveService->createReserve($user->contract, $reserveData);
+
         return response()->json([
             'reserve' => new ReserveResource($reserve),
         ], Response::HTTP_OK);
     }
 
-    /**
-     * @return Response
-     */
     public function updateReserve(int $reserveId, UpdateReserveRequest $request): JsonResponse
     {
         /** @var User $user */
-        $user = auth()->user();
+        $user = Auth::user();
         $reserveData = $request->input('reserve');
         $reserve = $this->reserveService->updateReserve($user->contract_id, $reserveId, $reserveData);
+
         return response()->json([
             'reserve' => new ReserveResource($reserve),
         ], Response::HTTP_OK);
     }
 
-    /**
-     * @return Response
-     */
     public function updateReserveStatus(int $reserveId, UpdateReserveStatusRequest $request): JsonResponse
     {
         /** @var User $user */
-        $user = auth()->user();
+        $user = Auth::user();
         $status = $request->input('status');
         $reserve = $this->reserveService->updateReserve($user->contract_id, $reserveId, ['status' => $status]);
+
         return response()->json([
             'reserve' => new ReserveResource($reserve),
         ], Response::HTTP_OK);
     }
 
-    /**
-     * @return Response
-     */
     public function deleteReserve(int $reserveId): JsonResponse
     {
         /** @var User $user */
-        $user = auth()->user();
+        $user = Auth::user();
         $this->reserveService->deleteReserve($user->contract_id, $reserveId);
+
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

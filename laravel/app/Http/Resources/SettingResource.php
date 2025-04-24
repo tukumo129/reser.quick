@@ -16,14 +16,16 @@ class SettingResource extends JsonResource
      */
     public function toArray($request)
     {
-        /** @var Setting|null $this */
+        /** @var Setting|null $setting */
+        $setting = $this->resource;
+
         return [
-            'storeName' => $this->store_name ?? '',
-            'reserveSlotTime' => $this->reserve_slot_time ?? '5',
-            'maxReserveNumber' => $this->max_reserve_number ?? null,
-            'reserveMonthsLimit' => $this->reserve_months_limit ?? null,
-            'maxAvailableReserve' => $this->max_available_reserve ?? null,
-            'openTimes' => empty($this->openTimes) ? [] : $this->openTimes->map(function (OpenTime $openTime) {
+            'storeName' => $setting->store_name ?? '',
+            'reserveSlotTime' => $setting->reserve_slot_time ?? '5',
+            'maxReserveNumber' => $setting->max_reserve_number ?? null,
+            'reserveMonthsLimit' => $setting->reserve_months_limit ?? null,
+            'maxAvailableReserve' => $setting->max_available_reserve ?? null,
+            'openTimes' => empty($setting->openTimes) ? [] : $setting->openTimes->map(function (OpenTime $openTime) {
                 return [
                     'id' => $openTime->id,
                     'type' => $openTime->type,

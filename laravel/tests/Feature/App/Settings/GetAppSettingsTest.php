@@ -15,8 +15,9 @@ class GetAppSettingsTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
+        /** @var Contract $contract */
         $contract = Contract::factory()->create();
 
         /** @var Setting $setting */
@@ -36,8 +37,9 @@ class GetAppSettingsTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
     }
 
-    public function testEmptySuccess(): void
+    public function test_empty_success(): void
     {
+        /** @var Contract $contract */
         $contract = Contract::factory()->create();
 
         $params = [];

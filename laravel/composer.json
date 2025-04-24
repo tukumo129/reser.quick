@@ -8,23 +8,25 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
-        "bensampo/laravel-enum": "^4.2",
-        "fruitcake/laravel-cors": "^2.0",
+        "php": "^8.3",
+        "bensampo/laravel-enum": "^6.12",
         "guzzlehttp/guzzle": "^7.0.1",
-        "laravel/framework": "^8.75",
-        "laravel/sanctum": "^2.11",
+        "laravel/framework": "^11.0",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.5"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^2.14",
-        "facade/ignition": "^2.5",
+        "barryvdh/laravel-ide-helper": "^3.0",
         "fakerphp/faker": "^1.9.1",
-        "friendsofphp/php-cs-fixer": "^3.52",
+        "larastan/larastan": "^3.4",
+        "laravel/pint": "^1.22",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^5.10",
-        "phpunit/phpunit": "^9.5.10"
+        "nunomaduro/collision": "^8.1",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^10.0",
+        "spatie/laravel-ignition": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -53,7 +55,8 @@
             "@php artisan key:generate --ansi"
         ],
         "fixer": [
-            "vendor/bin/php-cs-fixer fix -vvv"
+            "vendor/bin/pint",
+            "vendor/bin/phpstan analyze --memory-limit=1G"
         ]
     },
     "extra": {
@@ -64,8 +67,11 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

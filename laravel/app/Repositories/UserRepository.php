@@ -10,15 +10,17 @@ class UserRepository
 {
     public function get(int $id): User
     {
-        $user = User::get($id);
-        if (!$user) {
-            throw new UserNotFoundException("User with id {$id} not found.");
+        /** @var User|null $user */
+        $user = User::find($id);
+        if (! $user) {
+            throw new UserNotFoundException($id);
         }
+
         return $user;
     }
 
     /**
-     * @param array<string, mixed> $criteria
+     * @param  array<string, mixed>  $criteria
      * @return Collection<User>|null
      */
     public function getBy(array $criteria): ?Collection
@@ -27,13 +29,15 @@ class UserRepository
         foreach ($criteria as $key => $value) {
             $query->where($key, $value);
         }
+
         return $query->get();
     }
 
     /**
      * 条件に基づいてデータを検索し、ページネーションを適用する場合にはその情報も提供する。
-     * @param array<string, mixed> $criteria
-     * @param array<string, string>|null $sorts
+     *
+     * @param  array<string, mixed>  $criteria
+     * @param  array<string, string>  $sorts
      * @return array<string, mixed>
      */
     public function getWithPagination(array $criteria, array $sorts = [], ?int $page = 1, ?int $limit = 10): array
@@ -60,31 +64,35 @@ class UserRepository
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function create(array $data): User
     {
-        $user = new User();
+        $user = new User;
         $user->fill($data)->save();
+
         return $user;
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function update(int $id, array $data): User
     {
-        $user = User::get($id);
-        if (!$user) {
-            throw new UserNotFoundException("User with id {$id} not found.");
+        /** @var User|null $user */
+        $user = User::find($id);
+        if (! $user) {
+            throw new UserNotFoundException($id);
         }
         $user->fill($data)->save();
+
         return $user;
     }
 
     public function delete(int $id): void
     {
-        $user = User::get($id);
+        /** @var User $user */
+        $user = User::find($id);
         $user->delete();
     }
 }

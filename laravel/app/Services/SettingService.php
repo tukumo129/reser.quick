@@ -21,7 +21,7 @@ class SettingService
     }
 
     /**
-     * @param array<string, mixed> $settingData
+     * @param  array<string, mixed>  $settingData
      */
     public function updateOrCreateSettingAndOpenTimes(int $contractId, array $settingData): Setting
     {
@@ -30,8 +30,8 @@ class SettingService
         $openTimesData = $settingData['open_times'] ?? [];
         $openTimeIds = collect($openTimesData)->pluck('id')->unique()->toArray();
         $this->openTimeRepository->cleanupDelete($setting->id, $openTimeIds);
-        if($openTimesData) {
-            foreach($openTimesData as $openTimeData) {
+        if ($openTimesData) {
+            foreach ($openTimesData as $openTimeData) {
                 $this->openTimeRepository->updateOrCreate($setting->id, $openTimeData);
             }
         }
@@ -40,7 +40,7 @@ class SettingService
     }
 
     /**
-     * @param array<string, mixed> $settingData
+     * @param  array<string, mixed>  $settingData
      */
     public function updateOrCreateSetting(int $contractId, array $settingData): Setting
     {

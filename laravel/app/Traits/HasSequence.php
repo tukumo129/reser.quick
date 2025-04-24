@@ -11,6 +11,7 @@ trait HasSequence
     public function getNextSequence(string $key): int
     {
         return DB::transaction(function () use ($key) {
+            /** @var Sequence $sequence s */
             $sequence = $this->sequences()->lockForUpdate()->firstOrCreate(
                 ['key' => $key],
                 ['sequence_number' => 0],

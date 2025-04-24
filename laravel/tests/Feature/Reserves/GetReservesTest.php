@@ -8,6 +8,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 /**
@@ -17,7 +18,7 @@ class GetReservesTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
         // パラメーターなし、全件取得
         Reserve::query()->forceDelete();
@@ -25,6 +26,7 @@ class GetReservesTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user, 'web');
 
+        /** @var Collection<Reserve> $reserves */
         $reserves = Reserve::factory()->count(2)->create(['contract_id' => $user->contract_id]);
 
         $response = $this->json('GET', '/api/reserves/', []);
@@ -84,9 +86,11 @@ class GetReservesTest extends TestCase
 
         // 条件で絞り込み
         // 取得対象
-        $reserves = Reserve::factory()->count(2)->create(['contract_id' => $user->contract_id,'status' => ReserveStatus::COMPLETE,'start_date_time' => Carbon::now()->format('Y-m-d H:i'),]);
+        /** @var Collection<Reserve> $reserves */
+        $reserves = Reserve::factory()->count(2)->create(['contract_id' => $user->contract_id, 'status' => ReserveStatus::COMPLETE, 'start_date_time' => Carbon::now()->format('Y-m-d H:i')]);
 
         //　ステータス違い
+        /** @var Reserve $reserves */
         $reserves = Reserve::factory()->create([
             'contract_id' => $user->contract_id,
             'status' => ReserveStatus::NO_COMPLETE,
@@ -94,6 +98,7 @@ class GetReservesTest extends TestCase
         ]);
 
         // 期間前の予約時間
+        /** @var Reserve $reserves */
         $reserves = Reserve::factory()->create([
             'contract_id' => $user->contract_id,
             'status' => ReserveStatus::COMPLETE,
@@ -101,6 +106,7 @@ class GetReservesTest extends TestCase
         ]);
 
         // 期間後の予約時間
+        /** @var Reserve $reserves */
         $reserves = Reserve::factory()->create([
             'contract_id' => $user->contract_id,
             'status' => ReserveStatus::COMPLETE,

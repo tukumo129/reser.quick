@@ -22,7 +22,7 @@ class ReserveFactory extends Factory
             'name' => $this->faker->name(),
             'guest_number' => random_int(1, 5),
             'start_date_time' => Carbon::now()->format('Y-m-d'),
-            'end_date_time' => Carbon::now()->addHour(1)->format('Y-m-d'),
+            'end_date_time' => Carbon::now()->addHours(1)->format('Y-m-d'),
             'uuid' => Str::uuid()->toString(),
             'status' => ReserveStatus::NO_COMPLETE,
         ];

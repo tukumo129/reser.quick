@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Contract extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use HasSequence;
+    use SoftDeletes;
 
     protected $table = 'contracts';
 
@@ -25,9 +25,6 @@ class Contract extends Model
         'name',
     ];
 
-    /**
-     * @return HasOne<Setting>
-     */
     public function setting(): HasOne
     {
         return $this->hasOne(Setting::class);

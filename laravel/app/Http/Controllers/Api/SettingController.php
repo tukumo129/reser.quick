@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\SettingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class SettingController extends Controller
 {
@@ -23,23 +24,24 @@ class SettingController extends Controller
     public function getSetting(): JsonResponse
     {
         /** @var User $user */
-        $user = auth()->user();
-
-        if(!$user->contract) {
+        $user = Auth::user();
+        if (! $user->contract) {
             return response()->json([], Response::HTTP_NOT_FOUND);
         }
+
         return response()->json([
             'setting' => new SettingResource($user->contract->setting),
-            'reserveSiteUrl' => env('APP_URL') . "/app/{$user->contract->uuid}",
+            'reserveSiteUrl' => config('app.url')."/app/{$user->contract->uuid}",
         ], Response::HTTP_OK);
     }
 
     public function updateSetting(UpdateSettingRequest $request): JsonResponse
     {
         /** @var User $user */
-        $user = auth()->user();
+        $user = Auth::user();
         $settingData = $request->input('setting');
         $setting = $this->settingService->updateOrCreateSettingAndOpenTimes($user->contract_id, $settingData);
+
         return response()->json([
             'setting' => new SettingResource($setting),
         ], Response::HTTP_OK);

@@ -22,18 +22,19 @@ class UserService
     }
 
     /**
-     * @param array<string, string>|null $sorts
+     * @param  array<string, string>|null  $sorts
      * @return array<string, mixed>
      */
     public function getUsers(int $contractId, ?array $sorts, ?int $page, ?int $limit): array
     {
         $criteria = ['contract_id' => $contractId];
 
-        if($page && $limit) {
+        if ($page && $limit) {
             return $this->userRepository->getWithPagination($criteria, $sorts, $page, $limit);
         }
 
         $users = $this->userRepository->getBy($criteria);
+
         return [
             'Users' => $users,
             'pagination' => null,
@@ -43,11 +44,12 @@ class UserService
     public function getUserByEmail(string $email): ?User
     {
         $criteria = ['email' => $email];
+
         return $this->userRepository->getBy($criteria)->first();
     }
 
     /**
-     * @param array<string, mixed> $userData
+     * @param  array<string, mixed>  $userData
      */
     public function createUser(array $userData): User
     {
@@ -55,7 +57,7 @@ class UserService
     }
 
     /**
-     * @param array<string, mixed> $userData
+     * @param  array<string, mixed>  $userData
      */
     public function updateUser(int $userId, array $userData): User
     {
@@ -72,9 +74,10 @@ class UserService
         $criteria = ['email' => $email];
         $user = $this->userRepository->getBy($criteria)->first();
 
-        if (!$user || !Hash::check($password, $user->password)) {
+        if (! $user || ! Hash::check($password, $user->password)) {
             return null;
         }
+
         return $user;
     }
 }

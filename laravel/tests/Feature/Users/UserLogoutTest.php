@@ -14,10 +14,10 @@ use Tests\TestCase;
  */
 class UserLogoutTest extends TestCase
 {
-    use WithFaker;
     use DatabaseTransactions;
+    use WithFaker;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
         $email = $this->faker->unique()->safeEmail;
         $password = '1234';
@@ -37,7 +37,7 @@ class UserLogoutTest extends TestCase
         ];
 
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer '.$token,
         ])->json('POST', '/api/user/logout', $params);
         $response->assertStatus(Response::HTTP_NO_CONTENT);
     }

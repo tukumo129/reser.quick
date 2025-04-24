@@ -15,12 +15,14 @@ class AppSettingResource extends JsonResource
      */
     public function toArray($request)
     {
-        /** @var Setting $this */
+        /** @var Setting $setting */
+        $setting = $this->resource;
+
         return [
-            'storeName' => $this->store_name ?? null,
-            'reserveSlotTime' => $this->reserve_slot_time ?? null,
-            'maxReserveNumber' => $this->max_reserve_number ?? null,
-            'reserveMonthsLimit' => $this->reserve_months_limit ?? null,
+            'storeName' => $setting->store_name ?? null,
+            'reserveSlotTime' => $setting->reserve_slot_time ?? null,
+            'maxReserveNumber' => $setting->max_reserve_number ?? null,
+            'reserveMonthsLimit' => $setting->reserve_months_limit ?? null,
         ];
     }
 }

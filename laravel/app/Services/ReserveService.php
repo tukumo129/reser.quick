@@ -8,12 +8,14 @@ use App\Enums\ReserveCountType;
 use App\Enums\ReserveStatus;
 use App\Enums\SequenceKey;
 use App\Models\Contract;
+use App\Models\OpenTime;
 use App\Models\Reserve;
 use App\Models\Setting;
 use App\Repositories\ReserveRepository;
 use Carbon\CarbonPeriod;
 use Exception;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class ReserveService
@@ -32,26 +34,27 @@ class ReserveService
     }
 
     /**
-     * @param array<string, string>|null $criteria
-     * @param array<string, string>|null $periodCriteria
-     * @param array<string, string>|null $sorts
+     * @param  array<string, string>  $criteria
+     * @param  array<string, string>  $periodCriteria
+     * @param  array<string, string>  $sorts
      * @return array<string, mixed>
      */
     public function getReserves(
         int $contractId,
-        array $criteria = [],
-        array $periodCriteria = [],
+        array $criteria,
+        array $periodCriteria,
         ?string $searchKey,
-        ?array $sorts,
+        array $sorts,
         ?int $page,
         ?int $limit
     ): array {
         $criteria['contract_id'] = $contractId;
+
         return $this->reserveRepository->getWithPagination($criteria, $periodCriteria, $searchKey, $sorts, $page, $limit);
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, mixed>
      */
     public function getReservesCount(
         int $contractId,
@@ -83,10 +86,11 @@ class ReserveService
                 'count' => $this->reserveRepository->getCount($criteria, $periodCriteria),
             ];
         }
+
         return $result;
     }
 
-    private function getPeriod(Carbon $dateTime, string $period): array
+    private function getPeriod(Carbon $dateTime, int $period): array
     {
         switch ($period) {
             case ReserveCountPeriod::DAY:
@@ -101,21 +105,22 @@ class ReserveService
     }
 
     /**
-     * @param array<string, mixed> $reserveData
+     * @param  array<string, mixed>  $reserveData
      */
     public function createReserve(Contract $contract, array $reserveData): Reserve
     {
         $reserveData['uuid'] = Str::uuid()->toString();
-        if (!isset($reserveData['status'])) {
+        if (! isset($reserveData['status'])) {
             // 作成時にstatusが指定されていない場合はNO_COMPLETEを設定
             $reserveData['status'] = ReserveStatus::NO_COMPLETE;
         }
-        $reserveData['reserve_id'] = 'R' . str_pad($contract->getNextSequence(SequenceKey::Reserve), 8, '0', STR_PAD_LEFT);
+        $reserveData['reserve_id'] = 'R'.str_pad((string) $contract->getNextSequence(SequenceKey::Reserve), 8, '0', STR_PAD_LEFT);
+
         return $this->reserveRepository->create($reserveData);
     }
 
     /**
-     * @param array<string, mixed> $reserveData
+     * @param  array<string, mixed>  $reserveData
      */
     public function updateReserve(int $contractId, int $reserveId, array $reserveData): Reserve
     {
@@ -129,10 +134,12 @@ class ReserveService
 
     /**
      * 設定から予約できる日時を取得し、実際に予約が可能かを判定るする
+     *
      * @return array<string, string>
      */
     public function getMonthReserveAvailableDates(Contract $contract, string $date): array
     {
+        /** @var Setting $setting */
         $setting = $contract->setting;
         $availableDates = [];
 
@@ -159,10 +166,12 @@ class ReserveService
 
     /**
      * 指定日付の予約可能な時間を取得
-     * @return array<string, string>
+     *
+     * @return array<int, mixed>
      */
     public function getReserveAvailableTimes(Contract $contract, string $date): array
     {
+        /** @var Setting $setting */
         $setting = $contract->setting;
         $availableDates = [];
 
@@ -177,19 +186,21 @@ class ReserveService
                 'available' => $setting->max_available_reserve ? $availableDateTimeCount < $setting->max_available_reserve : true,
             ];
         }
+
         return $availableDates;
     }
 
     /**
      * 指定した日付間の設定から予約できる日時を取得
-     * @return array<string, string>
+     *
+     * @return array<int, mixed>
      */
     public function getReserveDateTimes(Setting $setting, Carbon $startDate, Carbon $endDate): array
     {
         // 対象の月のカレンダー取得
         $calender = CarbonPeriod::create($startDate, $endDate)->toArray();
         // 有効な曜日だけに絞り込み
-        $reserveSlotTime = $setting->reserve_slot_time;
+        $reserveSlotTime = (int) $setting->reserve_slot_time;
         $openTimes = $setting->openTimes;
         $weekArray = [];
         $dayArray = [];
@@ -197,6 +208,7 @@ class ReserveService
 
         foreach ($calender as $date) {
             // 週当たりの設定から対象日付を追加
+            /** @var Collection<OpenTime> $weekOpenTimes */
             $weekOpenTimes = $openTimes->where('type', OpenTimeType::WEEK)->where('week', $date->dayOfWeek);
             foreach ($weekOpenTimes as $weekOpenTime) {
                 $weekEndTime = Carbon::parse($weekOpenTime->end_time)->subMinutes($reserveSlotTime)->format('H:i');
@@ -211,10 +223,11 @@ class ReserveService
         }
 
         // 日付当たりの設定から対象日付を追加
+        /** @var Collection<OpenTime> $dayOpenTimes */
         $dayOpenTimes = $openTimes->where('type', OpenTimeType::DAY);
         foreach ($dayOpenTimes as $dayOpenTime) {
             $openDate = Carbon::parse($dayOpenTime->date);
-            if (!$openDate->between($startDate, $endDate)) {
+            if (! $openDate->between($startDate, $endDate)) {
                 // 指定した日付の区間外の場合スキップ
                 continue;
             }
@@ -237,8 +250,9 @@ class ReserveService
         }
 
         $weekAvailableDates = array_filter($weekArray, function ($item) use ($unsetWeekDates) {
-            return !in_array($item['date'], $unsetWeekDates);
+            return ! in_array($item['date'], $unsetWeekDates);
         });
+
         return array_merge($weekAvailableDates, $dayArray);
     }
 }

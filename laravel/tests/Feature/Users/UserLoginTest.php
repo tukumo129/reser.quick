@@ -14,14 +14,15 @@ use Tests\TestCase;
  */
 class UserLoginTest extends TestCase
 {
-    use WithFaker;
     use DatabaseTransactions;
+    use WithFaker;
 
-    public function testSuccess(): void
+    public function test_success(): void
     {
         $email = $this->faker->unique()->safeEmail;
         $password = '1234';
 
+        /** @var User $user */
         $user = User::factory()->create([
             'email' => $email,
             'password' => Hash::make($password),
@@ -46,16 +47,9 @@ class UserLoginTest extends TestCase
     /**
      * ログイン失敗時のテスト
      */
-    public function testLoginFailed(): void
+    public function test_login_failed(): void
     {
         $email = $this->faker->unique()->safeEmail;
-        $password = '1234';
-
-        $user = User::factory()->create([
-            'email' => $email,
-            'password' => Hash::make($password),
-        ]);
-
         $params = [
             'email' => $email,
             'password' => '1235',

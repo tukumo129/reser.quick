@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Reserve;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReserveResource extends JsonResource
@@ -14,16 +15,19 @@ class ReserveResource extends JsonResource
      */
     public function toArray($request)
     {
+        /** @var Reserve $reserve */
+        $reserve = $this->resource;
+
         return [
-            'id' => $this->id,
-            'contractId' => $this->contract_id,
-            'reserveId' => $this->reserve_id,
-            'name' => $this->name,
-            'guestNumber' => $this->guest_number,
-            'startDateTime' => $this->start_date_time,
-            'endDateTime' => $this->end_date_time,
-            'uuid' => $this->uuid,
-            'status' => $this->status,
+            'id' => $reserve->id,
+            'contractId' => $reserve->contract_id,
+            'reserveId' => $reserve->reserve_id,
+            'name' => $reserve->name,
+            'guestNumber' => $reserve->guest_number,
+            'startDateTime' => $reserve->start_date_time,
+            'endDateTime' => $reserve->end_date_time,
+            'uuid' => $reserve->uuid,
+            'status' => $reserve->status,
         ];
     }
 }
