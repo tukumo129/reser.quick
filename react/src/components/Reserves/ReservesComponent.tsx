@@ -10,6 +10,7 @@ import {
 } from "../../container/Reserves/ReservesContainer";
 import { AddIcon, SearchIcon } from "@chakra-ui/icons";
 import { reserveStatus } from "../../enums/reserveStatus";
+import { ErrorContent } from "../ErrorComponent";
 
 export const ReservesContents = () => {
   const [page, setPage] = useState<number>(1);
@@ -28,7 +29,7 @@ export const ReservesContents = () => {
   const navigate = useNavigate();
 
   if (isLoading) return <LoadingSpinner />;
-  if (error) return <div>Error reserves</div>;
+  if (error) return <ErrorContent />;
 
   return (
     <>

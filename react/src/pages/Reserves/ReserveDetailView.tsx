@@ -3,6 +3,7 @@ import { AdminLayout } from "../../components/AdminLayoutComponent";
 import { UpdateReserveForm } from "../../components/Reserves/ReserveDetailComponent";
 import { useGetReserve } from "../../services/ReserveService/UseGetReserve";
 import { LoadingSpinner } from "../../components/LoadingSpinnerComponent";
+import { ErrorContent } from "../../components/ErrorComponent";
 
 export function ReserveDetailView() {
   const { reserveId } = useParams();
@@ -20,7 +21,7 @@ export function ReserveDetailView() {
   };
 
   if (isLoading) return <LoadingSpinner />;
-  if (error) return <div>Error reserves</div>;
+  if (error) return <ErrorContent />;
 
   return (
     <AdminLayout

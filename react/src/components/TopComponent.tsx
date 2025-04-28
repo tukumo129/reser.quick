@@ -32,6 +32,7 @@ import { routePath } from "../enums/routePath";
 import { useReserveUpdateStatusForm } from "../container/Reserves/ReserveUpdateStatusFormContainer";
 import { Reserve } from "../types/Reserve";
 import { useGetReservesCount } from "../services/ReserveService/UseGetReservesCount";
+import { ErrorContent } from "./ErrorComponent";
 
 Chart.register(
   CategoryScale,
@@ -155,8 +156,7 @@ export const TopContents = () => {
 
   if (currentIsLoading || nextIsLoading || getCountIsLoading)
     return <LoadingSpinner />;
-  if (currentError || nextError || getCountError)
-    return <div>Error reserves</div>;
+  if (currentError || nextError || getCountError) return <ErrorContent />;
 
   return (
     <Box p={4}>

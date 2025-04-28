@@ -1,20 +1,19 @@
 import { ReactNode, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getRoutePath, routePath } from "../../enums/routePath";
+import { useParams } from "react-router-dom";
 import { LoadingSpinner } from "../../components/LoadingSpinnerComponent";
 import { useGetAppSettings } from "../api/UseGetAppSettings";
 import { useAppSettingsRecoil } from "../recoils/AppSettingsRecoil";
 import { useAppUuidRecoil } from "../recoils/AppUuidRecoil";
+import { PageNotFoundComponent } from "./PageNotFoundComponent";
 
 type AppAuthProps = {
   children: ReactNode;
 };
 
 export const AppAuth = ({ children }: AppAuthProps) => {
-  const { appUuid, setAppUuid } = useAppUuidRecoil();
+  const { setAppUuid } = useAppUuidRecoil();
   const { setAppSettings } = useAppSettingsRecoil();
   const { uuid } = useParams();
-  const navigate = useNavigate();
   const { settings, isLoading, error } = useGetAppSettings(String(uuid));
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export const AppAuth = ({ children }: AppAuthProps) => {
   }, [settings]);
 
   if (isLoading) return <LoadingSpinner />;
-  if (error) navigate(getRoutePath(routePath.AppErrorPage, appUuid));
+  if (error) return <PageNotFoundComponent />;
 
   return <>{children}</>;
 };

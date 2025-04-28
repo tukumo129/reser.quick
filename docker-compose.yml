@@ -51,7 +51,6 @@ services:
       - reserve-db:/var/lib/mysql
     networks:
       - reserve-net
-    env_file: laravel/.env
 
 volumes:
   reserve-db:

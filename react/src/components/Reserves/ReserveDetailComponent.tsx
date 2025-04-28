@@ -17,6 +17,7 @@ import { routePath } from "../../enums/routePath";
 import { useEffect } from "react";
 import { LoadingSpinner } from "../LoadingSpinnerComponent";
 import { useGetSetting } from "../../services/SettingService/UseGetSetting";
+import { ErrorContent } from "../ErrorComponent";
 
 export type ReserveFormProps = {
   reserve: {
@@ -44,7 +45,7 @@ export function UpdateReserveForm({ reserve }: ReserveFormProps) {
   }, [reserve]);
 
   if (isLoading) return <LoadingSpinner />;
-  if (error) return <div>Error reserves</div>;
+  if (error) return <ErrorContent />;
 
   function generateTimeSlots(reserveSlotTime: string): string[] {
     const timeSlots: string[] = [];

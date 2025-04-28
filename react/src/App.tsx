@@ -10,9 +10,10 @@ import { SettingUpdateView } from "./pages/Settings/SettingUpdateView";
 import { AppTopView } from "./App/pages/Reserves/AppTopView";
 import { AppAuth } from "./App/components/AppAuthComponent";
 import { RecoilRoot } from "recoil";
-import { ErrorView } from "./pages/ErrorView";
 import { AppReserveCreateView } from "./App/pages/Reserves/AppReserveCreateView";
 import { CreateUserView } from "./pages/CreateUserView";
+import { ErrorView } from "./App/pages/Reserves/ErrorView";
+import { PageNotFoundView } from "./pages/PageNotFoundView";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -64,7 +65,10 @@ const App: React.FC = () => {
             />
             {/* エラー画面 */}
             <Route path={routePath.AppErrorPage} element={<ErrorView />} />
-            <Route path="*" element={<ErrorView />} />
+            <Route
+              path={routePath.ErrorNotFound}
+              element={<PageNotFoundView />}
+            />
           </Routes>
         </RecoilRoot>
       </QueryClientProvider>

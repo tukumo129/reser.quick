@@ -16,6 +16,7 @@ import { useReserveCreateForm } from "../../container/Reserves/ReserveCreateForm
 import { routePath } from "../../enums/routePath";
 import { useGetSetting } from "../../services/SettingService/UseGetSetting";
 import { LoadingSpinner } from "../LoadingSpinnerComponent";
+import { ErrorContent } from "../ErrorComponent";
 
 export function CreateReserveForm() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export function CreateReserveForm() {
     useReserveCreateForm();
 
   if (isLoading) return <LoadingSpinner />;
-  if (error) return <div>Error reserves</div>;
+  if (error) return <ErrorContent />;
 
   function generateTimeSlots(reserveSlotTime: string): string[] {
     const timeSlots: string[] = [];
