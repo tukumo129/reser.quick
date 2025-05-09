@@ -4,15 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\CreateUserRequest;
+use App\Http\Requests\Users\ResetPasswordRequest;
+use App\Http\Requests\Users\SendResetLinkEmailRequest;
 use App\Http\Requests\Users\UserLoginRequest;
 use App\Http\Resources\UserResource;
 use App\Services\ContractService;
 use App\Services\SettingService;
 use App\Services\UserService;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -85,5 +89,33 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([], Response::HTTP_NO_CONTENT);
+    }
+
+    public function sendResetLinkEmail(SendResetLinkEmailRequest $request)
+    {
+        $status = Password::sendResetLink($request->only('email'));
+
+        return $status === Password::RESET_LINK_SENT
+            ? response()->json(['status' => __($status)])
+            : response()->json(['error' => __($status)], 400);
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user) use ($request) {
+                $user->forceFill([
+                    'password' => Hash::make($request->password),
+                    'remember_token' => Str::random(60),
+                ])->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? response()->json(['status' => __($status)])
+            : response()->json(['error' => __($status)], 400);
     }
 }

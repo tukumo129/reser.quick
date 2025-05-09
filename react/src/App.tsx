@@ -14,6 +14,8 @@ import { AppReserveCreateView } from "./App/pages/Reserves/AppReserveCreateView"
 import { CreateUserView } from "./pages/CreateUserView";
 import { ErrorView } from "./App/pages/Reserves/ErrorView";
 import { PageNotFoundView } from "./pages/PageNotFoundView";
+import { PasswordForgotView } from "./pages/PasswordForgotView";
+import { PasswordResetView } from "./pages/PasswordResetView";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +35,14 @@ const App: React.FC = () => {
           <Routes>
             {/* 管理画面 */}
             <Route path={routePath.Login} element={<LoginView />} />
+            <Route
+              path={routePath.PasswordForgot}
+              element={<PasswordForgotView />}
+            />
+            <Route
+              path={routePath.PasswordReset}
+              element={<PasswordResetView />}
+            />
             <Route path={routePath.Top} element={<TopView />} />
             <Route path={routePath.CreateUser} element={<CreateUserView />} />
             <Route path={routePath.Reserves} element={<ReserveView />} />

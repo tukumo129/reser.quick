@@ -8,9 +8,11 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Link,
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { routePath } from "../enums/routePath";
 
 export function LoginForm() {
   const { loginData, handleSubmit, onSubmit, errorMessage } = useLoginForm();
@@ -59,6 +61,15 @@ export function LoginForm() {
                   _focus={{ borderColor: "blue.500", bg: "white" }}
                 />
               </FormControl>
+              <Box textAlign="right">
+                <Link
+                  href={routePath.PasswordForgot}
+                  color="blue.500"
+                  fontSize="sm"
+                >
+                  パスワードをお忘れですか？
+                </Link>
+              </Box>
               <Button
                 type="submit"
                 mt={4}

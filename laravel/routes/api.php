@@ -17,8 +17,11 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::post('/user', [AuthController::class, 'createUser']);
 Route::post('/user/login', [AuthController::class, 'userLogin']);
+Route::post('/password/forgot', [AuthController::class, 'sendResetLinkEmail']);
+Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/user/logout', [AuthController::class, 'userLogout']);

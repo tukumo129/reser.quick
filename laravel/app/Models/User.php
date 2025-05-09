@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\PasswordReset;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -55,5 +56,11 @@ class User extends Authenticatable
     public function contract(): BelongsTo
     {
         return $this->belongsTo(Contract::class);
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $email = $this->email;
+        $this->notify(new PasswordReset($token, $email));
     }
 }

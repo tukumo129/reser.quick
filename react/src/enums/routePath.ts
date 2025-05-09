@@ -1,5 +1,7 @@
 export const routePath = {
   Login: "/login",
+  PasswordForgot: "password/forgot",
+  PasswordReset: "password/reset",
   CreateUser: "/user/create",
   Top: "/top",
   Reserves: "/reserves",
