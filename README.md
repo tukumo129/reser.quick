@@ -15,7 +15,7 @@ sudo apt-get install git
 ``` sh
 ssh-keygen -t ed25519 -C "test@gamail.com"  
 #（途中でコマンドが止まった場合はエンター）
-cat .ssh/id_ed25519.pub
+cat ~/.ssh/id_ed25519.pub
 ```
 
 ### githubでsshキーを設定

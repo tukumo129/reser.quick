@@ -31,7 +31,7 @@ class SettingController extends Controller
 
         return response()->json([
             'setting' => new SettingResource($user->contract->setting),
-            'reserveSiteUrl' => config('app.url')."/app/{$user->contract->uuid}",
+            'reserveSiteUrl' => config('app.front_url')."/app/{$user->contract->uuid}",
         ], Response::HTTP_OK);
     }
 

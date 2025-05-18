@@ -50,7 +50,7 @@ class GetSettingTest extends TestCase
                     ['id' => $openTimes[2]->id],
                 ],
             ],
-            'reserveSiteUrl' => config('app.url')."/app/{$contract->uuid}",
+            'reserveSiteUrl' => config('app.front_url')."/app/{$contract->uuid}",
         ]);
         $response->assertStatus(Response::HTTP_OK);
     }

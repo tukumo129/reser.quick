@@ -1,21 +1,21 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Route, Routes } from "react-router-dom";
-import { routePath } from "./enums/routePath";
-import { LoginView } from "./pages/LoginView";
-import { TopView } from "./pages/TopView";
-import { ReserveView } from "./pages/Reserves/ReservesView";
-import { ReserveCreateView } from "./pages/Reserves/ReserveCreateView";
-import { ReserveDetailView } from "./pages/Reserves/ReserveDetailView";
-import { SettingUpdateView } from "./pages/Settings/SettingUpdateView";
-import { AppTopView } from "./App/pages/Reserves/AppTopView";
-import { AppAuth } from "./App/components/AppAuthComponent";
 import { RecoilRoot } from "recoil";
-import { AppReserveCreateView } from "./App/pages/Reserves/AppReserveCreateView";
-import { CreateUserView } from "./pages/CreateUserView";
-import { ErrorView } from "./App/pages/Reserves/ErrorView";
-import { PageNotFoundView } from "./pages/PageNotFoundView";
-import { PasswordForgotView } from "./pages/PasswordForgotView";
-import { PasswordResetView } from "./pages/PasswordResetView";
+import { routePath } from "./enums/routePath";
+import { CreateReserveComponent } from "@/admin/feature/CreateReserve/createReserveComponent";
+import { CreateUserComponent } from "@/admin/feature/CreateUser/createUserFormComponent";
+import { ErrorComponent } from "@/admin/feature/ErrorPage/errorComponent";
+import { PasswordForgotComponent } from "@/admin/feature/PasswordForgot/passwordForgotComponent";
+import { PasswordResetComponent } from "@/admin/feature/PasswordReset/passwordResetComponent";
+import { ReserveDetailComponent } from "@/admin/feature/Reserve/reserveDetailComponent";
+import { ReservesComponent } from "@/admin/feature/Reserves/reservesComponent";
+import { SettingComponent } from "@/admin/feature/Setting/settingComponent";
+import { TopComponent } from "@/admin/feature/Top/topComponent";
+import { UserLoginComponent } from "@/admin/feature/UserLogin/userLoginFormComponent";
+import { AppAuth } from "@/app/feature/Auth/AppAuthComponent";
+import { AppCreateReserveComponent } from "@/app/feature/CreateReserve/AppCreateReserveFormComponent";
+import { AppTopComponent } from "@/app/feature/Top/AppTopComponent";
+import { PageNotFoundComponent } from "@/feature/PageNofFound/pageNotFoundComponent";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,34 +34,37 @@ const App: React.FC = () => {
         <RecoilRoot>
           <Routes>
             {/* 管理画面 */}
-            <Route path={routePath.Login} element={<LoginView />} />
+            <Route path={routePath.Login} element={<UserLoginComponent />} />
             <Route
               path={routePath.PasswordForgot}
-              element={<PasswordForgotView />}
+              element={<PasswordForgotComponent />}
             />
             <Route
               path={routePath.PasswordReset}
-              element={<PasswordResetView />}
+              element={<PasswordResetComponent />}
             />
-            <Route path={routePath.Top} element={<TopView />} />
-            <Route path={routePath.CreateUser} element={<CreateUserView />} />
-            <Route path={routePath.Reserves} element={<ReserveView />} />
+            <Route path={routePath.Top} element={<TopComponent />} />
+            <Route
+              path={routePath.CreateUser}
+              element={<CreateUserComponent />}
+            />
+            <Route path={routePath.Reserves} element={<ReservesComponent />} />
             <Route
               path={routePath.ReserveCreate}
-              element={<ReserveCreateView />}
+              element={<CreateReserveComponent />}
             />
             <Route
               path={routePath.ReserveDetail}
-              element={<ReserveDetailView />}
+              element={<ReserveDetailComponent />}
             />
-            <Route path={routePath.Setting} element={<SettingUpdateView />} />
+            <Route path={routePath.Setting} element={<SettingComponent />} />
 
             {/* ユーザー画面 */}
             <Route
               path={routePath.AppTop}
               element={
                 <AppAuth>
-                  <AppTopView />
+                  <AppTopComponent />
                 </AppAuth>
               }
             />
@@ -69,15 +72,15 @@ const App: React.FC = () => {
               path={routePath.AppReserveCreate}
               element={
                 <AppAuth>
-                  <AppReserveCreateView />
+                  <AppCreateReserveComponent />
                 </AppAuth>
               }
             />
             {/* エラー画面 */}
-            <Route path={routePath.AppErrorPage} element={<ErrorView />} />
+            <Route path={routePath.AppErrorPage} element={<ErrorComponent />} />
             <Route
               path={routePath.ErrorNotFound}
-              element={<PageNotFoundView />}
+              element={<PageNotFoundComponent />}
             />
           </Routes>
         </RecoilRoot>

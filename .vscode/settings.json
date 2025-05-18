@@ -10,8 +10,14 @@
     "typescriptreact"
   ],
   "prettier.requireConfig": true,
-  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.importModuleSpecifier": "non-relative",
   "cSpell.words": [
     "sequencable",
+  ],
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
   ]
 }

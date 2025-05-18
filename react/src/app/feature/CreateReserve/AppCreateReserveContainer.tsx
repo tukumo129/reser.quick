@@ -1,0 +1,63 @@
+import { useToast } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import {
+  AppCreateReserveParams,
+  useAppCreateReserveMutation,
+} from "@/app/api/UseAppCreateReserve";
+import { useAppUuidRecoil } from "@/app/recoils/AppUuidRecoil";
+import { getRoutePath, routePath } from "@/enums/routePath";
+
+export type AppCreateReserveSchema = {
+  name: string;
+  startTime: string;
+  guestNumber: number;
+};
+
+export const AppCreateReserveForm = (startDate: string) => {
+  const { appUuid } = useAppUuidRecoil();
+  const {
+    register: AppCreateReserveData,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<AppCreateReserveSchema>({});
+  const { mutate, isLoading } = useAppCreateReserveMutation(appUuid);
+  const navigate = useNavigate();
+  const toast = useToast();
+
+  const onSubmit = (data: AppCreateReserveSchema) => {
+    const params: AppCreateReserveParams = {
+      reserve: {
+        name: data.name,
+        start_date_time: `${startDate} ${data.startTime}`,
+        guest_number: data.guestNumber,
+      },
+    };
+
+    mutate(params, {
+      onSuccess: () => {
+        navigate(getRoutePath(routePath.AppTop, appUuid));
+      },
+      onError: () => {
+        navigate(getRoutePath(routePath.AppTop, appUuid));
+        toast({
+          title: "登録に失敗しました",
+          description: "予期しないエラーが発生しました",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
+      },
+    });
+  };
+  return {
+    AppCreateReserveData,
+    handleSubmit,
+    onSubmit,
+    errors,
+    reset,
+    isLoading,
+  };
+};
