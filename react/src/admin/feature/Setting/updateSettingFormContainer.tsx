@@ -10,8 +10,9 @@ import { routePath } from "@/enums/routePath";
 export type useUpdateSettingSchema = {
   storeName: string;
   reserveSlotTime: string;
-  maxReserveNumber: number | null;
-  reserveMonthsLimit: number | null;
+  maxReserveNumber: number;
+  reserveMonthsLimit: number;
+  reserveBlockMinutes: number;
   maxAvailableReserve: number | null;
   openTimes: openTimesSchema[];
 };
@@ -43,8 +44,9 @@ export const useUpdateSettingForm = () => {
       setting: {
         store_name: data.storeName,
         reserve_slot_time: data.reserveSlotTime,
-        max_reserve_number: data.maxReserveNumber ?? null,
-        reserve_months_limit: data.reserveMonthsLimit ?? null,
+        max_reserve_number: data.maxReserveNumber,
+        reserve_months_limit: data.reserveMonthsLimit,
+        reserve_block_minutes: data.reserveBlockMinutes,
         max_available_reserve: data.maxAvailableReserve ?? null,
         open_times: data.openTimes.map((item) => ({
           id: item.id ?? null,

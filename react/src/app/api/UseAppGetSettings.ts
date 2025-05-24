@@ -9,15 +9,17 @@ export type GetAppAuthData = {
 export type GetAppSettingData = {
   storeName: string | null;
   reserveSlotTime: string | null;
-  maxReserveNumber: string | null;
-  reserveMonthsLimit: string | null;
+  maxReserveNumber: number;
+  reserveMonthsLimit: number;
+  reserveBlockMinutes: number;
 };
 
 const defaultValues = {
   storeName: null,
   reserveSlotTime: null,
-  maxReserveNumber: null,
-  reserveMonthsLimit: null,
+  maxReserveNumber: 10,
+  reserveMonthsLimit: 3,
+  reserveBlockMinutes: 30,
 };
 
 export const useGetAppSettings = (uuid: string) => {

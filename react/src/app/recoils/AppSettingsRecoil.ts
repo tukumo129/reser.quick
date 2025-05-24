@@ -6,8 +6,9 @@ const appSettingsState = atom<GetAppSettingData>({
   default: {
     storeName: null,
     reserveSlotTime: null,
-    maxReserveNumber: null,
-    reserveMonthsLimit: null,
+    maxReserveNumber: 10,
+    reserveMonthsLimit: 3,
+    reserveBlockMinutes: 30,
   },
 });
 

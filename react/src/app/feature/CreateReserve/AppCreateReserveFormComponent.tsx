@@ -10,6 +10,7 @@ import {
   Select,
   Text,
   useBreakpointValue,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
@@ -42,15 +43,31 @@ export function AppCreateReserveComponent() {
   );
   const navigate = useNavigate();
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const maxReserveNumber = appSettings.maxReserveNumber || 100;
+  const maxReserveNumber = appSettings.maxReserveNumber || 10;
+  const reserveBlockMinutes = appSettings.reserveBlockMinutes || 30;
+  const now = new Date();
+  const limitDate = new Date(now.getTime() + reserveBlockMinutes * 60 * 1000);
+  const isToday = currentDate.toDateString() === now.toDateString();
+  const toast = useToast();
 
   useEffect(() => {
-    if (
-      availableTimes.length > 0 &&
-      availableTimes.filter((availableTime) => availableTime.available)
-        .length === 0
-    ) {
-      navigate(getRoutePath(routePath.AppTop, appUuid));
+    const hasAvailableSlot = availableTimes.some((availableTime) => {
+      if (!availableTime.available) return false;
+      const time = new Date(`${startDate}T${availableTime.startTime}`);
+      return !isToday || time.getTime() >= limitDate.getTime();
+    });
+
+    if (!hasAvailableSlot && availableTimes.length > 0) {
+      toast({
+        title: "予約可能な時間帯がありませんでした",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      setTimeout(() => {
+        navigate(getRoutePath(routePath.AppTop, appUuid));
+      }, 1000);
     }
     reset();
   }, [availableTimes]);
@@ -116,23 +133,34 @@ export function AppCreateReserveComponent() {
                   </Text>
                 </FormLabel>
                 <Select
-                  {...AppCreateReserveData("startTime")}
+                  {...AppCreateReserveData("startTime", {
+                    required: {
+                      value: true,
+                      message: "時刻を選択してください",
+                    },
+                  })}
                   maxW={{ base: "100%", md: "20rem" }}
                 >
                   {availableTimes.map((availableTime) => {
+                    const time = new Date(
+                      `${startDate}T${availableTime.startTime}`,
+                    );
+                    const shouldDisable =
+                      !availableTime.available ||
+                      (isToday && time.getTime() < limitDate.getTime());
+
+                    if (shouldDisable) return;
                     return (
                       <option
                         key={availableTime.startTime}
                         value={availableTime.startTime}
-                        disabled={!availableTime.available}
+                        disabled={shouldDisable}
                         style={{
-                          backgroundColor: availableTime.available
-                            ? "white"
-                            : "#D6D6D6",
+                          backgroundColor: shouldDisable ? "#D6D6D6" : "white",
                         }}
                       >
                         {availableTime.startTime}
-                        {availableTime.available ? " ✔" : " ✖"}
+                        {shouldDisable ? " ✖" : " ✔"}
                       </option>
                     );
                   })}
@@ -162,6 +190,10 @@ export function AppCreateReserveComponent() {
                     setValueAs: (value) => {
                       return value ? parseInt(value, 10) : undefined;
                     },
+                    required: {
+                      value: true,
+                      message: "人数を入力してください",
+                    },
                     max: {
                       value: maxReserveNumber,
                       message: `${maxReserveNumber}以下の値を設定してください`,
@@ -170,10 +202,8 @@ export function AppCreateReserveComponent() {
                   })}
                   maxW={{ base: "100%", md: "5rem" }}
                 />
-                <FormErrorMessage>
-                  {errors.guestNumber?.message}
-                </FormErrorMessage>
               </Flex>
+              <FormErrorMessage>{errors.guestNumber?.message}</FormErrorMessage>
             </FormControl>
           </VStack>
         </form>

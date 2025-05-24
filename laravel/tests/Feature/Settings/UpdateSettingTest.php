@@ -33,8 +33,9 @@ class UpdateSettingTest extends TestCase
             'setting' => [
                 'store_name' => 'store_name',
                 'reserve_slot_time' => '30',
-                'max_reserve_number' => '5',
-                'reserve_months_limit' => '3',
+                'max_reserve_number' => 5,
+                'reserve_months_limit' => 3,
+                'reserve_block_minutes' => 30,
                 'max_available_reserve' => 10,
                 'open_times' => [
                     [
@@ -67,6 +68,7 @@ class UpdateSettingTest extends TestCase
                 'reserveSlotTime' => 30,
                 'maxReserveNumber' => 5,
                 'reserveMonthsLimit' => 3,
+                'reserveBlockMinutes' => 30,
                 'maxAvailableReserve' => 10,
                 'openTimes' => [
                     [
@@ -107,8 +109,9 @@ class UpdateSettingTest extends TestCase
             'setting' => [
                 'store_name' => 'store_name',
                 'reserve_slot_time' => '30',
-                'max_reserve_number' => '5',
-                'reserve_months_limit' => '3',
+                'max_reserve_number' => 5,
+                'reserve_months_limit' => 3,
+                'reserve_block_minutes' => 30,
                 'max_available_reserve' => 10,
                 'open_times' => [
                     [
@@ -139,6 +142,7 @@ class UpdateSettingTest extends TestCase
                 'reserveSlotTime' => 30,
                 'maxReserveNumber' => 5,
                 'reserveMonthsLimit' => 3,
+                'reserveBlockMinutes' => 30,
                 'maxAvailableReserve' => 10,
                 'openTimes' => [
                     [

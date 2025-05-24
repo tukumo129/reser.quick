@@ -171,6 +171,10 @@ export const SettingComponent = () => {
                       setValueAs: (value) => {
                         return value ? parseInt(value, 10) : undefined;
                       },
+                      required: {
+                        value: true,
+                        message: "最大予約人数を設定してください",
+                      },
                       max: {
                         value: 100,
                         message: "100以下の値を設定してください",
@@ -214,6 +218,10 @@ export const SettingComponent = () => {
                       setValueAs: (value) => {
                         return value ? parseInt(value, 10) : undefined;
                       },
+                      required: {
+                        value: true,
+                        message: "予約月数上限を設定してください",
+                      },
                       max: {
                         value: 100,
                         message: "100以下の値を設定してください",
@@ -237,6 +245,53 @@ export const SettingComponent = () => {
               </Text>
               <FormErrorMessage>
                 {errors.reserveMonthsLimit?.message}
+              </FormErrorMessage>
+            </FormControl>
+            <Box borderWidth="1px" borderColor="bray.300" />
+            <FormControl
+              isInvalid={!!errors.reserveBlockMinutes}
+              id="reserveBlockMinutes"
+            >
+              <Flex direction={isMobile ? "column" : "row"}>
+                <FormLabel
+                  w={isMobile ? "auto" : 40}
+                  m={isMobile ? "auto 2" : "auto 0"}
+                >
+                  直前予約制限時間（分）
+                </FormLabel>
+                <Flex align="center">
+                  <Input
+                    {...updateSettingData("reserveBlockMinutes", {
+                      setValueAs: (value) => {
+                        return value ? parseInt(value, 10) : undefined;
+                      },
+                      required: {
+                        value: true,
+                        message: "直前予約制限時間（分）を設定してください",
+                      },
+                      max: {
+                        value: 600,
+                        message: "600以下の値を設定してください",
+                      },
+                      min: { value: 1, message: "1以上の値を設定してください" },
+                    })}
+                    type="number"
+                    w="full"
+                    maxW="5rem"
+                  />
+                  <Text ml={2}>分前まで予約不可</Text>
+                </Flex>
+              </Flex>
+              <Text
+                color="gray.500"
+                ml={isMobile ? "auto" : 40}
+                mt={2}
+                fontSize="xs"
+              >
+                何分前まで予約を不可能にするか設定します
+              </Text>
+              <FormErrorMessage>
+                {errors.reserveBlockMinutes?.message}
               </FormErrorMessage>
             </FormControl>
             <Box borderWidth="1px" borderColor="bray.300" />

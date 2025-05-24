@@ -21,8 +21,9 @@ class AppSettingResource extends JsonResource
         return [
             'storeName' => $setting->store_name ?? null,
             'reserveSlotTime' => $setting->reserve_slot_time ?? null,
-            'maxReserveNumber' => $setting->max_reserve_number ?? null,
-            'reserveMonthsLimit' => $setting->reserve_months_limit ?? null,
+            'maxReserveNumber' => $setting->max_reserve_number,
+            'reserveMonthsLimit' => $setting->reserve_months_limit,
+            'reserveBlockMinutes' => $setting->reserve_block_minutes,
         ];
     }
 }

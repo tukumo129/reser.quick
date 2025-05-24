@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $contract_id
  * @property string $store_name 店舗名
  * @property string $reserve_slot_time 予約枠単位
- * @property int|null $max_reserve_number 最大予約人数
- * @property int|null $reserve_months_limit 予約月数上限
+ * @property int $max_reserve_number 最大予約人数
+ * @property int $reserve_months_limit 予約月数上限
+ * @property int $reserve_block_minutes 日本語名候補
  * @property int|null $max_available_reserve 最大予約可能数
  */
 class Setting extends Model
@@ -28,6 +29,7 @@ class Setting extends Model
         'reserve_slot_time',
         'max_reserve_number',
         'reserve_months_limit',
+        'reserve_block_minutes',
         'max_available_reserve',
     ];
 

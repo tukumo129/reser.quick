@@ -40,6 +40,7 @@ class GetSettingTest extends TestCase
                 'reserveSlotTime' => $setting->reserve_slot_time,
                 'maxReserveNumber' => $setting->max_reserve_number,
                 'reserveMonthsLimit' => $setting->reserve_months_limit,
+                'reserveBlockMinutes' => $setting->reserve_block_minutes,
                 'openTimes' => [
                     [
                         'week' => $openTimes[0]->week,

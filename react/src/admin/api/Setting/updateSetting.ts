@@ -6,8 +6,9 @@ export type UpdateSettingParams = {
   setting: {
     store_name: string;
     reserve_slot_time: string;
-    max_reserve_number: number | null;
-    reserve_months_limit: number | null;
+    max_reserve_number: number;
+    reserve_months_limit: number;
+    reserve_block_minutes: number;
     max_available_reserve: number | null;
     open_times: {
       id: number | null;

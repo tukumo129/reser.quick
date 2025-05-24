@@ -42,7 +42,7 @@ export function AppTopComponent() {
     appUuid,
     { date: `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}` },
   );
-  const reserveMonthsLimit = Number(appSettings.reserveMonthsLimit);
+  const reserveMonthsLimit = appSettings.reserveMonthsLimit;
 
   if (isLoading) return <LoadingSpinner />;
   if (error) navigate(getRoutePath(routePath.AppErrorPage, appUuid));

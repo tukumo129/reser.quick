@@ -20,8 +20,9 @@ export type OpenTime = {
 export type GetSetting = {
   storeName: string;
   reserveSlotTime: string;
-  maxReserveNumber: number | null;
-  reserveMonthsLimit: number | null;
+  maxReserveNumber: number;
+  reserveMonthsLimit: number;
+  reserveBlockMinutes: number;
   maxAvailableReserve: number | null;
   openTimes: OpenTime[];
 };
@@ -29,8 +30,9 @@ export type GetSetting = {
 const defaultValues = {
   storeName: "",
   reserveSlotTime: "5",
-  maxReserveNumber: null,
-  reserveMonthsLimit: null,
+  maxReserveNumber: 10,
+  reserveMonthsLimit: 3,
+  reserveBlockMinutes: 30,
   maxAvailableReserve: null,
   openTimes: [],
 };

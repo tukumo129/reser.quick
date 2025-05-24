@@ -18,8 +18,9 @@ class CrateSettingsTable extends Migration
             $table->integer('contract_id');
             $table->string('store_name')->default('テスト店舗');
             $table->string('reserve_slot_time')->default('30');
-            $table->integer('max_reserve_number')->nullable();
-            $table->integer('reserve_months_limit')->nullable();
+            $table->integer('max_reserve_number')->default(10);
+            $table->integer('reserve_months_limit')->default(3);
+            $table->integer('reserve_block_minutes')->default(30);
             $table->integer('max_available_reserve')->nullable();
             $table->timestamps();
             $table->softDeletes();

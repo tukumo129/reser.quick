@@ -19,6 +19,7 @@ class SettingFactory extends Factory
             'reserve_slot_time' => '30',
             'max_reserve_number' => random_int(1, 10),
             'reserve_months_limit' => random_int(1, 10),
+            'reserve_block_minutes' => random_int(30, 60),
             'max_available_reserve' => random_int(1, 100),
         ];
     }

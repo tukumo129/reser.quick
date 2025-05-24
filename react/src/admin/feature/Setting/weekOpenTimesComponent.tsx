@@ -199,16 +199,17 @@ export const WeekOpenTimesComponent = ({
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleSave}>
-              保存
-            </Button>
             <Button
               colorScheme="gray"
+              mr={3}
               borderColor="gray.300"
               borderWidth="1px"
               onClick={onClose}
             >
               キャンセル
+            </Button>
+            <Button colorScheme="blue" onClick={handleSave}>
+              保存
             </Button>
           </ModalFooter>
         </ModalContent>
