@@ -120,6 +120,31 @@ class ReserveService
     }
 
     /**
+     * 時間的に予約可能か判定する
+     */
+    public function checkTimeLimit(Carbon $now, Setting $setting, string $startDateTime): bool
+    {
+        $reserveBlockMinutes = $setting->reserve_block_minutes ?? 30;
+        $maxAvailableReserve = $setting->max_available_reserve ?? null;
+
+        $dateTime = Carbon::parse($startDateTime);
+        // 当日かつ予約制限時間以前になっている場合は予約不可
+        if (
+            $dateTime->toDateString() === $now->toDateString() &&
+            $dateTime->lt($now->copy()->addMinutes($reserveBlockMinutes))
+        ) {
+            return false;
+        }
+        // 最大予約可能数まですでに登録されている場合予約不可
+        $availableDateTimeCount = $this->reserveRepository->getByStartDateTime($setting->contract_id, $dateTime->toDateString(), $dateTime->toTimeString())->count();
+        if ($maxAvailableReserve && $maxAvailableReserve <= $availableDateTimeCount) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * @param  array<string, mixed>  $reserveData
      */
     public function updateReserve(int $contractId, int $reserveId, array $reserveData): Reserve
@@ -142,16 +167,18 @@ class ReserveService
         /** @var Setting $setting */
         $setting = $contract->setting;
         $availableDates = [];
+        $now = Carbon::now();
 
         $targetDate = Carbon::parse($date);
         $reserveDateTimes = $this->getReserveDateTimes($setting, $targetDate->copy()->startOfMonth(), $targetDate->copy()->endOfMonth());
         foreach ($reserveDateTimes as $reserveDateTime) {
             $availableDateTimeCount = $this->reserveRepository->getByStartDateTime($contract->id, $reserveDateTime['date'], $reserveDateTime['start_time'])->count();
+            $isBlockedByTimeLimit = $this->checkTimeLimit($now, $setting, $reserveDateTime['date'].' '.$reserveDateTime['start_time']);
             $availableDates[] = [
                 'date' => $reserveDateTime['date'],
                 'start_time' => $reserveDateTime['start_time'],
                 'end_time' => $reserveDateTime['end_time'],
-                'available' => $setting->max_available_reserve ? $availableDateTimeCount < $setting->max_available_reserve : true,
+                'available' => $isBlockedByTimeLimit && ($setting->max_available_reserve ? $availableDateTimeCount < $setting->max_available_reserve : true),
             ];
         }
 

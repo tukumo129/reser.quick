@@ -8,6 +8,7 @@ use App\Models\Contract;
 use App\Models\OpenTime;
 use App\Models\Reserve;
 use App\Models\Setting;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -21,6 +22,8 @@ class GetReserveAvailableDatesTest extends TestCase
 
     public function test_success(): void
     {
+        Carbon::setTestNow(Carbon::parse('2024-01-01 00:00:00'));
+
         /** @var Contract $contract */
         $contract = Contract::factory()->create();
 
@@ -57,5 +60,6 @@ class GetReserveAvailableDatesTest extends TestCase
             ],
         ]);
         $response->assertStatus(Response::HTTP_OK);
+        Carbon::setTestNow();
     }
 }

@@ -1,4 +1,5 @@
 import { useToast } from "@chakra-ui/react";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
@@ -39,19 +40,40 @@ export const AppCreateReserveForm = (startDate: string) => {
       onSuccess: () => {
         navigate(getRoutePath(routePath.AppTop, appUuid));
       },
-      onError: () => {
-        navigate(getRoutePath(routePath.AppTop, appUuid));
-        toast({
-          title: "登録に失敗しました",
-          description: "予期しないエラーが発生しました",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-          position: "top",
-        });
+      onError: (error) => {
+        if (axios.isAxiosError(error)) {
+          const status = error.response?.status;
+          if (status === 400) {
+            navigate(getRoutePath(routePath.AppTop, appUuid));
+            toast({
+              title: "登録に失敗しました",
+              description: "予約可能な時間を過ぎたため登録できませんでした",
+              status: "error",
+              duration: 3000,
+              isClosable: true,
+              position: "top",
+            });
+          } else {
+            handleDefaultError();
+          }
+        } else {
+          handleDefaultError();
+        }
       },
     });
   };
+  const handleDefaultError = () => {
+    navigate(getRoutePath(routePath.AppTop, appUuid));
+    toast({
+      title: "登録に失敗しました",
+      description: "予期しないエラーが発生しました",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+      position: "top",
+    });
+  };
+
   return {
     AppCreateReserveData,
     handleSubmit,

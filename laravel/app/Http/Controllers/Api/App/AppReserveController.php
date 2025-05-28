@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api\App;
 
+use App\Exceptions\ReserveNotAlloweException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\App\Reserves\CreateAppReserveRequest;
 use App\Http\Requests\App\Reserves\GetAppReserveAvailableDatesRequest;
 use App\Http\Requests\App\Reserves\GetAppReserveAvailableTimesRequest;
 use App\Services\ReserveService;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 
 class AppReserveController extends Controller
 {
@@ -46,11 +47,17 @@ class AppReserveController extends Controller
     public function createAppReserve(CreateAppReserveRequest $request): JsonResponse
     {
         $contract = $request->attributes->get('contract');
+        $setting = $contract->setting;
         $reserveData = $request->input('reserve');
         $reserveData['contract_id'] = $contract->id;
-        $reserveSlotTime = $contract->setting->reserve_slot_time ?? 60;
+        $reserveSlotTime = $setting->reserve_slot_time ?? 60;
         $reserveData['end_date_time'] = Carbon::parse($reserveData['start_date_time'])->addMinutes((int) $reserveSlotTime)->format('Y-m-d H:i');
+        $now = Carbon::now();
 
+        $isBlockedByTimeLimit = $this->reserveService->checkTimeLimit($now, $setting, $reserveData['start_date_time']);
+        if (! $isBlockedByTimeLimit) {
+            throw new ReserveNotAlloweException;
+        }
         $this->reserveService->createReserve($contract, $reserveData);
 
         return response()->json([], Response::HTTP_NO_CONTENT);
