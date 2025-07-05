@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\CreateUserRequest;
+use App\Http\Requests\Users\GoogleLoginRequest;
 use App\Http\Requests\Users\ResetPasswordRequest;
 use App\Http\Requests\Users\SendResetLinkEmailRequest;
 use App\Http\Requests\Users\UserLoginRequest;
@@ -11,6 +12,7 @@ use App\Http\Resources\UserResource;
 use App\Services\ContractService;
 use App\Services\SettingService;
 use App\Services\UserService;
+use Google\Client;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -117,5 +119,46 @@ class AuthController extends Controller
         return $status === Password::PASSWORD_RESET
             ? response()->json(['status' => __($status)])
             : response()->json(['error' => __($status)], 400);
+    }
+
+    public function googleLogin(GoogleLoginRequest $request)
+    {
+        $googleToken = $request->input('google_token');
+        $client = new client(['client_id' => config('services.google.client_id')]);
+        $payload = $client->verifyIdToken($googleToken);
+
+        if (! $payload) {
+            return response()->json([], Response::HTTP_UNAUTHORIZED);
+        }
+        $googleId = $payload['sub'];
+        $user = $this->userService->getUserByGoogleId($googleId);
+        if (! $user) {
+            // メールアドレスが既に登録済みの場合登録できない
+            $user = $this->userService->getUserByEmail($payload['email'] ?? '');
+            if ($user) {
+                return response()->json([], Response::HTTP_CONFLICT);
+            }
+
+            $contractData = [
+                'uuid' => Str::uuid()->toString(),
+                'name' => '契約名', // TODO 53 仮で作成、契約自体をどう作るのか、ユーザーの紐づけをどうするか用検討
+            ];
+            $contract = $this->contractService->createContract($contractData);
+            $this->settingService->updateOrCreateSetting($contract->id, []);
+            $userData = [
+                'contract_id' => $contract->id,
+                'email' => $payload['email'] ?? '',
+                'password' => bcrypt(Str::random(24)),
+                'google_id' => $googleId,
+            ];
+            $user = $this->userService->createUser($userData);
+        }
+
+        $token = $user->createToken('AccessToken')->plainTextToken;
+
+        return response()->json([
+            'user' => new UserResource($user),
+            'token' => $token,
+        ], Response::HTTP_OK);
     }
 }

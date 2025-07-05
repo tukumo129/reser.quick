@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { AdminNoLoginHeaderComponent } from "../AdminNoLoginHeader/AdminNoLoginHeaderComponent";
 import { useLoginForm } from "./userLoginFormContainer";
+import { UserGoogleLoginComponent } from "@/admin/feature/UserLogin/userGoogleLoginFormComponent";
 import { routePath } from "@/enums/routePath";
 
 export function UserLoginComponent() {
@@ -92,6 +93,12 @@ export function UserLoginComponent() {
                   ログイン
                 </Button>
               </Stack>
+            </Box>
+            <Box mt={8} textAlign="center">
+              <Text fontSize="sm" color="gray.500" mb={2}>
+                または外部サービスでログイン
+              </Text>
+              <UserGoogleLoginComponent />
             </Box>
           </Card>
         </Center>

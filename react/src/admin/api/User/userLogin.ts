@@ -1,5 +1,6 @@
 import { UseMutationResult, useMutation } from "react-query";
 import { callLogin } from "@/api/ApiCallBase";
+import { ApiPath } from "@/enums/ApiPath";
 import { User } from "@/types/User";
 
 export type UserLoginParams = {
@@ -18,6 +19,6 @@ export const useUserLoginMutation = (): UseMutationResult<
   UserLoginParams
 > => {
   return useMutation<UserLoginData, Error, UserLoginParams>(
-    (params: UserLoginParams) => callLogin(params),
+    (params: UserLoginParams) => callLogin(ApiPath.LOGIN, params),
   );
 };

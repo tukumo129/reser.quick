@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/user', [AuthController::class, 'createUser']);
 Route::post('/user/login', [AuthController::class, 'userLogin']);
+Route::post('/user/login/google', [AuthController::class, 'googleLogin']);
 Route::post('/password/forgot', [AuthController::class, 'sendResetLinkEmail']);
 Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 

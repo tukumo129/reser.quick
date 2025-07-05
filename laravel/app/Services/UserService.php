@@ -48,6 +48,13 @@ class UserService
         return $this->userRepository->getBy($criteria)->first();
     }
 
+    public function getUserByGoogleId(string $googleId): ?User
+    {
+        $criteria = ['google_id' => $googleId];
+
+        return $this->userRepository->getBy($criteria)->first();
+    }
+
     /**
      * @param  array<string, mixed>  $userData
      */

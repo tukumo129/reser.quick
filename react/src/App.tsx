@@ -1,3 +1,4 @@
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
@@ -28,62 +29,72 @@ const queryClient = new QueryClient({
 });
 
 const App: React.FC = () => {
+  const googleKey = import.meta.env.VITE_GOOGLE_KEY;
+
   return (
     <div>
       <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <Routes>
-            {/* 管理画面 */}
-            <Route path={routePath.Login} element={<UserLoginComponent />} />
-            <Route
-              path={routePath.PasswordForgot}
-              element={<PasswordForgotComponent />}
-            />
-            <Route
-              path={routePath.PasswordReset}
-              element={<PasswordResetComponent />}
-            />
-            <Route path={routePath.Top} element={<TopComponent />} />
-            <Route
-              path={routePath.CreateUser}
-              element={<CreateUserComponent />}
-            />
-            <Route path={routePath.Reserves} element={<ReservesComponent />} />
-            <Route
-              path={routePath.ReserveCreate}
-              element={<CreateReserveComponent />}
-            />
-            <Route
-              path={routePath.ReserveDetail}
-              element={<ReserveDetailComponent />}
-            />
-            <Route path={routePath.Setting} element={<SettingComponent />} />
+        <GoogleOAuthProvider clientId={googleKey}>
+          <RecoilRoot>
+            <Routes>
+              {/* 管理画面 */}
+              <Route path={routePath.Login} element={<UserLoginComponent />} />
+              <Route
+                path={routePath.PasswordForgot}
+                element={<PasswordForgotComponent />}
+              />
+              <Route
+                path={routePath.PasswordReset}
+                element={<PasswordResetComponent />}
+              />
+              <Route path={routePath.Top} element={<TopComponent />} />
+              <Route
+                path={routePath.CreateUser}
+                element={<CreateUserComponent />}
+              />
+              <Route
+                path={routePath.Reserves}
+                element={<ReservesComponent />}
+              />
+              <Route
+                path={routePath.ReserveCreate}
+                element={<CreateReserveComponent />}
+              />
+              <Route
+                path={routePath.ReserveDetail}
+                element={<ReserveDetailComponent />}
+              />
+              <Route path={routePath.Setting} element={<SettingComponent />} />
 
-            {/* ユーザー画面 */}
-            <Route
-              path={routePath.AppTop}
-              element={
-                <AppAuth>
-                  <AppTopComponent />
-                </AppAuth>
-              }
-            />
-            <Route
-              path={routePath.AppReserveCreate}
-              element={
-                <AppAuth>
-                  <AppCreateReserveComponent />
-                </AppAuth>
-              }
-            />
-            {/* エラー画面 */}
-            <Route path={routePath.AppErrorPage} element={<ErrorComponent />} />
-            <Route
-              path={routePath.ErrorNotFound}
-              element={<PageNotFoundComponent />}
-            />
-          </Routes>
-        </RecoilRoot>
+              {/* ユーザー画面 */}
+              <Route
+                path={routePath.AppTop}
+                element={
+                  <AppAuth>
+                    <AppTopComponent />
+                  </AppAuth>
+                }
+              />
+              <Route
+                path={routePath.AppReserveCreate}
+                element={
+                  <AppAuth>
+                    <AppCreateReserveComponent />
+                  </AppAuth>
+                }
+              />
+              {/* エラー画面 */}
+              <Route
+                path={routePath.AppErrorPage}
+                element={<ErrorComponent />}
+              />
+              <Route
+                path={routePath.ErrorNotFound}
+                element={<PageNotFoundComponent />}
+              />
+            </Routes>
+          </RecoilRoot>
+        </GoogleOAuthProvider>
       </QueryClientProvider>
     </div>
   );

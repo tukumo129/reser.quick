@@ -3,6 +3,7 @@ const appUrl = import.meta.env.VITE_APP_URL;
 export const ApiPath = {
   BASE_PATH: `${appUrl}/api`,
   LOGIN: "/user/login",
+  GOOGLE_LOGIN: "/user/login/google",
   PASSWORD_FORGOT: "password/forgot",
   PASSWORD_RESET: "password/reset",
   LOGOUT: "/user/logout",

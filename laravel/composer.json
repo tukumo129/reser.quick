@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.3",
         "bensampo/laravel-enum": "^6.12",
+        "google/apiclient": "^2.18",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",

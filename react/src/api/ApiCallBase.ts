@@ -64,9 +64,10 @@ export const callDelete = async <
 };
 
 export const callLogin = async <TBody extends Record<string, unknown>>(
+  path: string,
   body: TBody = {} as TBody,
 ) => {
-  const response = await axiosClient.post(ApiPath.LOGIN, body);
+  const response = await axiosClient.post(path, body);
   const token = response.data?.token;
   localStorage.setItem("token", token);
   axiosClient.defaults.headers.Authorization = `Bearer ${token}`;
