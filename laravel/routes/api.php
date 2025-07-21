@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\App\AppReserveController;
 use App\Http\Controllers\Api\App\AppSettingController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ReserveController;
+use App\Http\Controllers\Api\ReserveOptionController;
 use App\Http\Controllers\Api\SettingController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/reserve/{reserve_id}', [ReserveController::class, 'updateReserve'])->where('reserve_id', '[0-9]+');
     Route::put('/reserve/{reserve_id}/status', [ReserveController::class, 'updateReserveStatus'])->where('reserve_id', '[0-9]+');
     Route::delete('/reserve/{reserve_id}', [ReserveController::class, 'deleteReserve'])->where('reserve_id', '[0-9]+');
+
+    // reserve_option
+    Route::get('/reserves/options', [ReserveOptionController::class, 'getReserveOptions']);
+    Route::get('/reserves/options/{reserve_option_id}', [ReserveOptionController::class, 'getReserveOption'])->where('reserve_option_id', '[0-9]+');
+    Route::post('/reserves/options', [ReserveOptionController::class, 'createReserveOption']);
+    Route::put('/reserves/options/{reserve_option_id}', [ReserveOptionController::class, 'updateReserveOption'])->where('reserve_option_id', '[0-9]+');
+    Route::delete('/reserves/options/{reserve_option_id}', [ReserveOptionController::class, 'deleteReserveOption'])->where('reserve_option_id', '[0-9]+');
 
     // setting
     Route::get('/setting', [SettingController::class, 'getSetting']);
