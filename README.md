@@ -31,16 +31,27 @@ ssh -T git@github.com
 # (途中で止まった場合はyesで続行)
 ```  
 
+### リポジトリクローン
+``` sh
+git clone git@github.com:tukumo129/reser.quick.git
+```  
+
 ## 環境変数を設定
 ### .env.exampleを.envにコピー
 ``` sh
-cd reser.quick/laravel
+cd laravel
+cp .env.example .env
+cd ../react
+cp .env.example .env
+cd ../
 cp .env.example .env
 ```
 ### laravelディレクトリ内にある.envを編集
 ```env
 APP_ENV=local
 DB_PASSWORD=123456
+GOOGLE_KEY={googleCloudConsoleから確認}
+GOOGLE_SECRET={googleCloudConsoleから確認}
 ```
 
 ## docker起動
@@ -48,16 +59,30 @@ DB_PASSWORD=123456
 docker compose up -d --build
 ```
 
-## dockerコンテナでコマンド実行
+## docker-compose.ymlを編集
+- phpコンテナ、`command: php artisan serve --host=0.0.0.0 --port=8000`をコメントアウト
+
+## dockerコンテナでコマンド実行(php)
 ``` sh
-docker compose exec app bash
-cd laravel
+docker compose exec php bash
 composer i
 php artisan key:generate
 php artisan migrate
-cd ../react
+exit
+```
+## docker-compose.ymlを編集
+- phpコンテナ、`command: php artisan serve --host=0.0.0.0 --port=8000`のコメント解除
+``` sh
+docker compose down && docker compose up -d --build
+```
+
+
+## dockerコンテナでコマンド実行(js)
+``` sh
+docker compose exec js bash
 npm i
 npm run build
+exit
 ```
 
 ## dnsを登録
@@ -65,7 +90,7 @@ npm run build
 ``` sh
 notepad C:\Windows\System32\drivers\etc\hosts
 # 最下段に下記を追加
-127.0.0.1 reser.quick
+127.0.0.1 reser.quick.local.com
 ```
 
 # サーバーデプロイ方法
