@@ -7,6 +7,9 @@ export const routePath = {
   Reserves: "/reserves",
   ReserveCreate: "/reserve/create",
   ReserveDetail: "/reserve/:reserveId",
+  ReserveOptions: "/reserves/options",
+  ReserveOptionCreate: "/reserve/options/create",
+  ReserveOptionDetail: "/reserve/options/:reserveOptionId",
   Setting: "/setting",
 
   AppTop: "/app/:uuid",

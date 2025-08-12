@@ -12,6 +12,8 @@ export const ApiPath = {
   RESERVE_STATUS: "/reserve/:reserveId/status",
   RESERVES: "/reserves",
   RESERVES_COUNT: "/reserves/count",
+  RESERVE_OPTION: "/reserves/options/:reserveOptionId",
+  RESERVE_OPTIONS: "/reserves/options",
   SETTING: "/setting",
 
   APP_AUTH: "/app/:uuid/auth",

@@ -1,5 +1,11 @@
 import { Box, Button, Divider, Text, VStack } from "@chakra-ui/react";
-import { FaCalendarAlt, FaCog, FaHome, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaCog,
+  FaHome,
+  FaSignOutAlt,
+  FaSlidersH,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useUserLogoutForm } from "./userLogoutFormContainer";
 import { routePath } from "@/enums/routePath";
@@ -10,6 +16,11 @@ const menuItems = [
     label: "予約",
     path: routePath.Reserves,
     icon: <FaCalendarAlt className="w-7 h-7" />,
+  },
+  {
+    label: "予約オプション",
+    path: routePath.ReserveOptions,
+    icon: <FaSlidersH className="w-7 h-7" />,
   },
 ];
 

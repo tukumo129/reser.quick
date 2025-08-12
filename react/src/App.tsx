@@ -4,11 +4,14 @@ import { Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { routePath } from "./enums/routePath";
 import { CreateReserveComponent } from "@/admin/feature/CreateReserve/createReserveComponent";
+import { CreateReserveOptionComponent } from "@/admin/feature/CreateReserveOption/createReserveOptionComponent";
 import { CreateUserComponent } from "@/admin/feature/CreateUser/createUserFormComponent";
 import { ErrorComponent } from "@/admin/feature/ErrorPage/errorComponent";
 import { PasswordForgotComponent } from "@/admin/feature/PasswordForgot/passwordForgotComponent";
 import { PasswordResetComponent } from "@/admin/feature/PasswordReset/passwordResetComponent";
 import { ReserveDetailComponent } from "@/admin/feature/Reserve/reserveDetailComponent";
+import { ReserveOptionDetailComponent } from "@/admin/feature/ReserveOption/reserveOptionDetailComponent";
+import { ReserveOptionsComponent } from "@/admin/feature/ReserveOptions/reserveOptionsComponent";
 import { ReservesComponent } from "@/admin/feature/Reserves/reservesComponent";
 import { SettingComponent } from "@/admin/feature/Setting/settingComponent";
 import { TopComponent } from "@/admin/feature/Top/topComponent";
@@ -63,6 +66,18 @@ const App: React.FC = () => {
               <Route
                 path={routePath.ReserveDetail}
                 element={<ReserveDetailComponent />}
+              />
+              <Route
+                path={routePath.ReserveOptions}
+                element={<ReserveOptionsComponent />}
+              />
+              <Route
+                path={routePath.ReserveOptionCreate}
+                element={<CreateReserveOptionComponent />}
+              />
+              <Route
+                path={routePath.ReserveOptionDetail}
+                element={<ReserveOptionDetailComponent />}
               />
               <Route path={routePath.Setting} element={<SettingComponent />} />
 
