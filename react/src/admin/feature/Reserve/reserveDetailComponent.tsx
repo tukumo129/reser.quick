@@ -82,7 +82,7 @@ export function ReserveDetailComponent() {
 
   return (
     <AdminLayoutComponent pageName={"予約詳細"}>
-      <Box p={{ base: 6, md: 10 }} bg="white" borderRadius="lg" boxShadow="xl">
+      <Box p={6} pb={24} bg="white" borderRadius="lg" boxShadow="xl">
         <form onSubmit={handleSubmit(onSubmit)} id="updateReserveForm">
           <Stack spacing={6}>
             <Stack>

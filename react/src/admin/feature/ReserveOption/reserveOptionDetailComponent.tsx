@@ -22,11 +22,9 @@ import { LoadingSpinner } from "@/feature/LoadingSpinner/loadingSpinnerComponent
 export function ReserveOptionDetailComponent() {
   const { reserveOptionId } = useParams();
   const navigate = useNavigate();
-  const {
-    reserveOption: gerReserveOptionData,
-    isLoading: getReserveOptionIsLoading,
-    error: getReserveOptionError,
-  } = useGetReserveOption(Number(reserveOptionId));
+  const { reserveOption, isLoading, error } = useGetReserveOption(
+    Number(reserveOptionId),
+  );
   const {
     UpdateReserveOptionData,
     handleSubmit,
@@ -34,14 +32,7 @@ export function ReserveOptionDetailComponent() {
     errors,
     reset,
     isLoading: submitIsLoading,
-  } = useUpdateReserveOptionForm(gerReserveOptionData.id);
-
-  const reserveOption = {
-    id: gerReserveOptionData.id,
-    optionName: gerReserveOptionData.name,
-    slotTime: gerReserveOptionData.slotTime,
-    price: gerReserveOptionData.price,
-  };
+  } = useUpdateReserveOptionForm(reserveOption.id);
 
   useEffect(() => {
     if (reserveOption) {
@@ -49,16 +40,15 @@ export function ReserveOptionDetailComponent() {
     }
   }, [reserveOption]);
 
-  if (getReserveOptionIsLoading) return <LoadingSpinner />;
-  if (getReserveOptionError) return <ErrorComponent />;
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <ErrorComponent />;
 
   return (
-    <AdminLayoutComponent pageName={"予約詳細"}>
-      <Box p={{ base: 6, md: 10 }} bg="white" borderRadius="lg" boxShadow="xl">
+    <AdminLayoutComponent pageName={"予約オプション詳細"}>
+      <Box p={6} pb={24} bg="white" borderRadius="lg" boxShadow="xl">
         <form onSubmit={handleSubmit(onSubmit)} id="updateReserveOptionForm">
           <Stack spacing={6}>
-            <Divider borderColor="gray.300" />
-            <FormControl isInvalid={!!errors.optionName} id="name">
+            <FormControl isInvalid={!!errors.name} id="name">
               <FormLabel fontWeight="semibold">
                 オプション名
                 <Text as="span" color="red.500">
@@ -66,9 +56,9 @@ export function ReserveOptionDetailComponent() {
                 </Text>
               </FormLabel>
               <Input
-                defaultValue={reserveOption.optionName}
-                {...UpdateReserveOptionData("optionName")}
-                placeholder="名前を入力してください"
+                defaultValue={reserveOption.name}
+                {...UpdateReserveOptionData("name")}
+                placeholder="オプション名を入力してください"
                 size="lg"
                 borderRadius="md"
                 _focus={{
@@ -76,7 +66,7 @@ export function ReserveOptionDetailComponent() {
                   boxShadow: "0 0 0 2px rgba(66, 153, 225, 0.6)",
                 }}
               />
-              <FormErrorMessage>{errors.optionName?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
             <Divider borderColor="gray.300" />
             <FormControl isInvalid={!!errors.slotTime} id="slotTime">
@@ -89,7 +79,7 @@ export function ReserveOptionDetailComponent() {
               <Input
                 type="number"
                 defaultValue={reserveOption.slotTime}
-                {...UpdateReserveOptionData("slotTime", { valueAsNumber: true })}
+                {...UpdateReserveOptionData("slotTime")}
                 size="lg"
                 borderRadius="md"
                 w={{ base: "100%", md: "6rem" }}
@@ -107,7 +97,7 @@ export function ReserveOptionDetailComponent() {
               <Input
                 type="number"
                 defaultValue={reserveOption.price}
-                {...UpdateReserveOptionData("price", { valueAsNumber: true })}
+                {...UpdateReserveOptionData("price")}
                 size="lg"
                 borderRadius="md"
                 w={{ base: "100%", md: "6rem" }}

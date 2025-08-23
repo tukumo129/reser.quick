@@ -17,17 +17,12 @@ import { routePath } from "@/enums/routePath";
 
 export function CreateReserveOptionComponent() {
   const navigate = useNavigate();
-  const {
-    CreateReserveOptionData,
-    handleSubmit,
-    onSubmit,
-    errors,
-    isLoading,
-  } = useCreateReserveOptionForm();
+  const { CreateReserveOptionData, handleSubmit, onSubmit, errors, isLoading } =
+    useCreateReserveOptionForm();
 
   return (
-    <AdminLayoutComponent pageName={"予約登録"}>
-      <Box p={{ base: 6, md: 10 }} bg="white" borderRadius="lg" boxShadow="xl">
+    <AdminLayoutComponent pageName={"予約オプション登録"}>
+      <Box p={6} pb={24} bg="white" borderRadius="lg" boxShadow="xl">
         <form onSubmit={handleSubmit(onSubmit)} id="createReserveOptionForm">
           <Stack spacing={6}>
             <FormControl isInvalid={!!errors.optionName} id="optionName">
@@ -39,7 +34,7 @@ export function CreateReserveOptionComponent() {
               </FormLabel>
               <Input
                 {...CreateReserveOptionData("optionName")}
-                placeholder="名前を入力してください"
+                placeholder="オプション名を入力してください"
                 size="lg"
                 borderRadius="md"
                 _focus={{

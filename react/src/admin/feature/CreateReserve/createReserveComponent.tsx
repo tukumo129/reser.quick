@@ -52,7 +52,7 @@ export function CreateReserveComponent() {
 
   return (
     <AdminLayoutComponent pageName={"予約登録"}>
-      <Box p={{ base: 6, md: 10 }} bg="white" borderRadius="lg" boxShadow="xl">
+      <Box p={6} pb={24} bg="white" borderRadius="lg" boxShadow="xl">
         <form onSubmit={handleSubmit(onSubmit)} id="createReserveForm">
           <Stack spacing={6}>
             <FormControl isInvalid={!!errors.name} id="name">

@@ -6,7 +6,7 @@ export type DeleteReserveOptionParams = {
   reserveOptionId: number;
 };
 
-export type DeleteReserveOptionData = null
+export type DeleteReserveOptionData = null;
 
 export const useDeleteReserveOptionMutation = (): UseMutationResult<
   DeleteReserveOptionData,

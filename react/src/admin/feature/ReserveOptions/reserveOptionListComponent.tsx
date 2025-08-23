@@ -1,13 +1,4 @@
-import {
-  Box,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { routePath } from "@/enums/routePath";
 import { ReserveOption } from "@/types/ReserveOption";
@@ -37,11 +28,13 @@ export const ReserveOptionListComponent = ({
     <Box p={8} bg="white">
       <Table variant="simple" fontSize="lg">
         <Thead>
-          <Tr >
+          <Tr>
             <Th fontSize="lg">ID</Th>
             <Th fontSize="lg">オプション名</Th>
             <Th fontSize="lg">予約枠時間</Th>
-            <Th isNumeric fontSize="lg">金額</Th>
+            <Th isNumeric fontSize="lg">
+              金額
+            </Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -50,11 +43,14 @@ export const ReserveOptionListComponent = ({
               key={reserveOption.id}
               onClick={() =>
                 navigate(
-                  routePath.ReserveOptionDetail.replace(':reserveOptionId', String(reserveOption.id))
+                  routePath.ReserveOptionDetail.replace(
+                    ":reserveOptionId",
+                    String(reserveOption.id),
+                  ),
                 )
               }
               _hover={{
-                background: 'gray.300',
+                background: "gray.300",
                 transition: "background 0.2s ease",
               }}
               cursor="pointer"
@@ -69,6 +65,6 @@ export const ReserveOptionListComponent = ({
           ))}
         </Tbody>
       </Table>
-    </Box >
+    </Box>
   );
 };

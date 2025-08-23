@@ -9,15 +9,16 @@ import {
 } from "@/admin/api/ReserveOption/updateReserveOption";
 import { routePath } from "@/enums/routePath";
 
-const schema = z
-  .object({
-    optionName: z
-      .string()
-      .min(1, { message: "オプション名を入力してください" })
-      .max(50, "50文字以内で入力してください"),
-    slotTime: z.coerce.number().min(1, { message: "予約枠時間を入力してください" }),
-    price: z.coerce.number().min(1, { message: "金額を入力してください" }),
-  });
+const schema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "オプション名を入力してください" })
+    .max(50, "50文字以内で入力してください"),
+  slotTime: z.coerce
+    .number()
+    .min(1, { message: "予約枠時間を入力してください" }),
+  price: z.coerce.number().min(1, { message: "金額を入力してください" }),
+});
 
 type useUpdateReserveOptionSchema = z.infer<typeof schema>;
 
@@ -37,7 +38,7 @@ export const useUpdateReserveOptionForm = (reserveOptionId: number) => {
   const onSubmit = (data: useUpdateReserveOptionSchema) => {
     const params: UpdateReserveOptionParams = {
       reserve_option: {
-        name: data.optionName,
+        name: data.name,
         slot_time: data.slotTime,
         price: data.price,
       },
