@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\App;
 
 use App\Exceptions\ContractNotFoundException;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\App\AppReserveOptionResource;
 use App\Http\Resources\App\AppSettingResource;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
@@ -28,6 +29,7 @@ class AppSettingController extends Controller
 
         return response()->json([
             'setting' => new AppSettingResource($contract->setting),
+            'reserveOptions' => AppReserveOptionResource::collection($contract->reserveOptions),
         ]);
     }
 }

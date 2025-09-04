@@ -3,7 +3,9 @@
 namespace Tests\Feature\App\Settings;
 
 use App\Models\Contract;
+use App\Models\ReserveOption;
 use App\Models\Setting;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -22,6 +24,8 @@ class GetAppSettingsTest extends TestCase
 
         /** @var Setting $setting */
         $setting = Setting::factory()->create(['contract_id' => $contract->id]);
+        /** @var Collection<int, ReserveOption> $reserveOptions */
+        $reserveOptions = ReserveOption::factory()->count(2)->create(['contract_id' => $contract->id]);
 
         $params = [];
 
@@ -33,6 +37,15 @@ class GetAppSettingsTest extends TestCase
                 'maxReserveNumber' => $setting->max_reserve_number,
                 'reserveMonthsLimit' => $setting->reserve_months_limit,
                 'reserveBlockMinutes' => $setting->reserve_block_minutes,
+            ],
+            'reserveOptions' => [
+                [
+                    'id' => $reserveOptions[0]->id,
+                    'name' => $reserveOptions[0]->name,
+                    'slotTime' => $reserveOptions[0]->slot_time,
+                    'price' => $reserveOptions[0]->price,
+
+                ],
             ],
         ]);
         $response->assertStatus(Response::HTTP_OK);
