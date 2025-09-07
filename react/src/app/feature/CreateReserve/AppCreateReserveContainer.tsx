@@ -13,6 +13,7 @@ export type AppCreateReserveSchema = {
   name: string;
   startTime: string;
   guestNumber: number;
+  reserveOptionId: number;
 };
 
 export const AppCreateReserveForm = (startDate: string) => {
@@ -33,6 +34,7 @@ export const AppCreateReserveForm = (startDate: string) => {
         name: data.name,
         start_date_time: `${startDate} ${data.startTime}`,
         guest_number: data.guestNumber,
+        reserve_option_id: data.reserveOptionId,
       },
     };
 

@@ -7,7 +7,10 @@ import {
   FormLabel,
   HStack,
   Input,
+  Radio,
+  RadioGroup,
   Select,
+  Stack,
   Text,
   useBreakpointValue,
   useToast,
@@ -18,6 +21,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AppLayoutComponent } from "../AppLayout/AppLayoutComponent";
 import { AppCreateReserveForm } from "./AppCreateReserveContainer";
 import { useGetReserveAvailableTimes } from "@/app/api/UseAppGetReserveAvailableTimes";
+import { useAppReserveOptionsRecoil } from "@/app/recoils/AppReserveOptionsRecoil";
 import { useAppSettingsRecoil } from "@/app/recoils/AppSettingsRecoil";
 import { useAppUuidRecoil } from "@/app/recoils/AppUuidRecoil";
 import { getRoutePath, routePath } from "@/enums/routePath";
@@ -28,6 +32,7 @@ export function AppCreateReserveComponent() {
   const startDate = date ?? "";
   const { appUuid } = useAppUuidRecoil();
   const { appSettings } = useAppSettingsRecoil();
+  const { appReserveOptions } = useAppReserveOptionsRecoil();
   const currentDate = new Date(startDate);
   const {
     AppCreateReserveData,
@@ -81,7 +86,8 @@ export function AppCreateReserveComponent() {
         maxWidth="md"
         margin="auto"
         mt={8}
-        p={{ base: 2, md: 6 }}
+        p={6}
+        pb={24}
         borderWidth={1}
         borderRadius="lg"
         boxShadow="lg"
@@ -119,7 +125,7 @@ export function AppCreateReserveComponent() {
               <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
 
-            <Box borderWidth="1px" borderColor="bray.300" />
+            <Box borderBottom="1px" borderColor="gray.300" w="100%" />
 
             <FormControl isInvalid={!!errors.startTime} id="startTime">
               <Flex direction={isMobile ? "column" : "row"}>
@@ -169,7 +175,7 @@ export function AppCreateReserveComponent() {
               <FormErrorMessage>{errors.startTime?.message}</FormErrorMessage>
             </FormControl>
 
-            <Box borderWidth="1px" borderColor="bray.300" />
+            <Box borderBottom="1px" borderColor="gray.300" w="100%" />
 
             <FormControl isInvalid={!!errors.guestNumber} id="guestNumber">
               <Flex direction={isMobile ? "column" : "row"}>
@@ -205,6 +211,52 @@ export function AppCreateReserveComponent() {
               </Flex>
               <FormErrorMessage>{errors.guestNumber?.message}</FormErrorMessage>
             </FormControl>
+
+            {appReserveOptions && appReserveOptions.length > 0 && (
+              <>
+                <Box borderBottom="1px" borderColor="gray.300" w="100%" />
+                <FormControl isInvalid={!!errors.reserveOptionId} id="planId">
+                  <FormLabel>
+                    プラン選択
+                    <Text as="span" color="red">
+                      *
+                    </Text>
+                  </FormLabel>
+                  <RadioGroup>
+                    <Stack
+                      direction={isMobile ? "column" : "column"}
+                      spacing={4}
+                    >
+                      {appReserveOptions.map((reserveOption) => (
+                        <Box
+                          key={reserveOption.id}
+                          p={4}
+                          borderWidth="1px"
+                          borderRadius="lg"
+                          _hover={{ shadow: "md", cursor: "pointer" }}
+                        >
+                          <Radio
+                            value={String(reserveOption.id)}
+                            {...AppCreateReserveData("reserveOptionId", {
+                              required: "プランを選択してください",
+                            })}
+                          >
+                            <Text fontWeight="bold">{reserveOption.name}</Text>
+                            <Text fontSize="sm">
+                              時間: {reserveOption.slotTime}分 料金:{" "}
+                              {reserveOption.price.toLocaleString()}円
+                            </Text>
+                          </Radio>
+                        </Box>
+                      ))}
+                    </Stack>
+                  </RadioGroup>
+                  <FormErrorMessage>
+                    {errors.reserveOptionId?.message}
+                  </FormErrorMessage>
+                </FormControl>
+              </>
+            )}
           </VStack>
         </form>
 

@@ -1,6 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useGetAppSettings } from "@/app/api/UseAppGetSettings";
+import { useAppReserveOptionsRecoil } from "@/app/recoils/AppReserveOptionsRecoil";
 import { useAppSettingsRecoil } from "@/app/recoils/AppSettingsRecoil";
 import { useAppUuidRecoil } from "@/app/recoils/AppUuidRecoil";
 import { LoadingSpinner } from "@/feature/LoadingSpinner/loadingSpinnerComponent";
@@ -13,8 +14,11 @@ type AppAuthProps = {
 export const AppAuth = ({ children }: AppAuthProps) => {
   const { setAppUuid } = useAppUuidRecoil();
   const { setAppSettings } = useAppSettingsRecoil();
+  const { setAppReserveOptions } = useAppReserveOptionsRecoil();
   const { uuid } = useParams();
-  const { settings, isLoading, error } = useGetAppSettings(String(uuid));
+  const { settings, reserveOptions, isLoading, error } = useGetAppSettings(
+    String(uuid),
+  );
 
   useEffect(() => {
     setAppUuid(uuid ?? "");
@@ -22,6 +26,12 @@ export const AppAuth = ({ children }: AppAuthProps) => {
       setAppSettings(settings);
     }
   }, [settings]);
+
+  useEffect(() => {
+    if (reserveOptions) {
+      setAppReserveOptions(reserveOptions);
+    }
+  }, [reserveOptions]);
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <PageNotFoundComponent />;

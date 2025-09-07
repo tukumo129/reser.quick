@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $contract_id
+ * @property int|null $reserve_option_id
  * @property int $reserve_id
  * @property string $name
  * @property int|null $guest_number
@@ -25,6 +26,7 @@ class Reserve extends Model
 
     protected $fillable = [
         'contract_id',
+        'reserve_option_id',
         'reserve_id',
         'name',
         'guest_number',

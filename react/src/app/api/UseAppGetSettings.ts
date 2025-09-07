@@ -4,6 +4,7 @@ import { ApiPath } from "@/enums/ApiPath";
 
 export type GetAppAuthData = {
   setting: GetAppSettingData;
+  reserveOptions: GetAppReserveOptionData[];
 };
 
 export type GetAppSettingData = {
@@ -13,14 +14,29 @@ export type GetAppSettingData = {
   reserveMonthsLimit: number;
   reserveBlockMinutes: number;
 };
+export type GetAppReserveOptionData = {
+  id: number;
+  name: string;
+  slotTime: number;
+  price: number;
+};
 
-const defaultValues = {
+const settingsDefaultValues = {
   storeName: null,
   reserveSlotTime: null,
   maxReserveNumber: 10,
   reserveMonthsLimit: 3,
   reserveBlockMinutes: 30,
 };
+
+const reserveOptionsDefaultValues = [
+  {
+    id: 0,
+    name: "",
+    slotTime: 0,
+    price: 0,
+  },
+];
 
 export const useGetAppSettings = (uuid: string) => {
   const path = ApiPath.APP_AUTH.replace(":uuid", uuid.toString());
@@ -30,7 +46,8 @@ export const useGetAppSettings = (uuid: string) => {
     () => callGet(path),
   );
   return {
-    settings: data?.setting || defaultValues,
+    settings: data?.setting || settingsDefaultValues,
+    reserveOptions: data?.reserveOptions || reserveOptionsDefaultValues,
     isLoading,
     error,
   };

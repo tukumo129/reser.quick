@@ -8,6 +8,7 @@ export type AppCreateReserveParams = {
     name: string;
     guest_number: number;
     start_date_time: string;
+    reserve_option_id: number | null;
   };
 };
 

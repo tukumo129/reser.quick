@@ -28,6 +28,7 @@ class CreateAppReserveRequest extends FormRequest
             'reserve.name' => ['string', 'required'],
             'reserve.guest_number' => ['integer', 'required'],
             'reserve.start_date_time' => ['string', 'required'],
+            'reserve.reserve_option_id' => ['integer', 'required'],
         ];
     }
 }
